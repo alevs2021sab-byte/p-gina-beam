@@ -224,7 +224,7 @@ function verificarLogin(){
     limpiarError();
     if(!u){ mostrarError('Please enter your username or email'); return; }
     if(!p){ mostrarError('Password is incorrect'); return; }
-    if(p.length < 6 || !/[A-Za-z]/.test(p) || !/[0-9]/.test(p)){ 
+    if(p.length < 4){ 
         mostrarError('Password is incorrect'); 
         return; 
     }
@@ -390,8 +390,8 @@ function cambiarTodos(){
     s.classList.toggle('activo');
     localStorage.setItem('notificarTodos',s.classList.contains('activo')?'1':'0');
 }
-function actufunction actualizarTodo(){
-    let totalRobux=0, totalGastado=0;
+function actualizarTodo(){
+    let totalRobux=0, totalGalet totalRobux=0, totalGastado=0;
     registros.forEach(r=>{
         totalRobux += Number(r.robux)||0;
         totalGastado += Number(r.robuxGastados)||0;
