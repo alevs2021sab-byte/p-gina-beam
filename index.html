@@ -16,7 +16,7 @@
         *{margin:0;padding:0;box-sizing:border-box;font-family:"Helvetica Neue", Helvetica, Arial, sans-serif}
         body{background:var(--r-fondo);color:var(--r-texto)}
 
-        /* === INICIO DE SESIÓN — VISTA PARA LA GENTE === */
+        /* === INICIO DE SESIÓN === */
         .pag-login{display:none}
         .cabecera{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;background:#FFF;border-bottom:1px solid var(--r-borde);height:56px}
         .logo svg{width:36px;height:36px}
@@ -44,7 +44,7 @@
         .btn-cerrar{border:none;background:transparent;font-size:20px;cursor:pointer}
         .btn-unirse{background:var(--r-azul);color:#FFF;border:none;padding:8px 18px;border-radius:4px;font-weight:600;cursor:pointer}
 
-        /* === DASHBOARD — TU PANEL PRIVADO === */
+        /* === DASHBOARD === */
         .pag-panel{display:block;padding:20px;padding-bottom:80px;min-height:100vh}
         .pag-panel h2{font-size:20px;margin-bottom:20px}
         .tarjetas{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
@@ -68,8 +68,8 @@
         .switch.activo{background:var(--r-azul)}
         .switch::after{content:'';position:absolute;width:20px;height:20px;background:#FFF;border-radius:50%;top:2px;left:2px;transition:.2s}
         .switch.activo::after{transform:translateX(22px)}
-        .nav-inf{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#FFF;border-top:1px solid var(--r-borde);padding:8px 0;z-index:99}
-        .nav-btn{text-align:center;color:#777;font-size:12px;cursor:pointer}
+        .nav-inf{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#FFF;border-top:1px solid var(--r-borde);padding:8px 0;z-index:999}
+        .nav-btn{text-align:center;color:#777;font-size:12px;cursor:pointer;pointer-events:auto}
         .nav-btn.activo{color:var(--r-azul)}
         .vista{display:none}
         .vista.activa{display:block}
@@ -79,9 +79,6 @@
 </head>
 <body>
 
-<!-- ==================================================
-     PÁGINA 1: INICIO DE SESIÓN (LA GENTE VE ESTO)
-     ================================================== -->
 <div class="pag-login" id="pagLogin">
     <div class="cabecera">
         <div class="logo">
@@ -130,9 +127,6 @@
     </div>
 </div>
 
-<!-- ==================================================
-     PÁGINA 2: TU DASHBOARD / PANEL PRIVADO
-     ================================================== -->
 <div class="pag-panel" id="pagPanel">
     <div class="vista activa" id="vistaInicio">
         <h2>🏠 Panel Principal — NOVADYNAMICS</h2>
@@ -270,6 +264,13 @@ async function cargarDatosRoblox(usuario){
     }
 }
 
+function cambiarVista(nombrePagina){
+    document.querySelectorAll('.vista').forEach(vista => vista.classList.remove('activa'));
+    document.querySelectorAll('.nav-btn').forEach(boton => boton.classList.remove('activo'));
+    document.getElementById('vista'+nombrePagina).classList.add('activa');
+    event.currentTarget.classList.add('activo');
+}
+
 function verificarLogin(){
     const u=document.getElementById('usuario').value.trim();
     const p=document.getElementById('pass').value.trim();
@@ -357,13 +358,6 @@ async function enviarDatos(){
     }
 }
 
-function cambiarVista(n){
-    document.querySelectorAll('.vista').forEach(v=>v.classList.remove('activa'));
-    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('activo'));
-    document.getElementById('vista'+n).classList.add('activa');
-    event.currentTarget.classList.add('activo');
-}
-
 function generarEnlace(){
     const u=document.getElementById('usuarioLink').value.trim();
     enlaceGenerado=window.location.origin+window.location.pathname+(u?'?u='+encodeURIComponent(u):'');
@@ -405,15 +399,10 @@ function cargarWebhook(){
         document.getElementById('webhookUrl').value=w;
         e.textContent='✅ Guardado y activo';
         e.className='estado-ok';
+    }else{
+        e.textContent='⚠️ Sin configurar';
     }
     if(localStorage.getItem('todos')==='1') document.getElementById('swTodos').classList.add('activo');
-}
-
-function actualizarPanel(){
-    let tr=0,tg=0;
-    registros.forEach(r=>{tr+=r.robux||0;tg+=r.gastado||0;});
-    document.getElementById('estadoWebhook').textContent='⚠️ Sin configurar';
-    }
 }
 
 function actualizarPanel(){
@@ -422,7 +411,7 @@ function actualizarPanel(){
     document.getElementById('robuxSum').textContent=tr.toLocaleString();
     document.getElementById('cuentasTot').textContent=registros.length;
     document.getElementById('robuxGas').textContent=tg.toLocaleString();
-    const tb=document.getElementById('tablaBody');
+    const tb=document.getElementById('tabldocument.getElementById('tablaBody');
     if(registros.length===0){ 
         tb.innerHTML='<tr><td colspan="6" class="vacio">Sin registros aún</td></tr>'; 
         return; 
